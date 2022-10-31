@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Local B2C.iml" filepath="$PROJECT_DIR$/.idea/Local B2C.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Local-B2C/Local-B2C.iml" filepath="$PROJECT_DIR$/Local-B2C/Local-B2C.iml" />
     </modules>
   </component>
 </project>
