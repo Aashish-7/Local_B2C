@@ -84,4 +84,5 @@ public class Laptop {
 //    @JoinColumn(name = "store", referencedColumnName = "local_store_id")
     @JoinColumn(name = "store", referencedColumnName = "local_store_id")
     private LocalStore store;
+
 }

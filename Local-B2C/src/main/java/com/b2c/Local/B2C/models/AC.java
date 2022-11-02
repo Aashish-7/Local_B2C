@@ -17,7 +17,7 @@ import java.util.UUID;
 public class AC {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ac_id")
     private UUID acId;
 
