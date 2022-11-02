@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "laptop", schema = "public")
+@Table(name = "laptop")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -78,11 +78,4 @@ public class Laptop {
     private double discountPercentage;
 
     private int noOfSpeaker;
-
-    @ManyToOne(targetEntity = LocalStore.class)
-//    @JsonBackReference
-//    @JoinColumn(name = "store", referencedColumnName = "local_store_id")
-    @JoinColumn(name = "store", referencedColumnName = "local_store_id")
-    private LocalStore store;
-
 }

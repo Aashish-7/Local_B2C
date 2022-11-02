@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "television", schema = "public")
+@Table(name = "television")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -60,9 +60,4 @@ public class Television {
     private double discountPercentage;
 
     private String warranty;
-
-    @ManyToOne(targetEntity = LocalStore.class)
-//    @JsonBackReference
-//    @JoinColumn(name = "store", referencedColumnName = "local_store_id")
-    @JoinColumn(name = "store", referencedColumnName = "local_store_id")
-    private LocalStore store;}
+}

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "washing_machine", schema = "public")
+@Table(name = "washing_machine")
 public class WashingMachine {
 
     @Id
@@ -50,9 +50,4 @@ public class WashingMachine {
     private double discountPercentage;
 
     private String availability;
-
-    @ManyToOne(targetEntity = LocalStore.class)
-//    @JsonBackReference
-    @JoinColumn(name = "store", referencedColumnName = "local_store_id")
-    private LocalStore store;
 }

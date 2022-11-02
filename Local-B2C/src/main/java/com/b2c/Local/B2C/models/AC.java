@@ -4,16 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ac", schema = "public")
+@Table(name = "ac")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EnableScheduling
 public class AC {
 
     @Id
@@ -50,10 +52,4 @@ public class AC {
     private boolean wiFi;
 
     private String airConditionerType;
-
-    @ManyToOne(targetEntity = LocalStore.class)
-//    @JsonBackReference
-//    @JoinColumn(name = "store", referencedColumnName = "local_store_id")
-    @JoinColumn(name = "store", referencedColumnName = "local_store_id")
-    private LocalStore store;
 }
