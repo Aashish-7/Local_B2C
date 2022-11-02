@@ -1,4 +1,4 @@
-package com.b2c.Local.B2C.models;
+package com.b2c.Local.B2C.electronic.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Getter

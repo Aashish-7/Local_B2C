@@ -1,4 +1,4 @@
-package com.b2c.Local.B2C.models;
+package com.b2c.Local.B2C.electronic.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.persistence.*;
-import java.util.UUID;
+
 
 @Entity
 @Table(name = "ac")
