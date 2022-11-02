@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class AC {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ac_id")
-    private UUID acId;
+    private Long acId;
 
     private String model;
 
@@ -52,4 +53,9 @@ public class AC {
     private boolean wiFi;
 
     private String airConditionerType;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    @JoinColumn(name = "local_store_id", referencedColumnName = "id")
+    private LocalStore localStore;
 }

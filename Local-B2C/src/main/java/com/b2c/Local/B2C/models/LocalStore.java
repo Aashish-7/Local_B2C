@@ -1,28 +1,31 @@
 package com.b2c.Local.B2C.models;
 
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
-//@TypeDefs(@TypeDef(name = "list-array", typeClass = ListArrayType.class))
+@TypeDefs(@TypeDef(name = "list-array", typeClass = ListArrayType.class))
 @Entity
 @Table(name = "local_store")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EnableScheduling
 public class LocalStore {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "local_store_id")
-    private UUID localStoreId;
+    @Column(name = "id")
+    private Long Id;
 
     private String storeName;
 
@@ -43,8 +46,9 @@ public class LocalStore {
     private String ownerName;
 
     private String description;
-//
-//    @Column(columnDefinition = "text[]")
-//    @Type(type = "list-array")
-//    private List<String> listOfProduct;
+
+    @Column(columnDefinition = "text[]")
+    @Type(type = "list-array")
+    private List<String> listOfProduct;
+
 }

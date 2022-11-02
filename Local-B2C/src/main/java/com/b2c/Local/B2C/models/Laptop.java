@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class Laptop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "laptop_id")
-    private UUID laptopId;
+    private Long laptopId;
 
     private String model;
 
@@ -78,4 +79,9 @@ public class Laptop {
     private double discountPercentage;
 
     private int noOfSpeaker;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    @JoinColumn(name = "local_store_id", referencedColumnName = "id")
+    private LocalStore localStore;
 }

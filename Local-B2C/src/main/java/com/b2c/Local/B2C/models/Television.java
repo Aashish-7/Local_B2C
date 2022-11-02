@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class Television {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "television_id")
-    private UUID televisionId;
+    private Long televisionId;
 
     private String model;
 
@@ -60,4 +61,9 @@ public class Television {
     private double discountPercentage;
 
     private String warranty;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    @JoinColumn(name = "local_store_id", referencedColumnName = "id")
+    private LocalStore localStore;
 }
