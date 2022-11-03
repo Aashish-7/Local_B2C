@@ -39,10 +39,7 @@ public class User implements UserDetails {
 
     private String mobileNo;
 
-    @JsonIgnore
-    private String storeDetails;
-
-    private boolean isStoreOwner;
+    private boolean storeOwner;
 
     @Column
     private boolean isActive = true;

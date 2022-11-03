@@ -53,7 +53,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/forgetPassword","/login", "/user/checkUser").permitAll()
+                .antMatchers("/forgetPassword","/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()

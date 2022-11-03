@@ -23,5 +23,5 @@ public class UserDto {
 
     private String mobileNumber;
 
-    private boolean StoreOwner;
+    private boolean storeOwner;
 }
