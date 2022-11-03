@@ -1,6 +1,5 @@
 package com.b2c.Local.B2C.auths.controller;
 
-import com.b2c.Local.B2C.auths.dto.LoginDto;
 import com.b2c.Local.B2C.auths.dto.UserDto;
 import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.auths.service.UserService;
@@ -24,8 +23,8 @@ public class UserController {
         return userService.addUser(userDto);
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody LoginDto loginDto){
-        return userService.login(loginDto);
-    }
+//    @PostMapping("/login")
+//    public String loginUser(@RequestBody LoginDto loginDto){
+//        return userService.loginUser(loginDto);
+//    }
 }

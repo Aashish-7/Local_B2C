@@ -1,16 +1,13 @@
 package com.b2c.Local.B2C.auths.service;
 
 import com.b2c.Local.B2C.auths.dao.UserRepository;
-import com.b2c.Local.B2C.auths.dto.LoginDto;
 import com.b2c.Local.B2C.auths.dto.UserDto;
 import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.exception.Conflict409Exception;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,10 +24,14 @@ public class UserService implements UserDetailsService {
 
     AuthenticationManager authenticationManager;
 
+    DaoAuthenticationProvider authenticationProvider;
+
     @Autowired
-    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager) {
+    public UserService(@Lazy UserRepository userRepository,@Lazy AuthenticationManager authenticationManager,
+                       @Lazy DaoAuthenticationProvider authenticationProvider) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
+        this.authenticationProvider = authenticationProvider;
     }
 
 
@@ -56,7 +57,7 @@ public class UserService implements UserDetailsService {
                 user.setCreateDate(localDateTime);
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 if (userDto.getNewPassword().equals(userDto.getConfirmPassword())){
-                    user.setPassword(bCryptPasswordEncoder.encode(userDto.getNewPassword() + localDateTime.toString()));
+                    user.setPassword(bCryptPasswordEncoder.encode(userDto.getNewPassword()));
                 } else {
                     throw new Conflict409Exception("New password and confirm password is not match!");
                 }
@@ -69,19 +70,33 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public String login(LoginDto loginDto){
-        if (loginDto.getEmail() != null && loginDto.getPassword() != null){
-            if (userRepository.existsByEmail(loginDto.getEmail())) {
-                Authentication authentication = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                loginDto.getEmail(),
-                                loginDto.getPassword()
-                        )
-                );
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else throw new BadCredentialsException("Invalid email!");
-        }
-        else throw new BadCredentialsException("Invalid email and password!");
-        return "Login Successfully!";
-    }
+//    public String loginUser(LoginDto loginDto){
+//        if (loginDto.getEmail() != null && loginDto.getPassword() != null){
+//            if (userRepository.existsByEmail(loginDto.getEmail())) {
+//                //LocalDateTime localDateTime = LocalDateTime.now();
+//                Authentication authentication = authenticationProvider.authenticate(
+//                        new UsernamePasswordAuthenticationToken(
+//                                loginDto.getEmail(),
+//                                loginDto.getPassword()));
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+//            } else throw new BadCredentialsException("Invalid email!");
+//        }
+//        else throw new BadCredentialsException("Invalid email and password!");
+//        return "Login Successfully!";
+//    }
+
+//    public String loginUser(LoginDto loginDto) {
+//        User user;
+//        user = userRepository.findByEmail(loginDto.getEmail());
+//        if (user.isActive()) {
+//            Authentication authentication = authenticationProvider.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            loginDto.getEmail(),
+//                            loginDto.getPassword()
+//                    )
+//            );
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//        }
+//        return "Login Successfully!!";
+//    }
 }
