@@ -1,5 +1,7 @@
 package com.b2c.Local.B2C.products.electronic.model;
 
+import com.b2c.Local.B2C.auths.model.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,5 +51,9 @@ public class LocalStore {
     @Column(columnDefinition = "text[]")
     @Type(type = "list-array")
     private List<String> listOfProduct;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
 }
