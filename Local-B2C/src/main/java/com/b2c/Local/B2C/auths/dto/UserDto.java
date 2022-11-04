@@ -26,4 +26,6 @@ public class UserDto {
     private boolean storeOwner;
 
     private int maxSession;
+
+    private String username;
 }

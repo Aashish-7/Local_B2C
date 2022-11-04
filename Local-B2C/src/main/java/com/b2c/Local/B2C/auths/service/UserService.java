@@ -43,11 +43,14 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     public UserService(@Lazy UserRepository userRepository, @Lazy AuthenticationManager authenticationManager,
-                       @Lazy DaoAuthenticationProvider authenticationProvider,@Lazy FindByIndexNameSessionRepository<? extends Session> sessions) {
+                       @Lazy DaoAuthenticationProvider authenticationProvider,
+                       @Lazy FindByIndexNameSessionRepository<? extends Session> sessions,
+                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.authenticationProvider = authenticationProvider;
         this.sessions = sessions;
+        this.userSecurityDetailsRepository = userSecurityDetailsRepository;
     }
 
 
@@ -69,7 +72,7 @@ public class UserService implements UserDetailsService {
                 user.setLastName(userDto.getLastName());
                 user.setMobileNo(userDto.getMobileNumber());
                 user.setStoreOwner(userDto.isStoreOwner());
-                user.setUsername(userDto.getEmail());
+                user.setUsername(userDto.getUsername());
                 LocalDateTime localDateTime = LocalDateTime.now();
                 user.setCreateDate(localDateTime);
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -80,7 +83,7 @@ public class UserService implements UserDetailsService {
                 }
                 userRepository.save(user);
                 UserSecurityDetails userSecurityDetails = new UserSecurityDetails();
-                userSecurityDetails.setUser(user);
+                userSecurityDetails.setUser(userRepository.findByEmail(userDto.getEmail()));
                 userSecurityDetails.setMaxSession(userDto.getMaxSession());
                 userSecurityDetailsRepository.save(userSecurityDetails);
             } else {
