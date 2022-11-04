@@ -53,20 +53,20 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/forgetPassword","/login").permitAll()
+                .antMatchers("/forgetPassword", "/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
                 .logout().logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    response.getWriter().print("Logged out successfully!!!");
-                })
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().print("Logged out successfully!!!");
+        })
                 .permitAll()
                 .and()
                 .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.getWriter().append("Access Denied");
-                });
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().append("Access Denied");
+        });
         return http.build();
     }
 
