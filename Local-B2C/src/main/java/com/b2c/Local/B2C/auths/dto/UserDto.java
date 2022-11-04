@@ -24,4 +24,6 @@ public class UserDto {
     private String mobileNumber;
 
     private boolean storeOwner;
+
+    private int maxSession;
 }

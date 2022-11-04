@@ -1,11 +1,14 @@
 package com.b2c.Local.B2C.auths.service;
 
 import com.b2c.Local.B2C.auths.dao.UserRepository;
+import com.b2c.Local.B2C.auths.dao.UserSecurityDetailsRepository;
 import com.b2c.Local.B2C.auths.dto.LoginDto;
 import com.b2c.Local.B2C.auths.dto.UserDto;
 import com.b2c.Local.B2C.auths.model.User;
+import com.b2c.Local.B2C.auths.model.UserSecurityDetails;
 import com.b2c.Local.B2C.exception.BadRequest400Exception;
 import com.b2c.Local.B2C.exception.Conflict409Exception;
+import com.b2c.Local.B2C.exception.Forbidden403Exception;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -18,6 +21,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,12 +37,17 @@ public class UserService implements UserDetailsService {
 
     DaoAuthenticationProvider authenticationProvider;
 
+    FindByIndexNameSessionRepository<? extends Session> sessions;
+
+    UserSecurityDetailsRepository userSecurityDetailsRepository;
+
     @Autowired
     public UserService(@Lazy UserRepository userRepository, @Lazy AuthenticationManager authenticationManager,
-                       @Lazy DaoAuthenticationProvider authenticationProvider) {
+                       @Lazy DaoAuthenticationProvider authenticationProvider,@Lazy FindByIndexNameSessionRepository<? extends Session> sessions) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.authenticationProvider = authenticationProvider;
+        this.sessions = sessions;
     }
 
 
@@ -69,6 +79,10 @@ public class UserService implements UserDetailsService {
                     throw new Conflict409Exception("New password and confirm password is not match!");
                 }
                 userRepository.save(user);
+                UserSecurityDetails userSecurityDetails = new UserSecurityDetails();
+                userSecurityDetails.setUser(user);
+                userSecurityDetails.setMaxSession(userDto.getMaxSession());
+                userSecurityDetailsRepository.save(userSecurityDetails);
             } else {
                 throw new Conflict409Exception("Email already exists!");
             }
@@ -98,8 +112,10 @@ public class UserService implements UserDetailsService {
                 if (!userRepository.findByEmail(loginDto.getEmail()).isActive()) {
                     throw new NotFound404Exception("User not found OR Enter Valid Credentials");
                 }
-                Authentication authentication = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (validateSession(loginDto.getEmail())) {
+                    Authentication authentication = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             } else {
                 throw new NotFound404Exception("User not found OR Enter Valid Credentials");
             }
@@ -107,5 +123,14 @@ public class UserService implements UserDetailsService {
             throw new BadRequest400Exception("Enter Email and Password");
         }
         return "Success Logged In";
+    }
+
+    public boolean validateSession(String email){
+        int userSessionLimit = userSecurityDetailsRepository.findByUserEmail(email).getMaxSession();
+        if (this.sessions.findByPrincipalName(email).entrySet().size() < userSessionLimit){
+            return true;
+        }else {
+            throw new Forbidden403Exception("Your MaximumSession Limit Exceed");
+        }
     }
 }
