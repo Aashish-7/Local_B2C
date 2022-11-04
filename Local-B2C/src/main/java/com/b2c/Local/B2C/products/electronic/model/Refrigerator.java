@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.products.electronic.model;
 
+import com.b2c.Local.B2C.store.model.LocalStore;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

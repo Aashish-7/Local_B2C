@@ -1,6 +1,6 @@
-package com.b2c.Local.B2C.products.electronic.dao;
+package com.b2c.Local.B2C.store.dao;
 
-import com.b2c.Local.B2C.products.electronic.model.LocalStore;
+import com.b2c.Local.B2C.store.model.LocalStore;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.b2c.Local.B2C.products.electronic.model;
+package com.b2c.Local.B2C.store.model;
 
 import com.b2c.Local.B2C.auths.model.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;

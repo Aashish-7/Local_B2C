@@ -1,4 +1,4 @@
-package com.b2c.Local.B2C.products.electronic.service;
+package com.b2c.Local.B2C.store.service;
 
 import org.springframework.stereotype.Service;
 
