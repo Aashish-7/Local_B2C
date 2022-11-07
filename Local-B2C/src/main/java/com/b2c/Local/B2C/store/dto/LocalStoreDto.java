@@ -51,7 +51,7 @@ public class LocalStoreDto implements Serializable {
     @Size(min = 5)
     private  String description;
 
-    @Size(min = 5)
+    @Size(min = 1)
     private  List<String> listOfProduct;
 
     @NotNull
