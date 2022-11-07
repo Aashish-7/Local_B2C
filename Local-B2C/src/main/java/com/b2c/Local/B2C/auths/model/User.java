@@ -39,7 +39,7 @@ public class User implements UserDetails {
 
     private String lastName;
 
-    private String mobileNo;
+    private long mobileNo;
 
     private boolean storeOwner;
 

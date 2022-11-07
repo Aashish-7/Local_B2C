@@ -21,7 +21,7 @@ public class UserSecurityDetails {
     @Id
     private UUID id = UUID.randomUUID();
 
-    private int maxSession;
+    private Integer maxSession;
 
     @OneToOne
     private User user;
