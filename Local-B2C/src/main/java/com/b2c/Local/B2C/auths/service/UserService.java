@@ -10,6 +10,7 @@ import com.b2c.Local.B2C.exception.BadRequest400Exception;
 import com.b2c.Local.B2C.exception.Conflict409Exception;
 import com.b2c.Local.B2C.exception.Forbidden403Exception;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
+import com.b2c.Local.B2C.store.service.LocalStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,7 @@ import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -42,16 +44,19 @@ public class UserService implements UserDetailsService {
 
     UserSecurityDetailsRepository userSecurityDetailsRepository;
 
+    LocalStoreService localStoreService;
+
     @Autowired
     public UserService(@Lazy UserRepository userRepository, @Lazy AuthenticationManager authenticationManager,
                        @Lazy DaoAuthenticationProvider authenticationProvider,
                        @Lazy FindByIndexNameSessionRepository<? extends Session> sessions,
-                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository) {
+                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository,@Lazy LocalStoreService localStoreService) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.authenticationProvider = authenticationProvider;
         this.sessions = sessions;
         this.userSecurityDetailsRepository = userSecurityDetailsRepository;
+        this.localStoreService = localStoreService;
     }
 
 
@@ -138,4 +143,39 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    private UUID getLoggedInUserId() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((User)principal).getId();
+        }
+        return null;
+    }
+
+    public String updateUser(UserDto userDto) {
+        User user = new User();
+        if (getLoggedInUserId() !=  null){
+            user = userRepository.findById(getLoggedInUserId()).get();
+            if (userDto.getFirstName() != null){
+                user.setFirstName(userDto.getFirstName());
+            }
+            if (userDto.getLastName() != null) {
+                user.setLastName(userDto.getLastName());
+            }
+            //String s = String.valueOf(userDto.getMobileNumber());
+            if (Objects.isNull(((Long) userDto.getMobileNumber()) != null)) {
+                user.setMobileNo(userDto.getMobileNumber());
+            }
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            if (userDto.getCurrentPassword() != null) {
+                if (bCryptPasswordEncoder.matches(userDto.getCurrentPassword(), user.getPassword()) && userDto.getNewPassword().equals(userDto.getConfirmPassword())) {
+                    user.setPassword(userDto.getNewPassword());
+                }
+            }
+            if (!Objects.isNull(userDto.getMaxSession())){
+                userSecurityDetailsRepository.findByUserEmail(user.getEmail()).setMaxSession(userDto.getMaxSession());
+            }
+            userRepository.save(user);
+        }
+        return "Successfully Updated !!";
+    }
 }

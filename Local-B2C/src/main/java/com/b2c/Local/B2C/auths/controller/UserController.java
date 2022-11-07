@@ -5,13 +5,9 @@ import com.b2c.Local.B2C.auths.dto.UserDto;
 import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.auths.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -32,5 +28,10 @@ public class UserController {
     @PostMapping("/login")
     public String loginUser(@RequestBody @Valid LoginDto loginDto) {
         return userService.loginUser(loginDto);
+    }
+
+    @PutMapping("/updateUser")
+    public String updateUser(@RequestBody UserDto userDto) {
+        return userService.updateUser(userDto);
     }
 }

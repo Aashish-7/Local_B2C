@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/localStore")
+@RequestMapping("/localStore/0")
 @Hidden
 public class LocalStoreController {
 

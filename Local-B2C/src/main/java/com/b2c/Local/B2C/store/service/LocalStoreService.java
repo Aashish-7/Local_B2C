@@ -9,7 +9,6 @@ import com.b2c.Local.B2C.store.model.LocalStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

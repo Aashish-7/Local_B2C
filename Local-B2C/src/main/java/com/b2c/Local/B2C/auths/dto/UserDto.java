@@ -41,4 +41,6 @@ public class UserDto {
     @Size(min = 2)
     //@NotEmpty(message = "Can't be empty")
     private String username;
+
+    private String currentPassword;
 }
