@@ -31,7 +31,7 @@ public class UserDto {
     private String lastName;
 
     @Range(min = 6000000000L, max = 9999999999L)
-    private long mobileNumber;
+    private Long mobileNumber;
 
     private boolean storeOwner;
 

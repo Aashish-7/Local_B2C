@@ -14,7 +14,6 @@ public class UserController {
 
     UserService userService;
 
-
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
@@ -33,5 +32,15 @@ public class UserController {
     @PutMapping("/updateUser")
     public String updateUser(@RequestBody UserDto userDto) {
         return userService.updateUser(userDto);
+    }
+
+    @DeleteMapping("/deleteUser")
+    public String deleteUser() {
+        return userService.deleteUser();
+    }
+
+    @GetMapping("/get")
+    public User get() {
+        return userService.get();
     }
 }

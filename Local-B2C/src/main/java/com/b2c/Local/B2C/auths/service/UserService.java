@@ -118,7 +118,7 @@ public class UserService implements UserDetailsService {
         if (loginDto.getEmail() != null && loginDto.getPassword() != null) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             if (userRepository.existsByEmail(loginDto.getEmail()) && bCryptPasswordEncoder.matches(loginDto.getPassword(), userRepository.findByEmail(loginDto.getEmail()).getPassword())) {
-                if (!userRepository.findByEmail(loginDto.getEmail()).isActive()) {
+                if (!userRepository.findByEmail(loginDto.getEmail()).getIsActive()) {
                     throw new NotFound404Exception("User not found OR Enter Valid Credentials");
                 }
                 if (validateSession(loginDto.getEmail())) {
@@ -139,7 +139,7 @@ public class UserService implements UserDetailsService {
         if (this.sessions.findByPrincipalName(email).entrySet().size() < userSessionLimit){
             return true;
         }else {
-            throw new Forbidden403Exception("Your MaximumSession Limit Exceed");
+            throw new Forbidden403Exception("Your Maximum Session Limit Exceed , Logout Any Session For Logged In");
         }
     }
 
@@ -161,7 +161,6 @@ public class UserService implements UserDetailsService {
             if (userDto.getLastName() != null) {
                 user.setLastName(userDto.getLastName());
             }
-            //String s = String.valueOf(userDto.getMobileNumber());
             if (Objects.isNull(((Long) userDto.getMobileNumber()) != null)) {
                 user.setMobileNo(userDto.getMobileNumber());
             }
@@ -176,6 +175,19 @@ public class UserService implements UserDetailsService {
             }
             userRepository.save(user);
         }
-        return "Successfully Updated !!";
+        return "Successfully Updated!";
+    }
+
+    public String deleteUser(){
+        if(userRepository.findById((Objects.requireNonNull(getLoggedInUserId()))).isPresent()){
+            userRepository.findById(getLoggedInUserId()).get().setIsActive(false);
+            return "Deleted Successfully";
+        }else {
+            return "Not Deleted";
+        }
+    }
+
+    public User get(){
+      return userRepository.findById(Objects.requireNonNull(getLoggedInUserId())).get();
     }
 }

@@ -39,13 +39,14 @@ public class User implements UserDetails {
 
     private String lastName;
 
-    private long mobileNo;
+    private Long mobileNo;
 
-    private boolean storeOwner;
+    private Boolean storeOwner;
 
     @Column
-    private boolean isActive = true;
+    private Boolean isActive = true;
 
+    @JsonIgnore
     @Column(name = "create_date")
     private LocalDateTime createDate;
 
