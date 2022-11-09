@@ -27,6 +27,7 @@ public class FilterRequestsService extends GenericFilter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         FilterRequest filterRequest = new FilterRequest();
         filterRequest.setRemoteIp(servletRequest.getRemoteAddr());
+        filterRequest.setRemoteHost(servletRequest.getRemoteHost());
         filterRequest.setRemotePort(servletRequest.getRemotePort());
         filterRequest.setProtocol(servletRequest.getProtocol());
         filterRequest.setContentType(servletRequest.getContentType());
