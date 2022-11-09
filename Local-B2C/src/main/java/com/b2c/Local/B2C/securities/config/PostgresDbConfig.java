@@ -26,7 +26,6 @@ public class PostgresDbConfig {
 
     @Primary
     @Bean
-    @SpringSessionDataSource
     @ConfigurationProperties(prefix="spring.datasource.first")
     public DataSource primaryDataSource() {
         return DataSourceBuilder.create().build();

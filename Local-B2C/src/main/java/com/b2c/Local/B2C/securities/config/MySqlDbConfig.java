@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.session.jdbc.config.annotation.SpringSessionDataSource;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class MySqlDbConfig {
     private String dialect;
 
     @Bean
+    @SpringSessionDataSource
     @ConfigurationProperties(prefix="spring.datasource.second")
     public DataSource secondaryDataSource() {
         return DataSourceBuilder.create().build();
