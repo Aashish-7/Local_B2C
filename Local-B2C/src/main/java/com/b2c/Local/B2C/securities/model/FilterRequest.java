@@ -18,7 +18,7 @@ import java.util.UUID;
 public class FilterRequest {
 
     @Id
-    private UUID requestId = UUID.randomUUID();
+    private String requestId = UUID.randomUUID().toString();
 
     private String remoteIp;
 
