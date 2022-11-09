@@ -18,15 +18,12 @@ import java.util.UUID;
 @Service
 public class LocalStoreService {
 
+    @Autowired(required = false)
     LocalStoreRepository localStoreRepository;
 
+    @Autowired(required = false)
     UserRepository userRepository;
 
-    @Autowired
-    public LocalStoreService(LocalStoreRepository localStoreRepository, UserRepository userRepository) {
-        this.localStoreRepository = localStoreRepository;
-        this.userRepository = userRepository;
-    }
 
     public LocalStore addStore(LocalStoreDto localStoreDto){
         LocalStore localStore = new LocalStore();

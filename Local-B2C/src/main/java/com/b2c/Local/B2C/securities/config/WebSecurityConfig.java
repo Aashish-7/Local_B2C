@@ -1,4 +1,4 @@
-package com.b2c.Local.B2C.securities;
+package com.b2c.Local.B2C.securities.config;
 
 import com.b2c.Local.B2C.auths.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +70,7 @@ public class WebSecurityConfig {
         });
         return http.build();
     }
+
 
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

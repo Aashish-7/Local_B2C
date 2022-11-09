@@ -1,6 +1,6 @@
 package com.b2c.Local.B2C.securities.service;
 
-import com.b2c.Local.B2C.securities.dao.FilterRequestRepository;
+import com.b2c.Local.B2C.securities.dao.FilterRequestsRepository;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,15 +10,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
-public class FilterRequestService extends GenericFilter {
-    
-    
-    FilterRequestRepository filterRequestRepository;
+public class FilterRequestsService extends GenericFilter {
 
-    @Autowired
-    public FilterRequestService(FilterRequestRepository filterRequestRepository) {
-        this.filterRequestRepository = filterRequestRepository;
-    }
+    @Autowired(required = false)
+    FilterRequestsRepository filterRequestsRepository;
+
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -28,7 +24,7 @@ public class FilterRequestService extends GenericFilter {
         filterRequest.setProtocol(servletRequest.getProtocol());
         filterRequest.setContentType(servletRequest.getContentType());
         filterRequest.setLocalDateTime(LocalDateTime.now());
-        filterRequestRepository.save(filterRequest);
+        filterRequestsRepository.save(filterRequest);
         filterChain.doFilter(servletRequest,servletResponse);
     }
 }
