@@ -32,4 +32,10 @@ public class FilterRequest {
 
     private String contentType;
 
+    private String url;
+
+    private String sessionId;
+
+    private String userAgent;
+
 }

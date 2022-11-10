@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
@@ -25,7 +26,12 @@ public class FilterRequestsService extends GenericFilter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        filterChain.doFilter(servletRequest, servletResponse);
+        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         FilterRequest filterRequest = new FilterRequest();
+        filterRequest.setSessionId(httpServletRequest.getRequestedSessionId());
+        filterRequest.setUserAgent(httpServletRequest.getHeader("User-Agent"));
+        filterRequest.setUrl(httpServletRequest.getRequestURL().toString());
         filterRequest.setRemoteIp(servletRequest.getRemoteAddr());
         filterRequest.setRemoteHost(servletRequest.getRemoteHost());
         filterRequest.setRemotePort(servletRequest.getRemotePort());
@@ -33,6 +39,5 @@ public class FilterRequestsService extends GenericFilter {
         filterRequest.setContentType(servletRequest.getContentType());
         filterRequest.setLocalDateTime(LocalDateTime.now());
         filterRequestsRepository.save(filterRequest);
-        filterChain.doFilter(servletRequest,servletResponse);
     }
 }
