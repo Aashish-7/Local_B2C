@@ -2,8 +2,8 @@ package com.b2c.Local.B2C.securities.service;
 
 import com.b2c.Local.B2C.securities.dao.FilterRequestsRepository;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import javax.servlet.*;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @ControllerAdvice
 @WebFilter
-@Service
+@Log4j2
 public class FilterRequestsService extends GenericFilter {
 
     FilterRequestsRepository filterRequestsRepository;
@@ -25,7 +25,18 @@ public class FilterRequestsService extends GenericFilter {
     }
 
     @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        log.info("########## Initiating filter ##########");
+    }
+
+    @Override
+    public void destroy() {
+        log.info("########## Destroying filter ##########");
+    }
+
+    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        log.info("-------- ------ ----- filtering ServletRequest ------ ------ -----");
         filterChain.doFilter(servletRequest, servletResponse);
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         FilterRequest filterRequest = new FilterRequest();
