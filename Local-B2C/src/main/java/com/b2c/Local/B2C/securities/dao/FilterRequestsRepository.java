@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FilterRequestsRepository extends JpaRepository<FilterRequest, String> {
+
+    /*@Query(nativeQuery = true, value = "select * from filter_request WHERE sessionId=:sessionId ORDER BY localDateTime DESC ")
+    List<FilterRequest> getBySessionId(String sessionId);*/
+
 }

@@ -37,10 +37,9 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         log.info("-------- ------ ----- filtering ServletRequest ------ ------ -----");
-        filterChain.doFilter(servletRequest, servletResponse);
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         FilterRequest filterRequest = new FilterRequest();
-        filterRequest.setSessionId(httpServletRequest.getRequestedSessionId());
+        filterRequest.setSessionId(httpServletRequest.getSession().getId());
         filterRequest.setUserAgent(httpServletRequest.getHeader("User-Agent"));
         filterRequest.setUrl(httpServletRequest.getRequestURL().toString());
         filterRequest.setRemoteIp(servletRequest.getRemoteAddr());
@@ -50,5 +49,6 @@ public class FilterRequestsService extends GenericFilter {
         filterRequest.setContentType(servletRequest.getContentType());
         filterRequest.setLocalDateTime(LocalDateTime.now());
         filterRequestsRepository.save(filterRequest);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }
