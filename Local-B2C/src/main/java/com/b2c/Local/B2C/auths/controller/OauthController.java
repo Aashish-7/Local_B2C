@@ -2,36 +2,47 @@ package com.b2c.Local.B2C.auths.controller;
 
 import com.b2c.Local.B2C.auths.service.OauthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
-import java.security.Principal;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 public class OauthController {
+
+    private AuthenticationProvider authenticationProvider;
 
     private OauthService oauthService;
 
     private OAuth2AuthorizedClientService service;
 
+    private HttpServletResponse httpServletResponse;
+
 
     @Autowired
-    public OauthController(OauthService oauthService, OAuth2AuthorizedClientService service) {
+    public OauthController(OauthService oauthService, OAuth2AuthorizedClientService service, HttpServletResponse httpServletResponse) {
         this.oauthService = oauthService;
         this.service = service;
+        this.httpServletResponse = httpServletResponse;
     }
 
-    @GetMapping("/oauthLogin")
-    public OAuth2AuthenticationToken testToken(OAuth2AuthenticationToken token, OAuth2AuthorizedClientService service){
-        var t = service.loadAuthorizedClient(token.getAuthorizedClientRegistrationId(), token.getName());
-        System.out.println(t.getAccessToken().getTokenValue());
-        return token;
+
+    @GetMapping("/login/oauth2/code/github")
+    public String getClientCode(@RequestParam String code) throws IOException {
+        String githubUrl = "https://github.com/login/oauth/access_token?client_id=2c1ebc8fdc8c61aaaa09&client_secret=d3329bda9c0e69d55089294b5fe3a127816b53b1&code="+code;
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.getForEntity(githubUrl,String.class);
+        return response.toString();
     }
 
-        @GetMapping("/")
-        public String message(Principal principal) {
-            return "Welcome "+principal.getName()+". You are successfully logged in";
-        }
+    @GetMapping("/login/oauth2")
+    public void redirectUrlToGithub(HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.sendRedirect("https://github.com/login/oauth/authorize?client_id=2c1ebc8fdc8c61aaaa09&redirect_uri=http://localhost:8080/login/oauth2/code/github");
+    }
 }

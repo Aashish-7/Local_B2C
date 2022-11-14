@@ -53,7 +53,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/forgetPassword", "/login", "/addUser").permitAll()
+                .antMatchers("/forgetPassword", "/login", "/addUser", "/login/oauth2/code/github", "/login/oauth2").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
@@ -72,11 +72,6 @@ public class WebSecurityConfig {
     }
 
 }
-
-
-
-
-
 
 
 //    @Bean
