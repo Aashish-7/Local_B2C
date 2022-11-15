@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = {"com.b2c.Local.B2C.auths.model","com.b2c.Local.B2C.products.electronic.model","com.b2c.Local.B2C.store.model","com.b2c.Local.B2C.auths.dao"}, entityManagerFactoryRef = "postgresEntityManager",transactionManagerRef = "postTransactionManager")
+@EnableJpaRepositories(basePackages = {"com.b2c.Local.B2C.auths.model","com.b2c.Local.B2C.products.electronic.model","com.b2c.Local.B2C.store","com.b2c.Local.B2C.auths.dao"}, entityManagerFactoryRef = "postgresEntityManager",transactionManagerRef = "postTransactionManager")
 public class PostgresDbConfig {
 
     @Value("${spring.datasource.first.hibernate.dialect}")

@@ -20,10 +20,10 @@ import java.util.UUID;
 @Service
 public class LocalStoreService {
 
-    @Autowired(required = false)
+    @Autowired
     LocalStoreRepository localStoreRepository;
 
-    @Autowired(required = false)
+    @Autowired
     UserRepository userRepository;
 
 
