@@ -47,6 +47,8 @@ public class LocalStore {
 
     private String description;
 
+    private Boolean active;
+
     @Column(columnDefinition = "text[]")
     @Type(type = "list-array")
     private List<String> listOfProduct;

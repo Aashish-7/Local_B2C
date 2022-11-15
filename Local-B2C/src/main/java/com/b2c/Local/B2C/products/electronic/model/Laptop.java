@@ -80,6 +80,8 @@ public class Laptop {
 
     private int noOfSpeaker;
 
+    private Boolean active;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")

@@ -52,6 +52,8 @@ public class WashingMachine {
 
     private String availability;
 
+    private Boolean active;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")

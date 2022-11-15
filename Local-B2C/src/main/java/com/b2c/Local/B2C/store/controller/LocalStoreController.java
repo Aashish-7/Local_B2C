@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/localStore/0")
@@ -30,5 +31,30 @@ public class LocalStoreController {
     @GetMapping("/listAllStores")
     public List<LocalStore> listAllStores(){
         return localStoreService.listAllStores();
+    }
+
+    @GetMapping("/getById")
+    public LocalStore getById(@RequestParam UUID uuid){
+        return localStoreService.getById(uuid);
+    }
+
+    @GetMapping("/deleteById")
+    public String deleteById(@RequestParam UUID uuid){
+        return localStoreService.deleteById(uuid);
+    }
+
+    @GetMapping("/deactivateById")
+    public String deactivateById(@RequestParam UUID uuid){
+        return localStoreService.deactivateById(uuid);
+    }
+
+    @DeleteMapping("/deleteAllStoreByUserId")
+    public String deleteAllStoreByUserId(){
+        return localStoreService.deleteAllStoreByUserId();
+    }
+
+    @PostMapping("/addProductByStoreId")
+    public LocalStore addProductByStoreId(@RequestParam UUID uuid, @RequestParam String product){
+        return localStoreService.addProductByStoreId(uuid, product);
     }
 }

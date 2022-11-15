@@ -90,6 +90,8 @@ public class MobilePhone {
 
     private double discountPercentage;
 
+    private Boolean active;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")
