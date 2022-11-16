@@ -32,4 +32,5 @@ public class ACDto implements Serializable {
     private boolean wiFi;
     private String airConditionerType;
     private UUID localStoreId;
+    private double price;
 }

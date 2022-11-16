@@ -33,4 +33,5 @@ public class WashingMachineDto implements Serializable {
     private double discountPercentage;
     private String availability;
     private UUID localStoreId;
+    private double price;
 }

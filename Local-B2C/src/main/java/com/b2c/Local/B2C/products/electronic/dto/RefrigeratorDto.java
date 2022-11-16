@@ -30,4 +30,5 @@ public class RefrigeratorDto implements Serializable {
     private String availability;
     private boolean builtInStabilizer;
     private UUID localStoreId;
+    private double price;
 }
