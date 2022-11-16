@@ -6,6 +6,7 @@ import com.b2c.Local.B2C.products.electronic.dto.ACDto;
 import com.b2c.Local.B2C.products.electronic.model.AC;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,6 +54,7 @@ public class ACService {
         }
     }
 
+    @Cacheable(value = "getAllByStoreId", key = "#uuid")
     public List<AC> getAllByStoreId(UUID uuid){
         if (localStoreRepository.existsById(uuid)) {
             return acRepository.findByLocalStore_IdAndActiveTrue(uuid);

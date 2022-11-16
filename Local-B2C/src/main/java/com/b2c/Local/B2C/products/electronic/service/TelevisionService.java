@@ -6,6 +6,7 @@ import com.b2c.Local.B2C.products.electronic.dto.TelevisionDto;
 import com.b2c.Local.B2C.products.electronic.model.Television;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,6 +58,7 @@ public class TelevisionService {
         }
     }
 
+    @Cacheable(value = "getAllByStoreId", key = "#uuid")
     public List<Television> getAllByStoreId(UUID uuid){
         if (localStoreRepository.existsById(uuid)) {
             return televisionRepository.findByLocalStore_IdAndActiveTrue(uuid);
