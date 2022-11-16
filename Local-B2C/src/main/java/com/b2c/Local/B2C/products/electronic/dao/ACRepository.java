@@ -8,6 +8,5 @@ import javax.transaction.Transactional;
 
 @Transactional
 @Repository
-
 public interface ACRepository extends JpaRepository<AC, Long> {
 }
