@@ -17,4 +17,10 @@ public interface LocalStoreRepository extends JpaRepository<LocalStore, UUID> {
     @Cacheable(value = "findByUserId", key = "#userId")
     List<LocalStore> findByUserId(UUID userId);
 
+    List<LocalStore> findByPinCodeAndActiveTrue(int pinCode);
+
+    List<LocalStore> findByCityAndActiveTrue(String city);
+
+
+
 }

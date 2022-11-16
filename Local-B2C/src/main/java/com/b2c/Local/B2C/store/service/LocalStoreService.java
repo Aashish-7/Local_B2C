@@ -122,4 +122,12 @@ public class LocalStoreService {
             return null;
         }
     }
+
+    public List<LocalStore> findStoreByPinCode(int pinCode){
+        return localStoreRepository.findByPinCodeAndActiveTrue(pinCode);
+    }
+
+    public List<LocalStore> findStoreByCity(String city){
+        return localStoreRepository.findByCityAndActiveTrue(city);
+    }
 }
