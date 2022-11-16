@@ -29,4 +29,9 @@ public class ACController {
     public List<AC> getAllByStoreId(@PathVariable UUID uuid) {
         return acService.getAllByStoreId(uuid);
     }
+
+    @PostMapping("/{id}/updateAcById")
+    public AC updateAcById(@RequestBody ACDto acDto, @PathVariable Long id){
+        return acService.updateAcById(acDto, id);
+    }
 }

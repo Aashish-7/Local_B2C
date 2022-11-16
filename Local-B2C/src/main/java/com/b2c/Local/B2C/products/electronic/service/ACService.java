@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -60,6 +61,73 @@ public class ACService {
             return acRepository.findByLocalStore_IdAndActiveTrue(uuid);
         }else {
             throw new NotFound404Exception("Store Not Found");
+        }
+    }
+
+    public AC updateAcById(ACDto acDto, Long id){
+        if (acRepository.existsByAcIdAndActiveTrue(id)){
+            AC ac = acRepository.findById(id).get();
+            if (acDto.getModel() != null){
+                ac.setModel(acDto.getModel());
+            }
+            if (acDto.getBrand() != null){
+                ac.setBrand(acDto.getBrand());
+            }
+            if (acDto.getColour() != null){
+                ac.setColour(acDto.getColour());
+            }
+            if (acDto.getWarranty() != null){
+                ac.setWarranty(acDto.getWarranty());
+            }
+            if (acDto.isDigitalDisplay()){
+               ac.setDigitalDisplay(acDto.isDigitalDisplay());
+            }else {
+                ac.setDigitalDisplay(acDto.isDigitalDisplay());
+            }
+            if (Objects.nonNull(acDto.getWeightInKg())) {
+                ac.setWeightInKg(acDto.getWeightInKg());
+            }
+            if (Objects.nonNull(acDto.getDiscountPercentage())) {
+                ac.setDiscountPercentage(acDto.getDiscountPercentage());
+            }
+            if (Objects.nonNull(acDto.getPowerInStar())){
+                ac.setPowerInStar(acDto.getPowerInStar());
+            }
+            if (acDto.getAvailability() != null) {
+                ac.setAvailability(acDto.getAvailability());
+            }
+            if (acDto.isBuiltInStabilizer()){
+                ac.setBuiltInStabilizer(acDto.isBuiltInStabilizer());
+            } else {
+                ac.setBuiltInStabilizer(acDto.isBuiltInStabilizer());
+            }
+            if (Objects.nonNull(acDto.getCapacityInTon())){
+                ac.setCapacityInTon(acDto.getCapacityInTon());
+            }
+            if (acDto.getMode() != null){
+                ac.setMode(acDto.getMode());
+            }
+            if (acDto.isTimer()){
+                ac.setTimer(acDto.isTimer());
+            } else {
+                ac.setTimer(acDto.isTimer());
+            }
+            if (acDto.isWiFi()) {
+                ac.setWiFi(acDto.isWiFi());
+            } else {
+                ac.setWiFi(acDto.isWiFi());
+            }
+            if (acDto.getAirConditionerType() != null){
+                ac.setAirConditionerType(acDto.getAirConditionerType());
+            }
+            if (Objects.nonNull(acDto.getPrice())) {
+                ac.setPrice(acDto.getPrice());
+            }
+            acRepository.save(ac);
+            return ac;
+        }
+        else {
+            throw new NotFound404Exception("Ac not found");
         }
     }
 }

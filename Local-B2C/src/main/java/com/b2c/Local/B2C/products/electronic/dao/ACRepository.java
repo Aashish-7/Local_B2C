@@ -17,4 +17,10 @@ public interface ACRepository extends JpaRepository<AC, Long> {
     @Query("select a from AC a where a.localStore.id =: id  and a.active = true")
     List<AC> getAllAcByStoreId(UUID id);
 
+    boolean existsByActiveTrue();
+
+    boolean existsByAcIdAndActiveTrue(Long acId);
+
+
+
 }
