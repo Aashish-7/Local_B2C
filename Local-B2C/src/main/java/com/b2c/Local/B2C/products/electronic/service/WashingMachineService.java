@@ -8,6 +8,9 @@ import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 public class WashingMachineService {
 
@@ -47,6 +50,14 @@ public class WashingMachineService {
         }
         else {
             throw new NotFound404Exception("Store not found");
+        }
+    }
+
+    public List<WashingMachine> getAllByStoreId(UUID uuid){
+        if (localStoreRepository.existsById(uuid)) {
+            return washingMachineRepository.findByLocalStore_IdAndActiveTrue(uuid);
+        }else {
+            throw new NotFound404Exception("Store Not Found");
         }
     }
 }

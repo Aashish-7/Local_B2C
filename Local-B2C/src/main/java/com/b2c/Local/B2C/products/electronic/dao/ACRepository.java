@@ -4,9 +4,12 @@ import com.b2c.Local.B2C.products.electronic.model.AC;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
+import java.util.List;
+import java.util.UUID;
 
-@Transactional
+
 @Repository
 public interface ACRepository extends JpaRepository<AC, Long> {
+
+    List<AC> findByLocalStore_IdAndActiveTrue(UUID id);
 }

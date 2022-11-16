@@ -4,10 +4,10 @@ import com.b2c.Local.B2C.products.electronic.dto.MobilePhoneDto;
 import com.b2c.Local.B2C.products.electronic.model.MobilePhone;
 import com.b2c.Local.B2C.products.electronic.service.MobilePhoneService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/products/mobilePhone")
@@ -23,5 +23,10 @@ public class MobilePhoneController {
     @PostMapping("/add")
     public MobilePhone addMobilePhone(@RequestBody MobilePhoneDto mobilePhoneDto){
         return mobilePhoneService.addMobilePhone(mobilePhoneDto);
+    }
+
+    @GetMapping("/{uuid}/getAllByStoreId")
+    public List<MobilePhone> getAllByStoreId(@PathVariable UUID uuid) {
+        return mobilePhoneService.getAllByStoreId(uuid);
     }
 }

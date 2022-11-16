@@ -25,7 +25,7 @@ public class LocalStore {
 
     @Id
     @Column(name = "id")
-    private UUID Id = UUID.randomUUID();
+    private UUID id = UUID.randomUUID();
 
     private String storeName;
 

@@ -8,6 +8,9 @@ import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 public class TelevisionService {
 
@@ -51,6 +54,14 @@ public class TelevisionService {
         }
         else {
             throw new NotFound404Exception("Store not found");
+        }
+    }
+
+    public List<Television> getAllByStoreId(UUID uuid){
+        if (localStoreRepository.existsById(uuid)) {
+            return televisionRepository.findByLocalStore_IdAndActiveTrue(uuid);
+        }else {
+            throw new NotFound404Exception("Store Not Found");
         }
     }
 }

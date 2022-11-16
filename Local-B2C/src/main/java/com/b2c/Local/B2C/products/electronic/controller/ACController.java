@@ -4,10 +4,10 @@ import com.b2c.Local.B2C.products.electronic.dto.ACDto;
 import com.b2c.Local.B2C.products.electronic.model.AC;
 import com.b2c.Local.B2C.products.electronic.service.ACService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/products/ac")
@@ -21,7 +21,12 @@ public class ACController {
     }
 
     @PostMapping("/add")
-    public AC addAc(@RequestBody ACDto acDto){
+    public AC addAc(@RequestBody ACDto acDto) {
         return acService.addAc(acDto);
+    }
+
+    @GetMapping("/{uuid}/getAllByStoreId")
+    public List<AC> getAllByStoreId(@PathVariable UUID uuid) {
+        return acService.getAllByStoreId(uuid);
     }
 }

@@ -4,10 +4,10 @@ import com.b2c.Local.B2C.products.electronic.dto.WashingMachineDto;
 import com.b2c.Local.B2C.products.electronic.model.WashingMachine;
 import com.b2c.Local.B2C.products.electronic.service.WashingMachineService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/products/washingMachine")
@@ -23,5 +23,10 @@ public class WashingMachineController {
     @PostMapping("/add")
     public WashingMachine addWashingMachine(@RequestBody WashingMachineDto washingMachineDto){
         return washingMachineService.addWashingMachine(washingMachineDto);
+    }
+
+    @GetMapping("/{uuid}/getAllByStoreId")
+    public List<WashingMachine> getAllByStoreId(@PathVariable UUID uuid) {
+        return washingMachineService.getAllByStoreId(uuid);
     }
 }
