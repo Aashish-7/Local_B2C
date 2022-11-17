@@ -58,7 +58,7 @@ public class WebSecurityConfig {
                 .and()
                 .formLogin().disable()
                 .logout().logoutSuccessHandler((request, response, authentication) -> {
-            request.getSession().invalidate();
+            request.logout();
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().print("Logged out successfully!!!");
         })
