@@ -41,7 +41,7 @@ public class FilterRequest {
 
     private Boolean newSession;
 
-    private Object userId;
+    private String userId;
 
     private Date lastAccessTime;
 
