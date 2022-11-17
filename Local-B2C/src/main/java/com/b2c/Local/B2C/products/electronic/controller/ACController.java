@@ -34,4 +34,9 @@ public class ACController {
     public AC updateAcById(@RequestBody ACDto acDto, @PathVariable Long id){
         return acService.updateAcById(acDto, id);
     }
+
+    @PutMapping("/{id}/updateAcByIdByPut")
+    public AC updateAcByIdByPut(@RequestBody ACDto acDto, @PathVariable Long id){
+        return acService.updateAcByIdByPut(acDto, id);
+    }
 }

@@ -130,4 +130,33 @@ public class ACService {
             throw new NotFound404Exception("Ac not found");
         }
     }
+
+    public AC updateAcByIdByPut(ACDto acDto, Long id){
+        if (acRepository.existsByAcIdAndActiveTrue(id)){
+            AC ac = acRepository.findById(id).get();
+            ac.setModel(acDto.getModel());
+            ac.setBrand(acDto.getBrand());
+            ac.setColour(acDto.getColour());
+            ac.setWarranty(acDto.getWarranty());
+            ac.setDigitalDisplay(acDto.isDigitalDisplay());
+            ac.setWeightInKg(acDto.getWeightInKg());
+            ac.setDiscountPercentage(acDto.getDiscountPercentage());
+            ac.setPowerInStar(acDto.getPowerInStar());
+            ac.setAvailability(acDto.getAvailability());
+            ac.setBuiltInStabilizer(ac.isBuiltInStabilizer());
+            ac.setCapacityInTon(acDto.getCapacityInTon());
+            ac.setMode(acDto.getMode());
+            ac.setTimer(acDto.isTimer());
+            ac.setWiFi(acDto.isWiFi());
+            ac.setAirConditionerType(acDto.getAirConditionerType());
+            ac.setPrice(acDto.getPrice());
+            ac.setLocalStore(localStoreRepository.findById(acDto.getLocalStoreId()).get());
+            ac.setActive(true);
+            acRepository.save(ac);
+            return ac;
+        }
+        else {
+            throw new NotFound404Exception("Store not found");
+        }
+    }
 }

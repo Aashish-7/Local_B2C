@@ -13,7 +13,7 @@ public class FirewallConfig {
     @Bean
     public StrictHttpFirewall httpFirewall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();
-        firewall.setAllowedHttpMethods(Arrays.asList("GET","POST"));
+        firewall.setAllowedHttpMethods(Arrays.asList("GET","POST","PUT"));
         firewall.setAllowNull(false);
         return firewall;
     }
