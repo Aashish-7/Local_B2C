@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@EnableJpaRepositories(basePackages = {"com.b2c.Local.B2C.securities.model","com.b2c.Local.B2C.securities.dao","com.b2c.Local.B2C.securities.service"}, entityManagerFactoryRef = "mySqlEntityManager"
+@EnableJpaRepositories(basePackages = {"com.b2c.Local.B2C.securities.model","com.b2c.Local.B2C.securities.dao","com.b2c.Local.B2C.securities.service","com.b2c.Local.B2C.auths.service"}, entityManagerFactoryRef = "mySqlEntityManager"
 ,transactionManagerRef = "sqlTransactionManager")
 public class MySqlDbConfig {
 
@@ -38,7 +38,7 @@ public class MySqlDbConfig {
     public LocalContainerEntityManagerFactoryBean mySqlEntityManagerFactory(EntityManagerFactoryBuilder entityManagerFactoryBuilder){
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.dialect", dialect);
-        return entityManagerFactoryBuilder.dataSource(secondaryDataSource()).packages("com.b2c.Local.B2C.securities.model","com.b2c.Local.B2C.securities.dao","com.b2c.Local.B2C.securities.service").properties(properties).build();
+        return entityManagerFactoryBuilder.dataSource(secondaryDataSource()).packages("com.b2c.Local.B2C.securities.model","com.b2c.Local.B2C.securities.dao","com.b2c.Local.B2C.securities.service","com.b2c.Local.B2C.auths.service").properties(properties).build();
     }
 
     @Bean(name="sqlTransactionManager")

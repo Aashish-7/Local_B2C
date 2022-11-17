@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -38,4 +39,11 @@ public class FilterRequest {
 
     private String userAgent;
 
+    private Boolean newSession;
+
+    private Object userId;
+
+    private Date lastAccessTime;
+
+    private String userName;
 }

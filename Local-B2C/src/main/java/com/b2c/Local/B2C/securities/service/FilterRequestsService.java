@@ -1,27 +1,33 @@
 package com.b2c.Local.B2C.securities.service;
 
+import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.securities.dao.FilterRequestsRepository;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Objects;
 
-@ControllerAdvice
+
 @WebFilter
 @Log4j2
 public class FilterRequestsService extends GenericFilter {
 
     FilterRequestsRepository filterRequestsRepository;
 
+    UserRepository userRepository;
+
     @Autowired
-    public FilterRequestsService(FilterRequestsRepository filterRequestsRepository) {
+    public FilterRequestsService(FilterRequestsRepository filterRequestsRepository, UserRepository userRepository) {
         this.filterRequestsRepository = filterRequestsRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -39,6 +45,18 @@ public class FilterRequestsService extends GenericFilter {
         log.info("-------- ------ ----- filtering ServletRequest ------ ------ -----");
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         FilterRequest filterRequest = new FilterRequest();
+        HttpSession httpSession = httpServletRequest.getSession();
+        if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())){
+            Date last = new Date(httpSession.getLastAccessedTime());
+            filterRequest.setLastAccessTime(last);
+            filterRequest.setNewSession(false);
+            filterRequest.setUserId(userRepository.findByEmail(httpServletRequest.getUserPrincipal().getName()).getId().toString());
+            filterRequest.setUserName(userRepository.findByEmail(httpServletRequest.getUserPrincipal().getName()).getEmail());
+        }else {
+            filterRequest.setNewSession(true);
+            Date last = new Date(httpSession.getLastAccessedTime());
+            filterRequest.setLastAccessTime(last);
+        }
         filterRequest.setSessionId(httpServletRequest.getSession().getId());
         filterRequest.setUserAgent(httpServletRequest.getHeader("User-Agent"));
         filterRequest.setUrl(httpServletRequest.getRequestURL().toString());
