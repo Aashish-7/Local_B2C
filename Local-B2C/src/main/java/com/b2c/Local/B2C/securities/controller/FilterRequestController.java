@@ -1,10 +1,12 @@
 package com.b2c.Local.B2C.securities.controller;
 
+import com.b2c.Local.B2C.securities.dto.FilterRequestInfo;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
 import com.b2c.Local.B2C.securities.service.FilteringDataService;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Set;
 
@@ -20,9 +22,9 @@ public class FilterRequestController {
         this.filteringDataService = filteringDataService;
     }
 
-    @GetMapping("getAllSessionId")
-    public List<FilterRequest> getAllSessionId() {
-        return filteringDataService.getAllSessionId();
+    @GetMapping("getAllSessionRequests")
+    public List<FilterRequest> getAllSessionRequests() {
+        return filteringDataService.getAllSessionRequests();
     }
 
     @GetMapping("{id}/getBySessionId")
@@ -38,5 +40,15 @@ public class FilterRequestController {
     @PostMapping("user/destroyAllSession")
     public void destroyAllSession() {
         filteringDataService.destroyAllSession();
+    }
+
+    @GetMapping("{sessionId}/getRequestsBySessionId")
+    public List<FilterRequest> getRequestsBySessionId(@PathVariable String sessionId, @RequestParam String url){
+        return filteringDataService.getRequestsBySessionId(sessionId, url);
+    }
+
+    @GetMapping("user/getAllSessionsByUser")
+    public List<FilterRequestInfo> getAllSessionsByUser(){
+        return filteringDataService.getAllSessionsByUser();
     }
 }

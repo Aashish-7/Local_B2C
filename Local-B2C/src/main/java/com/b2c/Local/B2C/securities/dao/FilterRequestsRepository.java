@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.securities.dao;
 
+import com.b2c.Local.B2C.securities.dto.FilterRequestInfo;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,13 @@ public interface FilterRequestsRepository extends JpaRepository<FilterRequest, S
 
     boolean existsAllBySessionId(String uuid);
 
-    List<FilterRequest> findAllByUserId(String uuid);
+    boolean existsAllByUrlAndSessionId(String url, String sessionId);
+
+    List<FilterRequest> findAllByUserId(String userId);
 
     List<FilterRequest> findAllBySessionId(String sessionId);
+
+    List<FilterRequest> findAllByUrlAndSessionId(String url, String sessionId);
+
+    List<FilterRequestInfo> getAllByUserId(String userId);
 }

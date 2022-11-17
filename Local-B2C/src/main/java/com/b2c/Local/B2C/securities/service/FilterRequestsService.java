@@ -32,18 +32,18 @@ public class FilterRequestsService extends GenericFilter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        log.info("########## Initiating filter ##########");
+        log.info("Initiating WebFilter For Local_B2C");
     }
 
     @Override
     public void destroy() {
-        log.info("########## Destroying filter ##########");
+        log.info("Destroying WebFilter For Local_B2C");
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        log.info("-------- ------ ----- filtering ServletRequest ------ ------ -----");
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        log.info("Incoming Request From - "+servletRequest.getRemoteAddr() +"  For - " +httpServletRequest.getRequestURI());
         FilterRequest filterRequest = new FilterRequest();
         HttpSession httpSession = httpServletRequest.getSession();
         if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())){
