@@ -163,4 +163,15 @@ public class ACService {
     public AC getAcById(Long id){
         return acRepository.findByAcIdAndActiveTrue(id);
     }
+
+    public String deactivateById(Long id){
+        if (acRepository.findById(id).isPresent()){
+            AC ac =acRepository.findById(id).get();
+            ac.setActive(false);
+            acRepository.save(ac);
+            return "Deactivate AC";
+        }else {
+            return "AC Not Found";
+        }
+    }
 }

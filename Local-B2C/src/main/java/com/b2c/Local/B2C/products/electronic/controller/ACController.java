@@ -44,4 +44,9 @@ public class ACController {
     public AC getAcById(@PathVariable Long id){
         return acService.getAcById(id);
     }
+
+    @GetMapping("/deactivateById")
+    public String deactivateById(@RequestParam Long id){
+        return acService.deactivateById(id);
+    }
 }
