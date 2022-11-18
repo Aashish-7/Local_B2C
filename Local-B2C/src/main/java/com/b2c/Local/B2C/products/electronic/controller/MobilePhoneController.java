@@ -39,4 +39,9 @@ public class MobilePhoneController {
     public MobilePhone getMobilePhoneById(@PathVariable Long id){
         return mobilePhoneService.getMobilePhoneById(id);
     }
+
+    @GetMapping("/deactivateById")
+    public String deactivateById(@RequestParam Long id){
+        return mobilePhoneService.deactivateById(id);
+    }
 }
