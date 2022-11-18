@@ -76,4 +76,45 @@ public class LaptopService {
             throw new NotFound404Exception("Store Not Found");
         }
     }
+
+    public Laptop updateLaptopById(LaptopDto laptopDto, Long id){
+        if (laptopRepository.existsByLaptopIdAndActiveTrue(id)){
+            Laptop laptop = laptopRepository.findById(id).get();
+            laptop.setModel(laptopDto.getModel());
+            laptop.setBrand(laptopDto.getBrand());
+            laptop.setPrice(laptopDto.getPrice());
+            laptop.setWeightInKg(laptopDto.getWeightInKg());
+            laptop.setScreenSizeInInch(laptopDto.getScreenSizeInInch());
+            laptop.setTouchScreen(laptopDto.isTouchScreen());
+            laptop.setAvailability(laptopDto.getAvailability());
+            laptop.setScreenResolution(laptopDto.getScreenResolution());
+            laptop.setCpuBrand(laptopDto.getCpuBrand());
+            laptop.setCpuModel(laptopDto.getCpuModel());
+            laptop.setCpuGeneration(laptopDto.getCpuGeneration());
+            laptop.setCpuClockSpeed(laptopDto.getCpuClockSpeed());
+            laptop.setNoOfCpuCore(laptopDto.getNoOfCpuCore());
+            laptop.setHardDiskSize(laptopDto.getHardDiskSize());
+            laptop.setRamSize(laptopDto.getRamSize());
+            laptop.setRamType(laptopDto.getRamType());
+            laptop.setFingerprint(laptopDto.isFingerprint());
+            laptop.setOs(laptopDto.getOs());
+            laptop.setWarranty(laptopDto.getWarranty());
+            laptop.setBatteryBackupHour(laptopDto.getBatteryBackupHour());
+            laptop.setGraphicCard(laptopDto.getGraphicCard());
+            laptop.setNoOfUsbPorts(laptopDto.getNoOfUsbPorts());
+            laptop.setEthernetPort(laptopDto.isEthernetPort());
+            laptop.setBluetooth(laptopDto.isBluetooth());
+            laptop.setHeadphoneJack(laptopDto.isHeadphoneJack());
+            laptop.setHdmiPort(laptopDto.isHdmiPort());
+            laptop.setColor(laptopDto.getColor());
+            laptop.setDiscountPercentage(laptopDto.getDiscountPercentage());
+            laptop.setNoOfSpeaker(laptopDto.getNoOfSpeaker());
+            laptop.setLocalStore(localStoreRepository.findById(laptopDto.getLocalStoreId()).get());
+            laptop.setActive(true);
+            laptopRepository.save(laptop);
+            return laptop;
+        } else {
+            throw new NotFound404Exception("Store not found");
+        }
+    }
 }

@@ -29,4 +29,9 @@ public class LaptopController {
     public List<Laptop> getAllByStoreId(@PathVariable UUID uuid) {
         return laptopService.getAllByStoreId(uuid);
     }
+
+    @PutMapping("{id}/updateLaptopById")
+    public Laptop updateLaptopById(@RequestBody LaptopDto laptopDto, @PathVariable Long id){
+        return laptopService.updateLaptopById(laptopDto, id);
+    }
 }

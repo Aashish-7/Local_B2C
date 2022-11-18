@@ -11,4 +11,8 @@ import java.util.UUID;
 public interface LaptopRepository extends JpaRepository<Laptop, Long> {
 
     List<Laptop> findByLocalStore_IdAndActiveTrue(UUID id);
+
+    boolean existsByLaptopIdAndActiveTrue(Long laptopId);
+
+
 }
