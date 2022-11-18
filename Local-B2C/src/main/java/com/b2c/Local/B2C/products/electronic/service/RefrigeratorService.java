@@ -60,4 +60,30 @@ public class RefrigeratorService {
             throw new NotFound404Exception("Store Not Found");
         }
     }
+
+    public Refrigerator updateRefrigeratorById(RefrigeratorDto refrigeratorDto, Long id){
+        if (refrigeratorRepository.existsByRefrigeratorIdAndActiveTrue(id)){
+            Refrigerator refrigerator = refrigeratorRepository.findById(id).get();
+            refrigerator.setModel(refrigeratorDto.getModel());
+            refrigerator.setBrand(refrigeratorDto.getBrand());
+            refrigerator.setColour(refrigeratorDto.getColour());
+            refrigerator.setWarranty(refrigeratorDto.getWarranty());
+            refrigerator.setDigitalDisplay(refrigeratorDto.isDigitalDisplay());
+            refrigerator.setWeight(refrigeratorDto.getWeight());
+            refrigerator.setDiscountPercentage(refrigeratorDto.getDiscountPercentage());
+            refrigerator.setPowerInStar(refrigeratorDto.getPowerInStar());
+            refrigerator.setCapacityInLitre(refrigeratorDto.getCapacityInLitre());
+            refrigerator.setMultiDoor(refrigeratorDto.isMultiDoor());
+            refrigerator.setFreezerPosition(refrigeratorDto.getFreezerPosition());
+            refrigerator.setAvailability(refrigeratorDto.getAvailability());
+            refrigerator.setBuiltInStabilizer(refrigeratorDto.isBuiltInStabilizer());
+            refrigerator.setPrice(refrigeratorDto.getPrice());
+            refrigerator.setLocalStore(localStoreRepository.findById(refrigeratorDto.getLocalStoreId()).get());
+            refrigerator.setActive(true);
+            refrigeratorRepository.save(refrigerator);
+            return refrigerator;
+        } else {
+            throw new NotFound404Exception("Store not found");
+        }
+    }
 }

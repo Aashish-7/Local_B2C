@@ -29,4 +29,9 @@ public class RefrigeratorController {
     public List<Refrigerator> getAllByStoreId(@PathVariable UUID uuid) {
         return refrigeratorService.getAllByStoreId(uuid);
     }
+
+    @PutMapping("/{id}/updateRefrigeratorById")
+    public Refrigerator updateRefrigeratorById(@RequestBody RefrigeratorDto refrigeratorDto, @PathVariable Long id){
+        return refrigeratorService.updateRefrigeratorById(refrigeratorDto, id);
+    }
 }
