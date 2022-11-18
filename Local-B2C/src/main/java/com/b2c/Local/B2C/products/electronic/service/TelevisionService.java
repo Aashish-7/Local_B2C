@@ -102,4 +102,15 @@ public class TelevisionService {
     public Television getTelevisionById(Long id){
         return televisionRepository.findByTelevisionIdAndActiveTrue(id);
     }
+
+    public String deactivateById(Long id){
+        if (televisionRepository.findById(id).isPresent()){
+            Television television = televisionRepository.findById(id).get();
+            television.setActive(false);
+            televisionRepository.save(television);
+            return "Deactivate television";
+        }else {
+            return "Television Not Found";
+        }
+    }
 }

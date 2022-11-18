@@ -39,4 +39,9 @@ public class TelevisionController {
     public Television getTelevisionById(@PathVariable Long id){
         return televisionService.getTelevisionById(id);
     }
+
+    @GetMapping("/deactivateById")
+    public String deactivateById(@RequestParam Long id){
+        return televisionService.deactivateById(id);
+    }
 }
