@@ -14,5 +14,5 @@ public interface LaptopRepository extends JpaRepository<Laptop, Long> {
 
     boolean existsByLaptopIdAndActiveTrue(Long laptopId);
 
-
+    Laptop findByLaptopIdAndActiveTrue(Long laptopId);
 }

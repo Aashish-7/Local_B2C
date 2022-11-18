@@ -34,4 +34,9 @@ public class LaptopController {
     public Laptop updateLaptopById(@RequestBody LaptopDto laptopDto, @PathVariable Long id){
         return laptopService.updateLaptopById(laptopDto, id);
     }
+
+    @GetMapping("/{id}/getLaptopById")
+    public Laptop getLaptopById(@PathVariable Long id){
+        return laptopService.getLaptopById(id);
+    }
 }

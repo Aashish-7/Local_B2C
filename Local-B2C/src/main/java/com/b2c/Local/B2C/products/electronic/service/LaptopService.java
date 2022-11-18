@@ -117,4 +117,8 @@ public class LaptopService {
             throw new NotFound404Exception("Store not found");
         }
     }
+
+    public Laptop getLaptopById(Long id){
+        return laptopRepository.findByLaptopIdAndActiveTrue(id);
+    }
 }
