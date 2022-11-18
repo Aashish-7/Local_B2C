@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface WashingMachineRepository extends JpaRepository<WashingMachine, Long> {
 
     List<WashingMachine> findByLocalStore_IdAndActiveTrue(UUID id);
+
+    boolean existsByWashingMachineIdAndActiveTrue(Long washingMachineId);
 }

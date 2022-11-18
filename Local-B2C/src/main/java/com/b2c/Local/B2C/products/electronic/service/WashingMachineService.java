@@ -62,4 +62,32 @@ public class WashingMachineService {
             throw new NotFound404Exception("Store Not Found");
         }
     }
+
+    public WashingMachine updateWashingMachineById(WashingMachineDto washingMachineDto, Long id){
+        if (washingMachineRepository.existsByWashingMachineIdAndActiveTrue(id)){
+            WashingMachine washingMachine = washingMachineRepository.findById(id).get();
+            washingMachine.setModel(washingMachineDto.getModel());
+            washingMachine.setBrand(washingMachineDto.getBrand());
+            washingMachine.setDryer(washingMachineDto.isDryer());
+            washingMachine.setFunctionType(washingMachineDto.getFunctionType());
+            washingMachine.setCapacityInKg(washingMachineDto.getCapacityInKg());
+            washingMachine.setPowerInStar(washingMachineDto.getPowerInStar());
+            washingMachine.setTimer(washingMachineDto.isTimer());
+            washingMachine.setColour(washingMachineDto.getColour());
+            washingMachine.setWarranty(washingMachineDto.getWarranty());
+            washingMachine.setDigitalDisplay(washingMachineDto.isDigitalDisplay());
+            washingMachine.setChildLock(washingMachineDto.isChildLock());
+            washingMachine.setShockProof(washingMachineDto.isShockProof());
+            washingMachine.setWeight(washingMachineDto.getWeight());
+            washingMachine.setDiscountPercentage(washingMachineDto.getDiscountPercentage());
+            washingMachine.setAvailability(washingMachineDto.getAvailability());
+            washingMachine.setPrice(washingMachineDto.getPrice());
+            washingMachine.setLocalStore(localStoreRepository.findById(washingMachineDto.getLocalStoreId()).get());
+            washingMachine.setActive(true);
+            washingMachineRepository.save(washingMachine);
+            return washingMachine;
+        } else {
+            throw new NotFound404Exception("Store not found");
+        }
+    }
 }

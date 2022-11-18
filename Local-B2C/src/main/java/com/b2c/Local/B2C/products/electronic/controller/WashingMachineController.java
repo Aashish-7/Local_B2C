@@ -29,4 +29,9 @@ public class WashingMachineController {
     public List<WashingMachine> getAllByStoreId(@PathVariable UUID uuid) {
         return washingMachineService.getAllByStoreId(uuid);
     }
+
+    @PutMapping("/{id}/updateWashingMachineById")
+    public WashingMachine updateWashingMachineById(@RequestBody WashingMachineDto washingMachineDto, @PathVariable Long id){
+        return washingMachineService.updateWashingMachineById(washingMachineDto, id);
+    }
 }
