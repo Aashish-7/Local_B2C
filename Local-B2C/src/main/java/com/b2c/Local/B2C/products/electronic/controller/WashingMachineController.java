@@ -39,4 +39,9 @@ public class WashingMachineController {
     public WashingMachine getWashingMachineById(@PathVariable Long id){
         return washingMachineService.getWashingMachineById(id);
     }
+
+    @GetMapping("/deactivateById")
+    public String deactivateById(@RequestParam Long id){
+        return washingMachineService.deactivateById(id);
+    }
 }
