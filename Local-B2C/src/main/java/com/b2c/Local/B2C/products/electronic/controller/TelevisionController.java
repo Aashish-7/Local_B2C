@@ -34,4 +34,9 @@ public class TelevisionController {
     public Television updateTelevisionById(@RequestBody TelevisionDto televisionDto, @PathVariable Long id){
         return televisionService.updateTelevisionById(televisionDto, id);
     }
+
+    @GetMapping("/{id}/getTelevisionById")
+    public Television getTelevisionById(@PathVariable Long id){
+        return televisionService.getTelevisionById(id);
+    }
 }

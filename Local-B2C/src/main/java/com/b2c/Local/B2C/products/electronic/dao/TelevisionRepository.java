@@ -14,4 +14,6 @@ public interface TelevisionRepository extends JpaRepository<Television, Long> {
     List<Television> findByLocalStore_IdAndActiveTrue(UUID id);
 
     boolean existsByTelevisionIdAndActiveTrue(Long televisionId);
+
+    Television findByTelevisionIdAndActiveTrue(Long televisionId);
 }

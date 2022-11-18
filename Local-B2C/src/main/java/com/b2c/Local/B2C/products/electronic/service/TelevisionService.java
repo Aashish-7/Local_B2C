@@ -98,4 +98,8 @@ public class TelevisionService {
             throw new NotFound404Exception("Store not found");
         }
     }
+
+    public Television getTelevisionById(Long id){
+        return televisionRepository.findByTelevisionIdAndActiveTrue(id);
+    }
 }
