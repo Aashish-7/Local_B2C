@@ -21,6 +21,5 @@ public interface ACRepository extends JpaRepository<AC, Long> {
 
     boolean existsByAcIdAndActiveTrue(Long acId);
 
-
-
+    AC findByAcIdAndActiveTrue(Long acId);
 }

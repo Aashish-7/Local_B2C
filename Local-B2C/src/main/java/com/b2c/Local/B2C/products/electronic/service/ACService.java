@@ -159,4 +159,8 @@ public class ACService {
             throw new NotFound404Exception("Store not found");
         }
     }
+
+    public AC getAcById(Long id){
+        return acRepository.findByAcIdAndActiveTrue(id);
+    }
 }
