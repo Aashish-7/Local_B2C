@@ -34,4 +34,9 @@ public class WashingMachineController {
     public WashingMachine updateWashingMachineById(@RequestBody WashingMachineDto washingMachineDto, @PathVariable Long id){
         return washingMachineService.updateWashingMachineById(washingMachineDto, id);
     }
+
+    @GetMapping("/{id}/getWashingMachineById")
+    public WashingMachine getWashingMachineById(@PathVariable Long id){
+        return washingMachineService.getWashingMachineById(id);
+    }
 }

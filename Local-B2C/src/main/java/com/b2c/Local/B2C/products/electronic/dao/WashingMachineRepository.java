@@ -13,4 +13,6 @@ public interface WashingMachineRepository extends JpaRepository<WashingMachine, 
     List<WashingMachine> findByLocalStore_IdAndActiveTrue(UUID id);
 
     boolean existsByWashingMachineIdAndActiveTrue(Long washingMachineId);
+
+    WashingMachine findByWashingMachineIdAndActiveTrue(Long washingMachineId);
 }

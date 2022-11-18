@@ -90,4 +90,8 @@ public class WashingMachineService {
             throw new NotFound404Exception("Store not found");
         }
     }
+
+    public WashingMachine getWashingMachineById(Long id){
+        return washingMachineRepository.findByWashingMachineIdAndActiveTrue(id);
+    }
 }
