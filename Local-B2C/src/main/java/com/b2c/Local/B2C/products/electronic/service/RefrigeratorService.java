@@ -86,4 +86,8 @@ public class RefrigeratorService {
             throw new NotFound404Exception("Store not found");
         }
     }
+
+    public Refrigerator getRefrigeratorById(Long id){
+        return refrigeratorRepository.findByRefrigeratorIdAndActiveTrue(id);
+    }
 }

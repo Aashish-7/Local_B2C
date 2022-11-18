@@ -14,4 +14,6 @@ public interface RefrigeratorRepository extends JpaRepository<Refrigerator, Long
     List<Refrigerator> findByLocalStore_IdAndActiveTrue(UUID id);
 
     boolean existsByRefrigeratorIdAndActiveTrue(Long refrigeratorId);
+
+    Refrigerator findByRefrigeratorIdAndActiveTrue(Long refrigeratorId);
 }

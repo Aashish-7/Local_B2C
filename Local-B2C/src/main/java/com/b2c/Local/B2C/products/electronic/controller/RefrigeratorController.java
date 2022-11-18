@@ -34,4 +34,9 @@ public class RefrigeratorController {
     public Refrigerator updateRefrigeratorById(@RequestBody RefrigeratorDto refrigeratorDto, @PathVariable Long id){
         return refrigeratorService.updateRefrigeratorById(refrigeratorDto, id);
     }
+
+    @GetMapping("/{id}/getRefrigeratorById")
+    public Refrigerator getRefrigeratorById(@PathVariable Long id){
+        return refrigeratorService.getRefrigeratorById(id);
+    }
 }
