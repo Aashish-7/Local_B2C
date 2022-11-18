@@ -14,4 +14,6 @@ public interface MobilePhoneRepository extends JpaRepository<MobilePhone, Long> 
     List<MobilePhone> findByLocalStore_IdAndActiveTrue(UUID id);
 
     boolean existsByMobilePhoneIdAndActiveTrue(Long mobilePhoneId);
+
+    MobilePhone findByMobilePhoneIdAndActiveTrue(Long mobilePhoneId);
 }

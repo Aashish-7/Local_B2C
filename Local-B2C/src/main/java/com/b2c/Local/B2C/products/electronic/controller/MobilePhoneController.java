@@ -34,4 +34,9 @@ public class MobilePhoneController {
     public MobilePhone updateMobilePhoneById(@RequestBody MobilePhoneDto mobilePhoneDto, @PathVariable Long id){
         return mobilePhoneService.updateMobilePhoneById(mobilePhoneDto, id);
     }
+
+    @GetMapping("/{id}/getMobilePhoneById")
+    public MobilePhone getMobilePhoneById(@PathVariable Long id){
+        return mobilePhoneService.getMobilePhoneById(id);
+    }
 }

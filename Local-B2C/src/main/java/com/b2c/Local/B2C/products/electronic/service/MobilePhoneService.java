@@ -125,4 +125,8 @@ public class MobilePhoneService {
             throw new NotFound404Exception("Store not found");
         }
     }
+
+    public MobilePhone getMobilePhoneById(Long id){
+        return mobilePhoneRepository.findByMobilePhoneIdAndActiveTrue(id);
+    }
 }
