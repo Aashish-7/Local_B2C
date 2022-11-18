@@ -90,4 +90,16 @@ public class RefrigeratorService {
     public Refrigerator getRefrigeratorById(Long id){
         return refrigeratorRepository.findByRefrigeratorIdAndActiveTrue(id);
     }
+
+
+    public String deactivateById(Long id){
+        if (refrigeratorRepository.findById(id).isPresent()){
+            Refrigerator refrigerator =refrigeratorRepository.findById(id).get();
+            refrigerator.setActive(false);
+            refrigeratorRepository.save(refrigerator);
+            return "Deactivate refrigerator";
+        }else {
+            return "Refrigerator Not Found";
+        }
+    }
 }

@@ -39,4 +39,9 @@ public class RefrigeratorController {
     public Refrigerator getRefrigeratorById(@PathVariable Long id){
         return refrigeratorService.getRefrigeratorById(id);
     }
+
+    @GetMapping("/deactivateById")
+    public String deactivateById(@RequestParam Long id){
+        return refrigeratorService.deactivateById(id);
+    }
 }
