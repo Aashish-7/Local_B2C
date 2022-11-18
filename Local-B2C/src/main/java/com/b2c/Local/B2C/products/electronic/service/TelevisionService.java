@@ -66,4 +66,36 @@ public class TelevisionService {
             throw new NotFound404Exception("Store Not Found");
         }
     }
+
+    public Television updateTelevisionById(TelevisionDto televisionDto, Long id){
+        if (televisionRepository.existsByTelevisionIdAndActiveTrue(id)){
+            Television television = televisionRepository.findById(id).get();
+            television.setModel(televisionDto.getModel());
+            television.setBrand(televisionDto.getBrand());
+            television.setPrice(televisionDto.getPrice());
+            television.setAvailability(televisionDto.getAvailability());
+            television.setDisplayType(televisionDto.getDisplayType());
+            television.setDisplaySizeInInch(televisionDto.getDisplaySizeInInch());
+            television.setScreenResolution(televisionDto.getScreenResolution());
+            television.setNoOfHdmiPorts(televisionDto.getNoOfHdmiPorts());
+            television.setNoOfUsbPorts(televisionDto.getNoOfUsbPorts());
+            television.setFeatures(televisionDto.getFeatures());
+            television.setWiFi(televisionDto.isWiFi());
+            television.setEthernet(televisionDto.isEthernet());
+            television.setRamSizeGb(televisionDto.getRamSizeGb());
+            television.setMemorySizeGb(televisionDto.getMemorySizeGb());
+            television.setDisplayRefreshRate(televisionDto.getDisplayRefreshRate());
+            television.setNoOfCpuCore(televisionDto.getNoOfCpuCore());
+            television.setNoOfSpeakers(televisionDto.getNoOfSpeakers());
+            television.setDiscountPercentage(televisionDto.getDiscountPercentage());
+            television.setColor(televisionDto.getColor());
+            television.setWarranty(televisionDto.getWarranty());
+            television.setLocalStore(localStoreRepository.findById(televisionDto.getLocalStoreId()).get());
+            television.setActive(true);
+            televisionRepository.save(television);
+            return television;
+        }else {
+            throw new NotFound404Exception("Store not found");
+        }
+    }
 }

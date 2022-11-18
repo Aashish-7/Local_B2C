@@ -29,4 +29,9 @@ public class TelevisionController {
     public List<Television> getAllByStoreId(@PathVariable UUID uuid) {
         return televisionService.getAllByStoreId(uuid);
     }
+
+    @PutMapping("/{id}/updateTelevisionById")
+    public Television updateTelevisionById(@RequestBody TelevisionDto televisionDto, @PathVariable Long id){
+        return televisionService.updateTelevisionById(televisionDto, id);
+    }
 }

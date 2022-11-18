@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface TelevisionRepository extends JpaRepository<Television, Long> {
 
     List<Television> findByLocalStore_IdAndActiveTrue(UUID id);
+
+    boolean existsByTelevisionIdAndActiveTrue(Long televisionId);
 }
