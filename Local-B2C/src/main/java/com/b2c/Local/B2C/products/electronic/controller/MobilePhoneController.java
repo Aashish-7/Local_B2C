@@ -29,4 +29,9 @@ public class MobilePhoneController {
     public List<MobilePhone> getAllByStoreId(@PathVariable UUID uuid) {
         return mobilePhoneService.getAllByStoreId(uuid);
     }
+
+    @PutMapping("/{id}/updateMobilePhoneById")
+    public MobilePhone updateMobilePhoneById(@RequestBody MobilePhoneDto mobilePhoneDto, @PathVariable Long id){
+        return mobilePhoneService.updateMobilePhoneById(mobilePhoneDto, id);
+    }
 }
