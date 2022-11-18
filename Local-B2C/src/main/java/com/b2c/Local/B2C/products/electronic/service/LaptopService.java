@@ -121,4 +121,15 @@ public class LaptopService {
     public Laptop getLaptopById(Long id){
         return laptopRepository.findByLaptopIdAndActiveTrue(id);
     }
+
+    public String deactivateById(Long id){
+        if (laptopRepository.findById(id).isPresent()){
+            Laptop laptop = laptopRepository.findById(id).get();
+            laptop.setActive(false);
+            laptopRepository.save(laptop);
+            return "Deactivate laptop";
+        }else {
+            return "Laptop Not Found";
+        }
+    }
 }
