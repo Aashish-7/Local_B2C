@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -71,5 +72,10 @@ public class LocalStoreController {
     @GetMapping("/findByCity")
     public List<LocalStore> findStoreByCity(@RequestParam String city){
         return localStoreService.findStoreByCity(city);
+    }
+
+    @GetMapping("/{uuid}/getAllProductInLocalStoreById")
+    public Map<String, List<Object>> getAllProductInLocalStoreById(@PathVariable UUID uuid){
+        return localStoreService.getAllProductInLocalStoreById(uuid);
     }
 }

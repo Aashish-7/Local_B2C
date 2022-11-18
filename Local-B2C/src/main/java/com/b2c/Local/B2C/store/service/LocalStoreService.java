@@ -4,6 +4,7 @@ import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.exception.Forbidden403Exception;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
+import com.b2c.Local.B2C.products.electronic.dao.*;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import com.b2c.Local.B2C.store.dto.LocalStoreDto;
 import com.b2c.Local.B2C.store.model.LocalStore;
@@ -12,20 +13,38 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class LocalStoreService {
 
-    @Autowired
     LocalStoreRepository localStoreRepository;
 
-    @Autowired
     UserRepository userRepository;
 
+    ACRepository acRepository;
+
+    LaptopRepository laptopRepository;
+
+    MobilePhoneRepository mobilePhoneRepository;
+
+    RefrigeratorRepository refrigeratorRepository;
+
+    TelevisionRepository televisionRepository;
+
+    WashingMachineRepository washingMachineRepository;
+
+    @Autowired
+    public LocalStoreService(LocalStoreRepository localStoreRepository, UserRepository userRepository, ACRepository acRepository, LaptopRepository laptopRepository, MobilePhoneRepository mobilePhoneRepository, RefrigeratorRepository refrigeratorRepository, TelevisionRepository televisionRepository, WashingMachineRepository washingMachineRepository) {
+        this.localStoreRepository = localStoreRepository;
+        this.userRepository = userRepository;
+        this.acRepository = acRepository;
+        this.laptopRepository = laptopRepository;
+        this.mobilePhoneRepository = mobilePhoneRepository;
+        this.refrigeratorRepository = refrigeratorRepository;
+        this.televisionRepository = televisionRepository;
+        this.washingMachineRepository = washingMachineRepository;
+    }
 
     public LocalStore addStore(LocalStoreDto localStoreDto){
         LocalStore localStore = new LocalStore();
@@ -129,5 +148,20 @@ public class LocalStoreService {
 
     public List<LocalStore> findStoreByCity(String city){
         return localStoreRepository.findByCityAndActiveTrue(city);
+    }
+
+    public Map<String, List<Object>> getAllProductInLocalStoreById(UUID uuid){
+        if (localStoreRepository.existsByIdAndActiveTrue(uuid)){
+            Map<String, List<Object>> map = new HashMap<>();
+            map.put("Ac", Collections.singletonList(acRepository.findAll()));
+            map.put("Laptop", Collections.singletonList(laptopRepository.findAll()));
+            map.put("MobilePhone", Collections.singletonList(mobilePhoneRepository.findAll()));
+            map.put("Refrigerator", Collections.singletonList(refrigeratorRepository.findAll()));
+            map.put("Television", Collections.singletonList(televisionRepository.findAll()));
+            map.put("WashingMachine", Collections.singletonList(washingMachineRepository.findAll()));
+            return map;
+        } else {
+            throw new NotFound404Exception("Store not found");
+        }
     }
 }

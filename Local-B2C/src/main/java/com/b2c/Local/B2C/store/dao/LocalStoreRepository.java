@@ -21,6 +21,5 @@ public interface LocalStoreRepository extends JpaRepository<LocalStore, UUID> {
 
     List<LocalStore> findByCityAndActiveTrue(String city);
 
-
-
+    boolean existsByIdAndActiveTrue(UUID id);
 }
