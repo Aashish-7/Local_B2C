@@ -40,8 +40,8 @@ public class TelevisionController {
         return televisionService.getTelevisionById(id);
     }
 
-    @GetMapping("/deactivateById")
-    public String deactivateById(@RequestParam Long id){
+    @GetMapping("/{id}/deactivateById")
+    public String deactivateById(@PathVariable Long id){
         return televisionService.deactivateById(id);
     }
 }

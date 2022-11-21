@@ -93,13 +93,13 @@ public class RefrigeratorService {
 
 
     public String deactivateById(Long id){
-        if (refrigeratorRepository.findById(id).isPresent()){
+        if (refrigeratorRepository.findById(id).isPresent() && refrigeratorRepository.findById(id).get().getActive()){
             Refrigerator refrigerator =refrigeratorRepository.findById(id).get();
             refrigerator.setActive(false);
             refrigeratorRepository.save(refrigerator);
             return "Deactivate refrigerator";
         }else {
-            return "Refrigerator Not Found";
+            throw new NotFound404Exception("Mobile not found");
         }
     }
 }

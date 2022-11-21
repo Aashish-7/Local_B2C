@@ -104,13 +104,13 @@ public class TelevisionService {
     }
 
     public String deactivateById(Long id){
-        if (televisionRepository.findById(id).isPresent()){
+        if (televisionRepository.findById(id).isPresent() && televisionRepository.findById(id).get().getActive()){
             Television television = televisionRepository.findById(id).get();
             television.setActive(false);
             televisionRepository.save(television);
             return "Deactivate television";
         }else {
-            return "Television Not Found";
+            throw new NotFound404Exception("Television not found");
         }
     }
 }

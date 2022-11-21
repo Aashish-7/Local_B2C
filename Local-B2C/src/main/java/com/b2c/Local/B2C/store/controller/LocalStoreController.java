@@ -75,7 +75,7 @@ public class LocalStoreController {
     }
 
     @GetMapping("/{uuid}/getAllProductInLocalStoreById")
-    public Map<String, List<Object>> getAllProductInLocalStoreById(@PathVariable UUID uuid){
+    public Map<String, Object> getAllProductInLocalStoreById(@PathVariable UUID uuid){
         return localStoreService.getAllProductInLocalStoreById(uuid);
     }
 }

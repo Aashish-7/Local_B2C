@@ -123,13 +123,13 @@ public class LaptopService {
     }
 
     public String deactivateById(Long id){
-        if (laptopRepository.findById(id).isPresent()){
+        if (laptopRepository.findById(id).isPresent() && laptopRepository.findById(id).get().getActive()){
             Laptop laptop = laptopRepository.findById(id).get();
             laptop.setActive(false);
             laptopRepository.save(laptop);
             return "Deactivate laptop";
         }else {
-            return "Laptop Not Found";
+            throw new NotFound404Exception("Laptop not found.");
         }
     }
 }

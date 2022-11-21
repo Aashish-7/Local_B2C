@@ -132,13 +132,13 @@ public class MobilePhoneService {
 
 
     public String deactivateById(Long id){
-        if (mobilePhoneRepository.findById(id).isPresent()){
+        if (mobilePhoneRepository.findById(id).isPresent() && mobilePhoneRepository.findById(id).get().getActive()){
             MobilePhone mobilePhone =mobilePhoneRepository.findById(id).get();
             mobilePhone.setActive(false);
             mobilePhoneRepository.save(mobilePhone);
             return "Deactivate MobilePhone";
         }else {
-            return "MobilePhone Not Found";
+            throw new NotFound404Exception("Mobile not found");
         }
     }
 }

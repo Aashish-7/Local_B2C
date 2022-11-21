@@ -40,8 +40,8 @@ public class LaptopController {
         return laptopService.getLaptopById(id);
     }
 
-    @GetMapping("/deactivateById")
-    public String deactivateById(@RequestParam Long id){
+    @GetMapping("/{id}/deactivateById")
+    public String deactivateById(@PathVariable Long id){
         return laptopService.deactivateById(id);
     }
 }

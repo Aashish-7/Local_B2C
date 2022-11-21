@@ -96,13 +96,13 @@ public class WashingMachineService {
     }
 
     public String deactivateById(Long id){
-        if (washingMachineRepository.findById(id).isPresent()){
+        if (washingMachineRepository.findById(id).isPresent() && washingMachineRepository.findById(id).get().getActive()){
             WashingMachine washingMachine = washingMachineRepository.findById(id).get();
             washingMachine.setActive(false);
             washingMachineRepository.save(washingMachine);
             return "Deactivate WashingMachine";
         }else {
-            return "WashingMachine Not Found";
+            throw new NotFound404Exception("Washing Machine not found!");
         }
     }
 }

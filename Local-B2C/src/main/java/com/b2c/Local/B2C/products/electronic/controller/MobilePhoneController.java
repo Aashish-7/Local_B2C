@@ -40,8 +40,8 @@ public class MobilePhoneController {
         return mobilePhoneService.getMobilePhoneById(id);
     }
 
-    @GetMapping("/deactivateById")
-    public String deactivateById(@RequestParam Long id){
+    @GetMapping("/{id}/deactivateById")
+    public String deactivateById(@PathVariable Long id){
         return mobilePhoneService.deactivateById(id);
     }
 }

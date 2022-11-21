@@ -165,13 +165,13 @@ public class ACService {
     }
 
     public String deactivateById(Long id){
-        if (acRepository.findById(id).isPresent()){
+        if (acRepository.findById(id).isPresent() && acRepository.findById(id).get().getActive()){
             AC ac =acRepository.findById(id).get();
             ac.setActive(false);
             acRepository.save(ac);
             return "Deactivate AC";
         }else {
-            return "AC Not Found";
+            throw new NotFound404Exception("Ac not found!");
         }
     }
 }
