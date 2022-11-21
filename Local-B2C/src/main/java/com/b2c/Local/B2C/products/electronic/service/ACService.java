@@ -5,10 +5,15 @@ import com.b2c.Local.B2C.products.electronic.dao.ACRepository;
 import com.b2c.Local.B2C.products.electronic.dto.ACDto;
 import com.b2c.Local.B2C.products.electronic.model.AC;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -172,6 +177,46 @@ public class ACService {
             return "Deactivate AC";
         }else {
             throw new NotFound404Exception("Ac not found!");
+        }
+    }
+
+    public ByteArrayInputStream downloadACbyLocalStoreId(UUID id) throws DocumentException {
+        if (!acRepository.findByLocalStore_IdAndActiveTrue(id).isEmpty()){
+            Document document = new Document(PageSize.A4,20,20,20,20);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, os);
+            document.open();
+            Paragraph title = new Paragraph("Ac Products", FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD, new BaseColor(0, 0, 0)));
+            document.add(title);
+            PdfPTable table = new PdfPTable(6);
+            table.setSpacingBefore(25);
+            table.setSpacingAfter(25);
+            PdfPCell c1 = new PdfPCell(new Phrase("id"));
+            table.addCell(c1);
+            PdfPCell c2 = new PdfPCell(new Phrase("model"));
+            table.addCell(c2);
+            PdfPCell c3 = new PdfPCell(new Phrase("brand"));
+            table.addCell(c3);
+            PdfPCell c4 = new PdfPCell(new Phrase("price"));
+            table.addCell(c4);
+            PdfPCell c5 = new PdfPCell(new Phrase("colour"));
+            table.addCell(c5);
+            PdfPCell c6 = new PdfPCell(new Phrase("availability"));
+            table.addCell(c6);
+            acRepository.findByLocalStore_IdAndActiveTrue(id).forEach(ac -> {
+                table.addCell(String.valueOf(ac.getAcId()));
+                table.addCell(ac.getModel());
+                table.addCell(ac.getBrand());
+                table.addCell(String.valueOf(ac.getPrice()));
+                table.addCell(ac.getColour());
+                table.addCell(ac.getAvailability());
+            });
+            document.add(table);
+            document.close();
+            return new ByteArrayInputStream(os.toByteArray());
+        }
+        else {
+             throw new NotFound404Exception("Not Found");
         }
     }
 }
