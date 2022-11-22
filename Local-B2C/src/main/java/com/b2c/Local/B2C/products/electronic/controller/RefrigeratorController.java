@@ -55,4 +55,14 @@ public class RefrigeratorController {
     public List<Refrigerator> getAllByBrand(@RequestParam @NotNull String brand){
         return refrigeratorService.getAllByBrand(brand);
     }
+
+    @GetMapping("/getAllByBrandAndPincode")
+    public List<Refrigerator> getAllByBrandAndPincode(@RequestParam @NotNull String brand, @RequestParam @NotNull int pincode) {
+        return refrigeratorService.getAllByBrandAndPincode(brand, pincode);
+    }
+
+    @GetMapping("/getAllByModelAndPincode")
+    public List<Refrigerator> getAllByModelAndPincode(@RequestParam @NotNull String model, @RequestParam @NotNull int pincode) {
+        return refrigeratorService.getAllByModelAndPincode(model, pincode);
+    }
 }

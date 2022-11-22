@@ -27,5 +27,8 @@ public interface ACRepository extends JpaRepository<AC, Long> {
 
     List<AC> findAllByBrandLikeAndActiveTrue(String brand);
 
+    List<AC> findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(String model, int pinCode);
+
+    List<AC> findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(String Brand, int pinCode);
 
 }

@@ -20,4 +20,8 @@ public interface MobilePhoneRepository extends JpaRepository<MobilePhone, Long> 
     List<MobilePhone> findAllByModelLikeAndActiveTrue(String model);
 
     List<MobilePhone> findAllByBrandLikeAndActiveTrue(String brand);
+
+    List<MobilePhone> findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(String model, int pinCode);
+
+    List<MobilePhone> findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(String Brand, int pinCode);
 }

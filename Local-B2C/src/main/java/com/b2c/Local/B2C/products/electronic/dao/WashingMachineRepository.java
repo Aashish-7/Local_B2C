@@ -19,4 +19,8 @@ public interface WashingMachineRepository extends JpaRepository<WashingMachine, 
     List<WashingMachine> findAllByBrandLikeAndActiveTrue(String brand);
 
     List<WashingMachine> findAllByModelLikeAndActiveTrue(String model);
+
+    List<WashingMachine> findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(String model, int pinCode);
+
+    List<WashingMachine> findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(String Brand, int pinCode);
 }

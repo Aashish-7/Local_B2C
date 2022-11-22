@@ -12,6 +12,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -31,7 +32,7 @@ public class ACService {
         this.localStoreRepository = localStoreRepository;
     }
 
-    public AC addAc(ACDto acDto){
+    public AC addAc(ACDto acDto) {
         if (localStoreRepository.findById(acDto.getLocalStoreId()).isPresent()) {
             AC ac = new AC();
             ac.setModel(acDto.getModel());
@@ -54,39 +55,38 @@ public class ACService {
             ac.setActive(true);
             acRepository.save(ac);
             return ac;
-        }
-        else {
+        } else {
             throw new NotFound404Exception("Store not found");
         }
     }
 
     @Cacheable(value = "getAllByStoreId", key = "#uuid")
-    public List<AC> getAllByStoreId(UUID uuid){
+    public List<AC> getAllByStoreId(UUID uuid) {
         if (localStoreRepository.existsById(uuid)) {
             return acRepository.findByLocalStore_IdAndActiveTrue(uuid);
-        }else {
+        } else {
             throw new NotFound404Exception("Store Not Found");
         }
     }
 
-    public AC updateAcById(ACDto acDto, Long id){
-        if (acRepository.existsByAcIdAndActiveTrue(id)){
+    public AC updateAcById(ACDto acDto, Long id) {
+        if (acRepository.existsByAcIdAndActiveTrue(id)) {
             AC ac = acRepository.findById(id).get();
-            if (acDto.getModel() != null){
+            if (acDto.getModel() != null) {
                 ac.setModel(acDto.getModel());
             }
-            if (acDto.getBrand() != null){
+            if (acDto.getBrand() != null) {
                 ac.setBrand(acDto.getBrand());
             }
-            if (acDto.getColour() != null){
+            if (acDto.getColour() != null) {
                 ac.setColour(acDto.getColour());
             }
-            if (acDto.getWarranty() != null){
+            if (acDto.getWarranty() != null) {
                 ac.setWarranty(acDto.getWarranty());
             }
-            if (acDto.isDigitalDisplay()){
-               ac.setDigitalDisplay(acDto.isDigitalDisplay());
-            }else {
+            if (acDto.isDigitalDisplay()) {
+                ac.setDigitalDisplay(acDto.isDigitalDisplay());
+            } else {
                 ac.setDigitalDisplay(acDto.isDigitalDisplay());
             }
             if (Objects.nonNull(acDto.getWeightInKg())) {
@@ -95,24 +95,24 @@ public class ACService {
             if (Objects.nonNull(acDto.getDiscountPercentage())) {
                 ac.setDiscountPercentage(acDto.getDiscountPercentage());
             }
-            if (Objects.nonNull(acDto.getPowerInStar())){
+            if (Objects.nonNull(acDto.getPowerInStar())) {
                 ac.setPowerInStar(acDto.getPowerInStar());
             }
             if (acDto.getAvailability() != null) {
                 ac.setAvailability(acDto.getAvailability());
             }
-            if (acDto.isBuiltInStabilizer()){
+            if (acDto.isBuiltInStabilizer()) {
                 ac.setBuiltInStabilizer(acDto.isBuiltInStabilizer());
             } else {
                 ac.setBuiltInStabilizer(acDto.isBuiltInStabilizer());
             }
-            if (Objects.nonNull(acDto.getCapacityInTon())){
+            if (Objects.nonNull(acDto.getCapacityInTon())) {
                 ac.setCapacityInTon(acDto.getCapacityInTon());
             }
-            if (acDto.getMode() != null){
+            if (acDto.getMode() != null) {
                 ac.setMode(acDto.getMode());
             }
-            if (acDto.isTimer()){
+            if (acDto.isTimer()) {
                 ac.setTimer(acDto.isTimer());
             } else {
                 ac.setTimer(acDto.isTimer());
@@ -122,7 +122,7 @@ public class ACService {
             } else {
                 ac.setWiFi(acDto.isWiFi());
             }
-            if (acDto.getAirConditionerType() != null){
+            if (acDto.getAirConditionerType() != null) {
                 ac.setAirConditionerType(acDto.getAirConditionerType());
             }
             if (Objects.nonNull(acDto.getPrice())) {
@@ -130,14 +130,13 @@ public class ACService {
             }
             acRepository.save(ac);
             return ac;
-        }
-        else {
+        } else {
             throw new NotFound404Exception("Ac not found");
         }
     }
 
-    public AC updateAcByIdByPut(ACDto acDto, Long id){
-        if (acRepository.existsByAcIdAndActiveTrue(id)){
+    public AC updateAcByIdByPut(ACDto acDto, Long id) {
+        if (acRepository.existsByAcIdAndActiveTrue(id)) {
             AC ac = acRepository.findById(id).get();
             ac.setModel(acDto.getModel());
             ac.setBrand(acDto.getBrand());
@@ -159,30 +158,29 @@ public class ACService {
             ac.setActive(true);
             acRepository.save(ac);
             return ac;
-        }
-        else {
+        } else {
             throw new NotFound404Exception("Store not found");
         }
     }
 
-    public AC getAcById(Long id){
+    public AC getAcById(Long id) {
         return acRepository.findByAcIdAndActiveTrue(id);
     }
 
-    public String deactivateById(Long id){
-        if (acRepository.findById(id).isPresent() && acRepository.findById(id).get().getActive()){
-            AC ac =acRepository.findById(id).get();
+    public String deactivateById(Long id) {
+        if (acRepository.findById(id).isPresent() && acRepository.findById(id).get().getActive()) {
+            AC ac = acRepository.findById(id).get();
             ac.setActive(false);
             acRepository.save(ac);
             return "Deactivate AC";
-        }else {
+        } else {
             throw new NotFound404Exception("Ac not found!");
         }
     }
 
     public ByteArrayInputStream downloadACbyLocalStoreId(UUID id) throws DocumentException {
-        if (!acRepository.findByLocalStore_IdAndActiveTrue(id).isEmpty()){
-            Document document = new Document(PageSize.A4,20,20,20,20);
+        if (!acRepository.findByLocalStore_IdAndActiveTrue(id).isEmpty()) {
+            Document document = new Document(PageSize.A4, 20, 20, 20, 20);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, os);
             document.open();
@@ -214,17 +212,30 @@ public class ACService {
             document.add(table);
             document.close();
             return new ByteArrayInputStream(os.toByteArray());
-        }
-        else {
-             throw new NotFound404Exception("Not Found");
+        } else {
+            throw new NotFound404Exception("Not Found");
         }
     }
 
-    public List<AC> getAllByModel(String model){
+    public List<AC> getAllByModel(String model) {
         return acRepository.findAllByModelLikeAndActiveTrue(model);
     }
 
-    public List<AC> getAllByBrand(String brand){
+    public List<AC> getAllByBrand(String brand) {
         return acRepository.findAllByBrandLikeAndActiveTrue(brand);
+    }
+
+    public List<AC> getAllByBrandAndPincode(String brand, int pinCode) {
+        if (!acRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode).isEmpty())
+            return acRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode);
+        else
+            return null;
+    }
+
+    public List<AC> getAllByModelAndPincode(String model, int pinCode) {
+        if (!acRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode).isEmpty())
+            return acRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode);
+        else
+            return null;
     }
 }

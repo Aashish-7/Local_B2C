@@ -3,7 +3,6 @@ package com.b2c.Local.B2C.products.electronic.service;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.products.electronic.dao.RefrigeratorRepository;
 import com.b2c.Local.B2C.products.electronic.dto.RefrigeratorDto;
-import com.b2c.Local.B2C.products.electronic.model.AC;
 import com.b2c.Local.B2C.products.electronic.model.Refrigerator;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,5 +109,19 @@ public class RefrigeratorService {
 
     public List<Refrigerator> getAllByBrand(String brand){
         return refrigeratorRepository.findAllByBrandLikeAndActiveTrue(brand);
+    }
+
+    public List<Refrigerator> getAllByBrandAndPincode(String brand, int pinCode) {
+        if (!refrigeratorRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode).isEmpty())
+            return refrigeratorRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode);
+        else
+            return null;
+    }
+
+    public List<Refrigerator> getAllByModelAndPincode(String model, int pinCode) {
+        if (!refrigeratorRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode).isEmpty())
+            return refrigeratorRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode);
+        else
+            return null;
     }
 }

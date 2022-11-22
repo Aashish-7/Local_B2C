@@ -122,4 +122,18 @@ public class TelevisionService {
     public List<Television> getAllByBrand(String brand){
         return televisionRepository.findAllByBrandLikeAndActiveTrue(brand);
     }
+
+    public List<Television> getAllByBrandAndPincode(String brand, int pinCode) {
+        if (!televisionRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode).isEmpty())
+            return televisionRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode);
+        else
+            return null;
+    }
+
+    public List<Television> getAllByModelAndPincode(String model, int pinCode) {
+        if (!televisionRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode).isEmpty())
+            return televisionRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode);
+        else
+            return null;
+    }
 }

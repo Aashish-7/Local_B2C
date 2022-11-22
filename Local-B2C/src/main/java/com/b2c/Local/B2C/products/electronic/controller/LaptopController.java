@@ -55,4 +55,14 @@ public class LaptopController {
     public List<Laptop> getAllByBrand(@RequestParam @NotNull String brand){
         return laptopService.getAllByBrand(brand);
     }
+
+    @GetMapping("/getAllByBrandAndPincode")
+    public List<Laptop> getAllByBrandAndPincode(@RequestParam @NotNull String brand, @RequestParam @NotNull int pincode) {
+        return laptopService.getAllByBrandAndPincode(brand, pincode);
+    }
+
+    @GetMapping("/getAllByModelAndPincode")
+    public List<Laptop> getAllByModelAndPincode(@RequestParam @NotNull String model, @RequestParam @NotNull int pincode) {
+        return laptopService.getAllByModelAndPincode(model, pincode);
+    }
 }

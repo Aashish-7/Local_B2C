@@ -20,4 +20,8 @@ public interface RefrigeratorRepository extends JpaRepository<Refrigerator, Long
     List<Refrigerator> findAllByModelLikeAndActiveTrue(String model);
 
     List<Refrigerator> findAllByBrandLikeAndActiveTrue(String brand);
+
+    List<Refrigerator> findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(String model, int pinCode);
+
+    List<Refrigerator> findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(String Brand, int pinCode);
 }

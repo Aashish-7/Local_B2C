@@ -150,4 +150,18 @@ public class MobilePhoneService {
     public List<MobilePhone> getAllByBrand(String brand){
         return mobilePhoneRepository.findAllByBrandLikeAndActiveTrue(brand);
     }
+
+    public List<MobilePhone> getAllByBrandAndPincode(String brand, int pinCode) {
+        if (!mobilePhoneRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode).isEmpty())
+            return mobilePhoneRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode);
+        else
+            return null;
+    }
+
+    public List<MobilePhone> getAllByModelAndPincode(String model, int pinCode) {
+        if (!mobilePhoneRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode).isEmpty())
+            return mobilePhoneRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode);
+        else
+            return null;
+    }
 }

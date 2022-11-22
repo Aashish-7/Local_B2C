@@ -140,4 +140,18 @@ public class LaptopService {
     public List<Laptop> getAllByBrand(String brand){
         return laptopRepository.findAllByBrandLikeAndActiveTrue(brand);
     }
+
+    public List<Laptop> getAllByBrandAndPincode(String brand, int pinCode) {
+        if (!laptopRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode).isEmpty())
+            return laptopRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode);
+        else
+            return null;
+    }
+
+    public List<Laptop> getAllByModelAndPincode(String model, int pinCode) {
+        if (!laptopRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode).isEmpty())
+            return laptopRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode);
+        else
+            return null;
+    }
 }

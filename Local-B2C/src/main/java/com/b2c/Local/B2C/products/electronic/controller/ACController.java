@@ -79,4 +79,14 @@ public class ACController {
     public List<AC> getAllByBrand(@RequestParam @NotNull String brand) {
         return acService.getAllByBrand(brand);
     }
+
+    @GetMapping("/getAllByBrandAndPincode")
+    public List<AC> getAllByBrandAndPincode(@RequestParam @NotNull String brand, @RequestParam @NotNull int pincode) {
+        return acService.getAllByBrandAndPincode(brand, pincode);
+    }
+
+    @GetMapping("/getAllByModelAndPincode")
+    public List<AC> getAllByModelAndPincode(@RequestParam @NotNull String model, @RequestParam @NotNull int pincode) {
+        return acService.getAllByModelAndPincode(model, pincode);
+    }
 }

@@ -55,4 +55,14 @@ public class WashingMachineController {
     public List<WashingMachine> getAllByBrand(@RequestParam @NotNull String brand){
         return washingMachineService.getAllByBrand(brand);
     }
+
+    @GetMapping("/getAllByBrandAndPincode")
+    public List<WashingMachine> getAllByBrandAndPincode(@RequestParam @NotNull String brand, @RequestParam @NotNull int pincode) {
+        return washingMachineService.getAllByBrandAndPincode(brand, pincode);
+    }
+
+    @GetMapping("/getAllByModelAndPincode")
+    public List<WashingMachine> getAllByModelAndPincode(@RequestParam @NotNull String model, @RequestParam @NotNull int pincode) {
+        return washingMachineService.getAllByModelAndPincode(model, pincode);
+    }
 }

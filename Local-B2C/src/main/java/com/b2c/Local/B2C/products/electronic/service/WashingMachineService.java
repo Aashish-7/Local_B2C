@@ -113,4 +113,18 @@ public class WashingMachineService {
     public List<WashingMachine> getAllByBrand(String brand){
         return washingMachineRepository.findAllByBrandLikeAndActiveTrue(brand);
     }
+
+    public List<WashingMachine> getAllByBrandAndPincode(String brand, int pinCode) {
+        if (!washingMachineRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode).isEmpty())
+            return washingMachineRepository.findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(brand, pinCode);
+        else
+            return null;
+    }
+
+    public List<WashingMachine> getAllByModelAndPincode(String model, int pinCode) {
+        if (!washingMachineRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode).isEmpty())
+            return washingMachineRepository.findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(model, pinCode);
+        else
+            return null;
+    }
 }

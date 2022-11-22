@@ -55,4 +55,14 @@ public class TelevisionController {
     public List<Television> getAllByBrand(@RequestParam @NotNull String brand){
         return televisionService.getAllByBrand(brand);
     }
+
+    @GetMapping("/getAllByBrandAndPincode")
+    public List<Television> getAllByBrandAndPincode(@RequestParam @NotNull String brand, @RequestParam @NotNull int pincode) {
+        return televisionService.getAllByBrandAndPincode(brand, pincode);
+    }
+
+    @GetMapping("/getAllByModelAndPincode")
+    public List<Television> getAllByModelAndPincode(@RequestParam @NotNull String model, @RequestParam @NotNull int pincode) {
+        return televisionService.getAllByModelAndPincode(model, pincode);
+    }
 }

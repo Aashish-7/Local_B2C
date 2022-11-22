@@ -20,4 +20,8 @@ public interface TelevisionRepository extends JpaRepository<Television, Long> {
     List<Television> findAllByModelLikeAndActiveTrue(String model);
 
     List<Television> findAllByBrandLikeAndActiveTrue(String brand);
+
+    List<Television> findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(String model, int pinCode);
+
+    List<Television> findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(String Brand, int pinCode);
 }

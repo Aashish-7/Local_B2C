@@ -19,4 +19,8 @@ public interface LaptopRepository extends JpaRepository<Laptop, Long> {
     List<Laptop> findAllByBrandLikeAndActiveTrue(String brand);
 
     List<Laptop> findAllByModelLikeAndActiveTrue(String model);
+
+    List<Laptop> findAllByActiveTrueAndModelLikeAndLocalStore_PinCode(String model, int pinCode);
+
+    List<Laptop> findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(String Brand, int pinCode);
 }

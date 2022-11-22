@@ -55,4 +55,14 @@ public class MobilePhoneController {
     public List<MobilePhone> getAllByBrand(@RequestParam @NotNull String brand){
         return mobilePhoneService.getAllByBrand(brand);
     }
+
+    @GetMapping("/getAllByBrandAndPincode")
+    public List<MobilePhone> getAllByBrandAndPincode(@RequestParam @NotNull String brand, @RequestParam @NotNull int pincode) {
+        return mobilePhoneService.getAllByBrandAndPincode(brand, pincode);
+    }
+
+    @GetMapping("/getAllByModelAndPincode")
+    public List<MobilePhone> getAllByModelAndPincode(@RequestParam @NotNull String model, @RequestParam @NotNull int pincode) {
+        return mobilePhoneService.getAllByModelAndPincode(model, pincode);
+    }
 }
