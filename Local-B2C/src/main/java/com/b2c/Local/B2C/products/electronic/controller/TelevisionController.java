@@ -6,6 +6,7 @@ import com.b2c.Local.B2C.products.electronic.service.TelevisionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,5 +44,15 @@ public class TelevisionController {
     @GetMapping("/{id}/deactivateById")
     public String deactivateById(@PathVariable Long id){
         return televisionService.deactivateById(id);
+    }
+
+    @GetMapping("/getAllByModel")
+    public List<Television> getAllByModel(@RequestParam @NotNull String model){
+        return televisionService.getAllByModel(model);
+    }
+
+    @GetMapping("/getAllByBrand")
+    public List<Television> getAllByBrand(@RequestParam @NotNull String brand){
+        return televisionService.getAllByBrand(brand);
     }
 }

@@ -15,4 +15,8 @@ public interface LaptopRepository extends JpaRepository<Laptop, Long> {
     boolean existsByLaptopIdAndActiveTrue(Long laptopId);
 
     Laptop findByLaptopIdAndActiveTrue(Long laptopId);
+
+    List<Laptop> findAllByBrandLikeAndActiveTrue(String brand);
+
+    List<Laptop> findAllByModelLikeAndActiveTrue(String model);
 }

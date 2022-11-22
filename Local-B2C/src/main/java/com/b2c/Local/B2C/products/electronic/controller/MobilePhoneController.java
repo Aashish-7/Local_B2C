@@ -6,6 +6,7 @@ import com.b2c.Local.B2C.products.electronic.service.MobilePhoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,5 +44,15 @@ public class MobilePhoneController {
     @GetMapping("/{id}/deactivateById")
     public String deactivateById(@PathVariable Long id){
         return mobilePhoneService.deactivateById(id);
+    }
+
+    @GetMapping("/getAllByModel")
+    public List<MobilePhone> getAllByModel(@RequestParam @NotNull String model){
+        return mobilePhoneService.getAllByModel(model);
+    }
+
+    @GetMapping("/getAllByBrand")
+    public List<MobilePhone> getAllByBrand(@RequestParam @NotNull String brand){
+        return mobilePhoneService.getAllByBrand(brand);
     }
 }

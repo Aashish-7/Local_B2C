@@ -23,5 +23,9 @@ public interface ACRepository extends JpaRepository<AC, Long> {
 
     AC findByAcIdAndActiveTrue(Long acId);
 
+    List<AC> findAllByModelLikeAndActiveTrue(String model);
+
+    List<AC> findAllByBrandLikeAndActiveTrue(String brand);
+
 
 }

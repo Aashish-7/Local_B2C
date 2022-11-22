@@ -3,6 +3,7 @@ package com.b2c.Local.B2C.products.electronic.service;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.products.electronic.dao.MobilePhoneRepository;
 import com.b2c.Local.B2C.products.electronic.dto.MobilePhoneDto;
+import com.b2c.Local.B2C.products.electronic.model.AC;
 import com.b2c.Local.B2C.products.electronic.model.MobilePhone;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,5 +141,13 @@ public class MobilePhoneService {
         }else {
             throw new NotFound404Exception("Mobile not found");
         }
+    }
+
+    public List<MobilePhone> getAllByModel(String model){
+        return mobilePhoneRepository.findAllByModelLikeAndActiveTrue(model);
+    }
+
+    public List<MobilePhone> getAllByBrand(String brand){
+        return mobilePhoneRepository.findAllByBrandLikeAndActiveTrue(brand);
     }
 }

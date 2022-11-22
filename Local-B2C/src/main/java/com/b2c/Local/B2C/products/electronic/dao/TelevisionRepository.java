@@ -16,4 +16,8 @@ public interface TelevisionRepository extends JpaRepository<Television, Long> {
     boolean existsByTelevisionIdAndActiveTrue(Long televisionId);
 
     Television findByTelevisionIdAndActiveTrue(Long televisionId);
+
+    List<Television> findAllByModelLikeAndActiveTrue(String model);
+
+    List<Television> findAllByBrandLikeAndActiveTrue(String brand);
 }

@@ -6,6 +6,7 @@ import com.b2c.Local.B2C.products.electronic.service.LaptopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,5 +44,15 @@ public class LaptopController {
     @GetMapping("/{id}/deactivateById")
     public String deactivateById(@PathVariable Long id){
         return laptopService.deactivateById(id);
+    }
+
+    @GetMapping("/getAllByModel")
+    public List<Laptop> getAllByModel(@RequestParam @NotNull String model){
+        return laptopService.getAllByModel(model);
+    }
+
+    @GetMapping("/getAllByBrand")
+    public List<Laptop> getAllByBrand(@RequestParam @NotNull String brand){
+        return laptopService.getAllByBrand(brand);
     }
 }

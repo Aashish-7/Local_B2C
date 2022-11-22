@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.UUID;
@@ -39,22 +40,22 @@ public class ACController {
     }
 
     @PostMapping("/{id}/updateAcById")
-    public AC updateAcById(@RequestBody ACDto acDto, @PathVariable Long id){
+    public AC updateAcById(@RequestBody ACDto acDto, @PathVariable Long id) {
         return acService.updateAcById(acDto, id);
     }
 
     @PutMapping("/{id}/updateAcByIdByPut")
-    public AC updateAcByIdByPut(@RequestBody ACDto acDto, @PathVariable Long id){
+    public AC updateAcByIdByPut(@RequestBody ACDto acDto, @PathVariable Long id) {
         return acService.updateAcByIdByPut(acDto, id);
     }
 
     @GetMapping("/{id}/getAcById")
-    public AC getAcById(@PathVariable Long id){
+    public AC getAcById(@PathVariable Long id) {
         return acService.getAcById(id);
     }
 
     @GetMapping("/{id}/deactivateById")
-    public String deactivateById(@PathVariable Long id){
+    public String deactivateById(@PathVariable Long id) {
         return acService.deactivateById(id);
     }
 
@@ -67,5 +68,15 @@ public class ACController {
         header.setCacheControl("must-revalidate, post-check=0, pre-check=0");
         ResponseEntity<Resource> response = new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
         return response;
+    }
+
+    @GetMapping("/getAllByModel")
+    public List<AC> getAllByModel(@RequestParam @NotNull String model) {
+        return acService.getAllByModel(model);
+    }
+
+    @GetMapping("/getAllByBrand")
+    public List<AC> getAllByBrand(@RequestParam @NotNull String brand) {
+        return acService.getAllByBrand(brand);
     }
 }

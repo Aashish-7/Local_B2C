@@ -105,4 +105,12 @@ public class WashingMachineService {
             throw new NotFound404Exception("Washing Machine not found!");
         }
     }
+
+    public List<WashingMachine> getAllByModel(String model){
+        return washingMachineRepository.findAllByModelLikeAndActiveTrue(model);
+    }
+
+    public List<WashingMachine> getAllByBrand(String brand){
+        return washingMachineRepository.findAllByBrandLikeAndActiveTrue(brand);
+    }
 }

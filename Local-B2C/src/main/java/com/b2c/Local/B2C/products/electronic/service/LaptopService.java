@@ -132,4 +132,12 @@ public class LaptopService {
             throw new NotFound404Exception("Laptop not found.");
         }
     }
+
+    public List<Laptop> getAllByModel(String model){
+        return laptopRepository.findAllByModelLikeAndActiveTrue(model);
+    }
+
+    public List<Laptop> getAllByBrand(String brand){
+        return laptopRepository.findAllByBrandLikeAndActiveTrue(brand);
+    }
 }

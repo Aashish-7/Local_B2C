@@ -219,4 +219,12 @@ public class ACService {
              throw new NotFound404Exception("Not Found");
         }
     }
+
+    public List<AC> getAllByModel(String model){
+        return acRepository.findAllByModelLikeAndActiveTrue(model);
+    }
+
+    public List<AC> getAllByBrand(String brand){
+        return acRepository.findAllByBrandLikeAndActiveTrue(brand);
+    }
 }

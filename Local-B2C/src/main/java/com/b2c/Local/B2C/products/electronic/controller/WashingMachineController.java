@@ -6,6 +6,7 @@ import com.b2c.Local.B2C.products.electronic.service.WashingMachineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,5 +44,15 @@ public class WashingMachineController {
     @GetMapping("{id}/deactivateById")
     public String deactivateById(@PathVariable Long id){
         return washingMachineService.deactivateById(id);
+    }
+
+    @GetMapping("/getAllByModel")
+    public List<WashingMachine> getAllByModel(@RequestParam @NotNull String model){
+        return washingMachineService.getAllByModel(model);
+    }
+
+    @GetMapping("/getAllByBrand")
+    public List<WashingMachine> getAllByBrand(@RequestParam @NotNull String brand){
+        return washingMachineService.getAllByBrand(brand);
     }
 }

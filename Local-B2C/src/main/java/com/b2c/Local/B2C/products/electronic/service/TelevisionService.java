@@ -3,6 +3,7 @@ package com.b2c.Local.B2C.products.electronic.service;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.products.electronic.dao.TelevisionRepository;
 import com.b2c.Local.B2C.products.electronic.dto.TelevisionDto;
+import com.b2c.Local.B2C.products.electronic.model.AC;
 import com.b2c.Local.B2C.products.electronic.model.Television;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,5 +113,13 @@ public class TelevisionService {
         }else {
             throw new NotFound404Exception("Television not found");
         }
+    }
+
+    public List<Television> getAllByModel(String model){
+        return televisionRepository.findAllByModelLikeAndActiveTrue(model);
+    }
+
+    public List<Television> getAllByBrand(String brand){
+        return televisionRepository.findAllByBrandLikeAndActiveTrue(brand);
     }
 }

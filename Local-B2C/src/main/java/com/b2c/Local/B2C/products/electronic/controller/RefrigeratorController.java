@@ -6,6 +6,7 @@ import com.b2c.Local.B2C.products.electronic.service.RefrigeratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,5 +44,15 @@ public class RefrigeratorController {
     @GetMapping("/{id}/deactivateById")
     public String deactivateById(@PathVariable Long id){
         return refrigeratorService.deactivateById(id);
+    }
+
+    @GetMapping("/getAllByModel")
+    public List<Refrigerator> getAllByModel(@RequestParam @NotNull String model){
+        return refrigeratorService.getAllByModel(model);
+    }
+
+    @GetMapping("/getAllByBrand")
+    public List<Refrigerator> getAllByBrand(@RequestParam @NotNull String brand){
+        return refrigeratorService.getAllByBrand(brand);
     }
 }

@@ -16,4 +16,8 @@ public interface RefrigeratorRepository extends JpaRepository<Refrigerator, Long
     boolean existsByRefrigeratorIdAndActiveTrue(Long refrigeratorId);
 
     Refrigerator findByRefrigeratorIdAndActiveTrue(Long refrigeratorId);
+
+    List<Refrigerator> findAllByModelLikeAndActiveTrue(String model);
+
+    List<Refrigerator> findAllByBrandLikeAndActiveTrue(String brand);
 }
