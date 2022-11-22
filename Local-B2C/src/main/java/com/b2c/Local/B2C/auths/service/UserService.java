@@ -11,6 +11,7 @@ import com.b2c.Local.B2C.exception.Conflict409Exception;
 import com.b2c.Local.B2C.exception.Forbidden403Exception;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.store.service.LocalStoreService;
+import com.b2c.Local.B2C.utility.UserMacAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,8 @@ import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -69,7 +72,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User addUser(UserDto userDto) {
+    public User addUser(UserDto userDto, HttpServletRequest httpServletRequest) throws IOException {
         User user = new User();
         if (userDto.getEmail() != null) {
             if (!userRepository.existsByEmail(userDto.getEmail())) {
@@ -91,6 +94,7 @@ public class UserService implements UserDetailsService {
                 UserSecurityDetails userSecurityDetails = new UserSecurityDetails();
                 userSecurityDetails.setUser(userRepository.findByEmail(userDto.getEmail()));
                 userSecurityDetails.setMaxSession(userDto.getMaxSession());
+                userSecurityDetails.setMacAddress(UserMacAddress.arpByRemoteIp(httpServletRequest.getRemoteAddr()));
                 userSecurityDetailsRepository.save(userSecurityDetails);
             } else {
                 throw new Conflict409Exception("Email already exists!");

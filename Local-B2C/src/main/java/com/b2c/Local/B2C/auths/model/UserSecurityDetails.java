@@ -23,6 +23,8 @@ public class UserSecurityDetails {
 
     private Integer maxSession;
 
+    private String macAddress;
+
     @OneToOne
     private User user;
 }

@@ -7,7 +7,9 @@ import com.b2c.Local.B2C.auths.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 public class UserController {
@@ -20,8 +22,8 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public User checkUser(@RequestBody @Valid UserDto userDto) {
-        return userService.addUser(userDto);
+    public User checkUser(@RequestBody @Valid UserDto userDto, HttpServletRequest httpServletRequest) throws IOException {
+        return userService.addUser(userDto, httpServletRequest);
     }
 
     @PostMapping("/login")
