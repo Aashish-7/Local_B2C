@@ -3,6 +3,7 @@ package com.b2c.Local.B2C.securities.service;
 import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.securities.dao.FilterRequestsRepository;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
+import com.b2c.Local.B2C.utility.UserMacAddress;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -66,6 +67,7 @@ public class FilterRequestsService extends GenericFilter {
         filterRequest.setProtocol(servletRequest.getProtocol());
         filterRequest.setContentType(servletRequest.getContentType());
         filterRequest.setLocalDateTime(LocalDateTime.now());
+        filterRequest.setMacAddress(UserMacAddress.arpByRemoteIp(httpServletRequest.getRemoteAddr()));
         filterRequestsRepository.save(filterRequest);
         filterChain.doFilter(servletRequest, servletResponse);
     }

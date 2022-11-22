@@ -46,4 +46,6 @@ public class FilterRequest {
     private Date lastAccessTime;
 
     private String userName;
+
+    private String macAddress;
 }
