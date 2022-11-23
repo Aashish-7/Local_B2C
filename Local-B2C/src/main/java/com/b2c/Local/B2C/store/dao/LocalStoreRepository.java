@@ -15,11 +15,13 @@ import java.util.UUID;
 public interface LocalStoreRepository extends JpaRepository<LocalStore, UUID> {
 
     @Cacheable(value = "findByUserId", key = "#userId")
-    List<LocalStore> findByUserId(UUID userId);
+    List<LocalStore> findByUserIdAndActiveTrue(UUID userId);
 
     List<LocalStore> findByPinCodeAndActiveTrue(int pinCode);
 
     List<LocalStore> findByCityAndActiveTrue(String city);
 
     boolean existsByIdAndActiveTrue(UUID id);
+
+    Iterable<? extends LocalStore> findByUserId(UUID loggedInUserId);
 }

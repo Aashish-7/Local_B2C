@@ -54,9 +54,9 @@ public class LocalStoreService {
         this.acService = acService;
     }
 
-    public LocalStore addStore(LocalStoreDto localStoreDto){
+    public LocalStore addStore(LocalStoreDto localStoreDto) {
         LocalStore localStore = new LocalStore();
-        if (Objects.equals(getLoggedInUserId(), localStoreDto.getUserId())){
+        if (Objects.equals(getLoggedInUserId(), localStoreDto.getUserId()) && userRepository.existsByIdAndIsActiveTrue(getLoggedInUserId())) {
             localStore.setStoreName(localStoreDto.getStoreName());
             localStore.setStoreAddress(localStoreDto.getStoreAddress());
             localStore.setPinCode(localStoreDto.getPinCode());
@@ -71,15 +71,15 @@ public class LocalStoreService {
             localStore.setUser(userRepository.findById(localStoreDto.getUserId()).get());
             localStore.setActive(true);
             localStoreRepository.save(localStore);
-        }else {
+        } else {
             throw new Forbidden403Exception("Enter Valid UserId");
         }
         return localStore;
     }
 
-    public LocalStore UpdateByStoreId(UUID uuid, LocalStoreDto localStoreDto){
-        if (localStoreRepository.findById(uuid).isEmpty()){
-           throw new NotFound404Exception("Store Not Found");
+    public LocalStore UpdateByStoreId(UUID uuid, LocalStoreDto localStoreDto) {
+        if (localStoreRepository.findById(uuid).isEmpty() && !localStoreRepository.findById(uuid).get().getActive()) {
+            throw new NotFound404Exception("Store Not Found");
         }
         LocalStore localStore = localStoreRepository.findById(uuid).get();
         if (localStoreDto.getEmail() != null)
@@ -97,70 +97,76 @@ public class LocalStoreService {
     private UUID getLoggedInUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            return ((User)principal).getId();
+            return ((User) principal).getId();
         }
         return null;
     }
 
-    public List<LocalStore> listAllStores(){
+    public List<LocalStore> listAllStores() {
         if (getLoggedInUserId() != null)
-            return localStoreRepository.findByUserId(getLoggedInUserId());
+            return localStoreRepository.findByUserIdAndActiveTrue(getLoggedInUserId());
         return null;
     }
 
-    public LocalStore getById(UUID uuid){
-        if (localStoreRepository.findById(uuid).isPresent())
+    public LocalStore getById(UUID uuid) {
+        if (localStoreRepository.findById(uuid).isPresent() && localStoreRepository.findById(uuid).get().getActive())
             return localStoreRepository.findById(uuid).get();
         else
             return null;
     }
 
-    public String deleteById(UUID uuid){
-        if (localStoreRepository.findById(uuid).isPresent()){
-             localStoreRepository.deleteById(uuid);
-             return "Deleted";
-        }else {
+    public String deleteById(UUID uuid) {
+        if (localStoreRepository.findById(uuid).isPresent() && localStoreRepository.findById(uuid).get().getActive()) {
+            localStoreRepository.deleteById(uuid);
+            return "Deleted";
+        } else {
             return "Store Not Found";
         }
     }
 
-    public String deactivateById(UUID uuid){
-        if (localStoreRepository.findById(uuid).isPresent()){
-            LocalStore localStore =localStoreRepository.findById(uuid).get();
+    public String deactivateById(UUID uuid) {
+        if (localStoreRepository.findById(uuid).isPresent() && localStoreRepository.findById(uuid).get().getActive()) {
+            LocalStore localStore = localStoreRepository.findById(uuid).get();
             localStore.setActive(false);
             localStoreRepository.save(localStore);
             return "Deactivate Store";
-        }else {
+        } else {
             return "Store Not Found";
         }
     }
 
-    public String deleteAllStoreByUserId(){
+    public String deleteAllStoreByUserId() {
         localStoreRepository.deleteAll(localStoreRepository.findByUserId(getLoggedInUserId()));
         return "Delete All Store";
     }
 
-    public LocalStore addProductByStoreId(UUID uuid, String product){
-        if (localStoreRepository.findById(uuid).isPresent()){
+    public LocalStore addProductByStoreId(UUID uuid, String product) {
+        if (localStoreRepository.findById(uuid).isPresent() && localStoreRepository.findById(uuid).get().getActive()) {
             LocalStore localStore = localStoreRepository.findById(uuid).get();
             localStore.setListOfProduct(Collections.singletonList(product));
             localStoreRepository.save(localStore);
             return localStore;
-        }else {
+        } else {
             return null;
         }
     }
 
-    public List<LocalStore> findStoreByPinCode(int pinCode){
-        return localStoreRepository.findByPinCodeAndActiveTrue(pinCode);
+    public List<LocalStore> findStoreByPinCode(int pinCode) {
+        if (!localStoreRepository.findByPinCodeAndActiveTrue(pinCode).isEmpty())
+            return localStoreRepository.findByPinCodeAndActiveTrue(pinCode);
+        else
+            throw new NotFound404Exception("Store Not Found");
     }
 
-    public List<LocalStore> findStoreByCity(String city){
-        return localStoreRepository.findByCityAndActiveTrue(city);
+    public List<LocalStore> findStoreByCity(String city) {
+        if (!localStoreRepository.findByCityAndActiveTrue(city).isEmpty())
+            return localStoreRepository.findByCityAndActiveTrue(city);
+        else
+            throw new NotFound404Exception("Store Not Found");
     }
 
-    public Map<String, Object> getAllProductInLocalStoreById(UUID uuid){
-        if (localStoreRepository.existsByIdAndActiveTrue(uuid)){
+    public Map<String, Object> getAllProductInLocalStoreById(UUID uuid) {
+        if (localStoreRepository.existsByIdAndActiveTrue(uuid)) {
             Map<String, Object> map = new HashMap<>();
             map.put("Ac", acRepository.findByLocalStore_IdAndActiveTrue(uuid));
             map.put("Laptop", laptopRepository.findByLocalStore_IdAndActiveTrue(uuid));
