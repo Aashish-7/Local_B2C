@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.products.electronic.controller;
 
+import com.b2c.Local.B2C.products.electronic.dto.ElectronicFilterDto;
 import com.b2c.Local.B2C.products.electronic.dto.MobilePhoneDto;
 import com.b2c.Local.B2C.products.electronic.model.MobilePhone;
 import com.b2c.Local.B2C.products.electronic.service.MobilePhoneService;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -64,5 +66,10 @@ public class MobilePhoneController {
     @GetMapping("/getAllByModelAndPincode")
     public List<MobilePhone> getAllByModelAndPincode(@RequestParam @NotNull String model, @RequestParam @NotNull int pincode) {
         return mobilePhoneService.getAllByModelAndPincode(model, pincode);
+    }
+
+    @GetMapping("/getFilteredMobilePhone")
+    public Map<String, Object> getFilteredMobilePhone(@RequestParam int page, @RequestParam int size, @RequestBody ElectronicFilterDto electronicFilterDto){
+        return mobilePhoneService.getFilteredMobilePhone(page, size, electronicFilterDto);
     }
 }
