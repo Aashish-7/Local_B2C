@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter@AllArgsConstructor
 @NoArgsConstructor
-public class UserSecurityDetails {
+public class UserSecurityDetails implements Serializable {
 
     @Id
     private UUID id = UUID.randomUUID();

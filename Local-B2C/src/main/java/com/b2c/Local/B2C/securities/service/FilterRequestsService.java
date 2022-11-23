@@ -6,6 +6,7 @@ import com.b2c.Local.B2C.securities.model.FilterRequest;
 import com.b2c.Local.B2C.utility.UserMacAddress;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -44,16 +45,16 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        log.info("Incoming Request From - "+servletRequest.getRemoteAddr() +"  For - " +httpServletRequest.getRequestURI());
+        log.info("Incoming Request From - " + servletRequest.getRemoteAddr() + "  For - " + httpServletRequest.getRequestURI());
         FilterRequest filterRequest = new FilterRequest();
         HttpSession httpSession = httpServletRequest.getSession();
-        if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())){
+        if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())) {
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
             filterRequest.setNewSession(false);
-            filterRequest.setUserId(userRepository.findByEmail(httpServletRequest.getUserPrincipal().getName()).getId().toString());
-            filterRequest.setUserName(userRepository.findByEmail(httpServletRequest.getUserPrincipal().getName()).getEmail());
-        }else {
+            filterRequest.setUserId(getUserIdByEmail(httpServletRequest.getUserPrincipal().getName()));
+            filterRequest.setUserName(httpServletRequest.getUserPrincipal().getName());
+        } else {
             filterRequest.setNewSession(true);
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
@@ -67,8 +68,19 @@ public class FilterRequestsService extends GenericFilter {
         filterRequest.setProtocol(servletRequest.getProtocol());
         filterRequest.setContentType(servletRequest.getContentType());
         filterRequest.setLocalDateTime(LocalDateTime.now());
-        filterRequest.setMacAddress(UserMacAddress.arpByRemoteIp(httpServletRequest.getRemoteAddr()));
+        filterRequest.setMacAddress(getMacAddress(httpServletRequest.getRemoteAddr()));
         filterRequestsRepository.save(filterRequest);
         filterChain.doFilter(servletRequest, servletResponse);
     }
+
+    @Cacheable(cacheNames = "getMacAddress", key = "#remoteIp")
+    public String getMacAddress(String remoteIp) throws IOException {
+        return UserMacAddress.arpByRemoteIp(remoteIp);
+    }
+
+    @Cacheable(cacheNames = "getUserIdByEmail", key = "#email")
+    public String getUserIdByEmail(String email) {
+        return userRepository.findByEmail(email).getId().toString();
+    }
+
 }
