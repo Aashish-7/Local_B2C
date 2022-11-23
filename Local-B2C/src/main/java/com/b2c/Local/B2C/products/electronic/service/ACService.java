@@ -276,6 +276,7 @@ public class ACService {
             if (electronicFilterDto.getCity() != null && !electronicFilterDto.getCity().isEmpty()){
                 predicates.add(criteriaBuilder.equal(setJoin.get("city"), electronicFilterDto.getCity()));
             }
+            predicates.add(criteriaBuilder.equal(acRoot.get("active"), true));
             criteriaQuery.select(acRoot).where(predicates.toArray(new Predicate[0])).distinct(true);
             session.createQuery(criteriaQuery);
             List<AC> resources = session.createQuery(criteriaQuery).setFirstResult(page * size).setMaxResults(size).getResultList();
