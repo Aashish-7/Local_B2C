@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.products.electronic.service;
 
+import com.b2c.Local.B2C.exception.BadRequest400Exception;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.products.electronic.dao.ACRepository;
 import com.b2c.Local.B2C.products.electronic.dto.ACDto;
@@ -245,8 +246,7 @@ public class ACService {
             return null;
     }
 
-    public Map<String, Object>
-    getFilteredAc(int page, int size, ElectronicFilterDto electronicFilterDto){
+    public Map<String, Object> getFilteredAc(int page, int size, ElectronicFilterDto electronicFilterDto){
         Map<String, Object> map = new HashMap<>();
         if (size != 0){
             Session session = entityManager.unwrap(Session.class);
@@ -281,7 +281,9 @@ public class ACService {
             List<AC> resources = session.createQuery(criteriaQuery).setFirstResult(page * size).setMaxResults(size).getResultList();
             map.put("result", resources);
             map.put("count", session.createQuery(criteriaQuery).getResultList().size());
+            return map;
+        } else {
+            throw new BadRequest400Exception("size can't be zero");
         }
-        return map;
     }
 }
