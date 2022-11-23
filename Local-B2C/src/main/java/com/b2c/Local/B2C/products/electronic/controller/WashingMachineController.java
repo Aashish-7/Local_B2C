@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.products.electronic.controller;
 
+import com.b2c.Local.B2C.products.electronic.dto.ElectronicFilterDto;
 import com.b2c.Local.B2C.products.electronic.dto.WashingMachineDto;
 import com.b2c.Local.B2C.products.electronic.model.WashingMachine;
 import com.b2c.Local.B2C.products.electronic.service.WashingMachineService;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -64,5 +66,10 @@ public class WashingMachineController {
     @GetMapping("/getAllByModelAndPincode")
     public List<WashingMachine> getAllByModelAndPincode(@RequestParam @NotNull String model, @RequestParam @NotNull int pincode) {
         return washingMachineService.getAllByModelAndPincode(model, pincode);
+    }
+
+    @GetMapping("/getFilteredWashingMachine")
+    public Map<String, Object> getFilteredWashingMachine(@RequestParam int page, @RequestParam int size, @RequestBody ElectronicFilterDto electronicFilterDto){
+        return washingMachineService.getFilteredWashingMachine(page, size, electronicFilterDto);
     }
 }

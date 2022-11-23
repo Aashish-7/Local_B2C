@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.products.electronic.controller;
 
+import com.b2c.Local.B2C.products.electronic.dto.ElectronicFilterDto;
 import com.b2c.Local.B2C.products.electronic.dto.LaptopDto;
 import com.b2c.Local.B2C.products.electronic.model.Laptop;
 import com.b2c.Local.B2C.products.electronic.service.LaptopService;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -64,5 +66,10 @@ public class LaptopController {
     @GetMapping("/getAllByModelAndPincode")
     public List<Laptop> getAllByModelAndPincode(@RequestParam @NotNull String model, @RequestParam @NotNull int pincode) {
         return laptopService.getAllByModelAndPincode(model, pincode);
+    }
+
+    @GetMapping("/getFilteredLaptop")
+    public Map<String, Object> getFilteredLaptop(@RequestParam int page, @RequestParam int size, @RequestBody ElectronicFilterDto electronicFilterDto){
+        return laptopService.getFilteredLaptop(page, size, electronicFilterDto);
     }
 }
