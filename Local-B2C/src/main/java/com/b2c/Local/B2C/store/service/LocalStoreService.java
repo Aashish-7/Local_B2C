@@ -69,6 +69,7 @@ public class LocalStoreService {
             localStore.setDescription(localStoreDto.getDescription());
             localStore.setListOfProduct(localStoreDto.getListOfProduct());
             localStore.setUser(userRepository.findById(localStoreDto.getUserId()).get());
+            localStore.setActive(true);
             localStoreRepository.save(localStore);
         }else {
             throw new Forbidden403Exception("Enter Valid UserId");
