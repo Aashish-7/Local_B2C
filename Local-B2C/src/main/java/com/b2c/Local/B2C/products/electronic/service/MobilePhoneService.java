@@ -3,7 +3,6 @@ package com.b2c.Local.B2C.products.electronic.service;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.products.electronic.dao.MobilePhoneRepository;
 import com.b2c.Local.B2C.products.electronic.dto.MobilePhoneDto;
-import com.b2c.Local.B2C.products.electronic.model.AC;
 import com.b2c.Local.B2C.products.electronic.model.MobilePhone;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,7 @@ public class MobilePhoneService {
             mobilePhone.setBatterySize(mobilePhoneDto.getBatterySize());
             mobilePhone.setChargingType(mobilePhoneDto.getChargingType());
             mobilePhone.setChargerOutput(mobilePhoneDto.getChargerOutput());
-            mobilePhone.setColor(mobilePhoneDto.getColor());
+            mobilePhone.setColour(mobilePhoneDto.getColor());
             mobilePhone.setWeightInGrams(mobilePhoneDto.getWeightInGrams());
             mobilePhone.setPrice(mobilePhoneDto.getPrice());
             mobilePhone.setBluetooth(mobilePhoneDto.isBluetooth());
@@ -106,7 +105,7 @@ public class MobilePhoneService {
             mobilePhone.setBatterySize(mobilePhoneDto.getBatterySize());
             mobilePhone.setChargingType(mobilePhoneDto.getChargingType());
             mobilePhone.setChargerOutput(mobilePhoneDto.getChargerOutput());
-            mobilePhone.setColor(mobilePhoneDto.getColor());
+            mobilePhone.setColour(mobilePhoneDto.getColor());
             mobilePhone.setWeightInGrams(mobilePhoneDto.getWeightInGrams());
             mobilePhone.setPrice(mobilePhoneDto.getPrice());
             mobilePhone.setBluetooth(mobilePhoneDto.isBluetooth());

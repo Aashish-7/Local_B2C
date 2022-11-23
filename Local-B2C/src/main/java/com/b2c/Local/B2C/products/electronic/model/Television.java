@@ -55,7 +55,7 @@ public class Television {
 
     private int noOfSpeakers;
 
-    private String color;
+    private String colour;
 
     private double discountPercentage;
 

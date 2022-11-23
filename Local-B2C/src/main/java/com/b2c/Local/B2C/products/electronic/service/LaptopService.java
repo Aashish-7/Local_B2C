@@ -55,7 +55,7 @@ public class LaptopService {
             laptop.setBluetooth(laptopDto.isBluetooth());
             laptop.setHeadphoneJack(laptopDto.isHeadphoneJack());
             laptop.setHdmiPort(laptopDto.isHdmiPort());
-            laptop.setColor(laptopDto.getColor());
+            laptop.setColour(laptopDto.getColor());
             laptop.setDiscountPercentage(laptopDto.getDiscountPercentage());
             laptop.setNoOfSpeaker(laptopDto.getNoOfSpeaker());
             laptop.setLocalStore(localStoreRepository.findById(laptopDto.getLocalStoreId()).get());
@@ -106,7 +106,7 @@ public class LaptopService {
             laptop.setBluetooth(laptopDto.isBluetooth());
             laptop.setHeadphoneJack(laptopDto.isHeadphoneJack());
             laptop.setHdmiPort(laptopDto.isHdmiPort());
-            laptop.setColor(laptopDto.getColor());
+            laptop.setColour(laptopDto.getColor());
             laptop.setDiscountPercentage(laptopDto.getDiscountPercentage());
             laptop.setNoOfSpeaker(laptopDto.getNoOfSpeaker());
             laptop.setLocalStore(localStoreRepository.findById(laptopDto.getLocalStoreId()).get());

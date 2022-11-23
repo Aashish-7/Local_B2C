@@ -3,7 +3,6 @@ package com.b2c.Local.B2C.products.electronic.service;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.products.electronic.dao.TelevisionRepository;
 import com.b2c.Local.B2C.products.electronic.dto.TelevisionDto;
-import com.b2c.Local.B2C.products.electronic.model.AC;
 import com.b2c.Local.B2C.products.electronic.model.Television;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,7 @@ public class TelevisionService {
             television.setNoOfCpuCore(televisionDto.getNoOfCpuCore());
             television.setNoOfSpeakers(televisionDto.getNoOfSpeakers());
             television.setDiscountPercentage(televisionDto.getDiscountPercentage());
-            television.setColor(televisionDto.getColor());
+            television.setColour(televisionDto.getColor());
             television.setWarranty(televisionDto.getWarranty());
             television.setLocalStore(localStoreRepository.findById(televisionDto.getLocalStoreId()).get());
             television.setActive(true);
@@ -89,7 +88,7 @@ public class TelevisionService {
             television.setNoOfCpuCore(televisionDto.getNoOfCpuCore());
             television.setNoOfSpeakers(televisionDto.getNoOfSpeakers());
             television.setDiscountPercentage(televisionDto.getDiscountPercentage());
-            television.setColor(televisionDto.getColor());
+            television.setColour(televisionDto.getColor());
             television.setWarranty(televisionDto.getWarranty());
             television.setLocalStore(localStoreRepository.findById(televisionDto.getLocalStoreId()).get());
             television.setActive(true);

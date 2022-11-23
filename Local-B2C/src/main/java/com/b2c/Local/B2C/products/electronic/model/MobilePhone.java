@@ -65,7 +65,7 @@ public class MobilePhone {
 
     private String chargerOutput;
 
-    private String color;
+    private String colour;
 
     private int weightInGrams;
 

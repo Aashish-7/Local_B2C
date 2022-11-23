@@ -73,7 +73,7 @@ public class Laptop {
 
     private boolean hdmiPort;
 
-    private String color;
+    private String colour;
 
     private double discountPercentage;
 
