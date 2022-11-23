@@ -72,4 +72,8 @@ public class LaptopController {
     public Map<String, Object> getFilteredLaptop(@RequestParam int page, @RequestParam int size, @RequestBody ElectronicFilterDto electronicFilterDto){
         return laptopService.getFilteredLaptop(page, size, electronicFilterDto);
     }
+    @GetMapping("/findAllDistinctData")
+    public ElectronicFilterDto findAllDistinctData(){
+        return laptopService.findAllDistinctData();
+    }
 }

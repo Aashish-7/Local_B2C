@@ -246,34 +246,34 @@ public class ACService {
             return null;
     }
 
-    public Map<String, Object> getFilteredAc(int page, int size, ElectronicFilterDto electronicFilterDto){
+    public Map<String, Object> getFilteredAc(int page, int size, ElectronicFilterDto electronicFilterDto) {
         Map<String, Object> map = new HashMap<>();
-        if (size != 0){
+        if (size != 0) {
             Session session = entityManager.unwrap(Session.class);
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<AC> criteriaQuery = criteriaBuilder.createQuery(AC.class);
             Root<AC> acRoot = criteriaQuery.from(AC.class);
             Join setJoin = acRoot.join("localStore");
             List<Predicate> predicates = new ArrayList<>();
-            if (electronicFilterDto.getModel() != null && !electronicFilterDto.getModel().isEmpty()){
+            if (electronicFilterDto.getModel() != null && !electronicFilterDto.getModel().isEmpty()) {
                 predicates.add(criteriaBuilder.and(acRoot.get("model").in(electronicFilterDto.getModel())));
             }
-            if (electronicFilterDto.getBrand() != null && !electronicFilterDto.getBrand().isEmpty()){
+            if (electronicFilterDto.getBrand() != null && !electronicFilterDto.getBrand().isEmpty()) {
                 predicates.add(criteriaBuilder.and(acRoot.get("brand").in(electronicFilterDto.getBrand())));
             }
-            if (electronicFilterDto.getColour() != null && !electronicFilterDto.getColour().isEmpty()){
+            if (electronicFilterDto.getColour() != null && !electronicFilterDto.getColour().isEmpty()) {
                 predicates.add(criteriaBuilder.and(acRoot.get("colour").in(electronicFilterDto.getColour())));
             }
-            if (electronicFilterDto.getAvailability() != null && !electronicFilterDto.getAvailability().isEmpty()){
+            if (electronicFilterDto.getAvailability() != null && !electronicFilterDto.getAvailability().isEmpty()) {
                 predicates.add(criteriaBuilder.and(acRoot.get("availability").in(electronicFilterDto.getAvailability())));
             }
-            if (Objects.nonNull(electronicFilterDto.getPrice())){
+            if (Objects.nonNull(electronicFilterDto.getPrice())) {
                 predicates.add(criteriaBuilder.and(acRoot.get("price").in(electronicFilterDto.getPrice())));
             }
-            if (electronicFilterDto.getPinCode() != null){
+            if (electronicFilterDto.getPinCode() != null) {
                 predicates.add(criteriaBuilder.equal(setJoin.get("pinCode"), electronicFilterDto.getPinCode()));
             }
-            if (electronicFilterDto.getCity() != null && !electronicFilterDto.getCity().isEmpty()){
+            if (electronicFilterDto.getCity() != null && !electronicFilterDto.getCity().isEmpty()) {
                 predicates.add(criteriaBuilder.equal(setJoin.get("city"), electronicFilterDto.getCity()));
             }
             predicates.add(criteriaBuilder.equal(acRoot.get("active"), true));
@@ -286,5 +286,15 @@ public class ACService {
         } else {
             throw new BadRequest400Exception("size can't be zero");
         }
+    }
+
+    public ElectronicFilterDto findAllDistinctData() {
+        ElectronicFilterDto electronicFilterDto = new ElectronicFilterDto();
+        electronicFilterDto.setModel(acRepository.findAllDistinctModel());
+        electronicFilterDto.setBrand(acRepository.findAllDistinctBrand());
+        electronicFilterDto.setPrice(acRepository.findAllDistinctPrice());
+        electronicFilterDto.setColour(acRepository.findAllDistinctColour());
+        electronicFilterDto.setAvailability(acRepository.findAllDistinctAvailability());
+        return electronicFilterDto;
     }
 }

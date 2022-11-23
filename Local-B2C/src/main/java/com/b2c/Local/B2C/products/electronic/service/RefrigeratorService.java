@@ -173,4 +173,14 @@ public class RefrigeratorService {
             throw new BadRequest400Exception("size can't be zero");
         }
     }
+
+    public ElectronicFilterDto findAllDistinctData() {
+        ElectronicFilterDto electronicFilterDto = new ElectronicFilterDto();
+        electronicFilterDto.setModel(refrigeratorRepository.findAllDistinctModel());
+        electronicFilterDto.setBrand(refrigeratorRepository.findAllDistinctBrand());
+        electronicFilterDto.setPrice(refrigeratorRepository.findAllDistinctPrice());
+        electronicFilterDto.setColour(refrigeratorRepository.findAllDistinctColour());
+        electronicFilterDto.setAvailability(refrigeratorRepository.findAllDistinctAvailability());
+        return electronicFilterDto;
+    }
 }

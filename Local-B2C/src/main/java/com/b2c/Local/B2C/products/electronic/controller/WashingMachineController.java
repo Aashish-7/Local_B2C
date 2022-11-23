@@ -72,4 +72,9 @@ public class WashingMachineController {
     public Map<String, Object> getFilteredWashingMachine(@RequestParam int page, @RequestParam int size, @RequestBody ElectronicFilterDto electronicFilterDto){
         return washingMachineService.getFilteredWashingMachine(page, size, electronicFilterDto);
     }
+
+    @GetMapping("/findAllDistinctData")
+    public ElectronicFilterDto findAllDistinctData(){
+        return washingMachineService.findAllDistinctData();
+    }
 }

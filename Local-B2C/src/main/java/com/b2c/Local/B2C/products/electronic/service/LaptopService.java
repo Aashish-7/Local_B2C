@@ -204,4 +204,14 @@ public class LaptopService {
             throw new BadRequest400Exception("size can't be zero");
         }
     }
+
+    public ElectronicFilterDto findAllDistinctData() {
+        ElectronicFilterDto electronicFilterDto = new ElectronicFilterDto();
+        electronicFilterDto.setModel(laptopRepository.findAllDistinctModel());
+        electronicFilterDto.setBrand(laptopRepository.findAllDistinctBrand());
+        electronicFilterDto.setPrice(laptopRepository.findAllDistinctPrice());
+        electronicFilterDto.setColour(laptopRepository.findAllDistinctColour());
+        electronicFilterDto.setAvailability(laptopRepository.findAllDistinctAvailability());
+        return electronicFilterDto;
+    }
 }

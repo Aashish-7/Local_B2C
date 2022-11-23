@@ -72,4 +72,10 @@ public class MobilePhoneController {
     public Map<String, Object> getFilteredMobilePhone(@RequestParam int page, @RequestParam int size, @RequestBody ElectronicFilterDto electronicFilterDto){
         return mobilePhoneService.getFilteredMobilePhone(page, size, electronicFilterDto);
     }
+
+    @GetMapping("/findAllDistinctData")
+    public ElectronicFilterDto findAllDistinctData(){
+        return mobilePhoneService.findAllDistinctData();
+    }
+
 }

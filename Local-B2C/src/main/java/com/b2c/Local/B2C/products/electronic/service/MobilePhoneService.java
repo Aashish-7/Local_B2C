@@ -212,4 +212,14 @@ public class MobilePhoneService {
             throw new BadRequest400Exception("size can't be zero");
         }
     }
+
+    public ElectronicFilterDto findAllDistinctData() {
+        ElectronicFilterDto electronicFilterDto = new ElectronicFilterDto();
+        electronicFilterDto.setModel(mobilePhoneRepository.findAllDistinctModel());
+        electronicFilterDto.setBrand(mobilePhoneRepository.findAllDistinctBrand());
+        electronicFilterDto.setPrice(mobilePhoneRepository.findAllDistinctPrice());
+        electronicFilterDto.setColour(mobilePhoneRepository.findAllDistinctColour());
+        electronicFilterDto.setAvailability(mobilePhoneRepository.findAllDistinctAvailability());
+        return electronicFilterDto;
+    }
 }

@@ -72,4 +72,9 @@ public class RefrigeratorController {
     public Map<String, Object> getFilteredRefrigerator(@RequestParam int page, @RequestParam int size, @RequestBody ElectronicFilterDto electronicFilterDto){
         return refrigeratorService.getFilteredRefrigerator(page, size, electronicFilterDto);
     }
+
+    @GetMapping("/findAllDistinctData")
+    public ElectronicFilterDto findAllDistinctData(){
+        return refrigeratorService.findAllDistinctData();
+    }
 }

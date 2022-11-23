@@ -176,4 +176,14 @@ public class WashingMachineService {
             throw new BadRequest400Exception("size can't be zero");
         }
     }
+
+    public ElectronicFilterDto findAllDistinctData() {
+        ElectronicFilterDto electronicFilterDto = new ElectronicFilterDto();
+        electronicFilterDto.setModel(washingMachineRepository.findAllDistinctModel());
+        electronicFilterDto.setBrand(washingMachineRepository.findAllDistinctBrand());
+        electronicFilterDto.setPrice(washingMachineRepository.findAllDistinctPrice());
+        electronicFilterDto.setColour(washingMachineRepository.findAllDistinctColour());
+        electronicFilterDto.setAvailability(washingMachineRepository.findAllDistinctAvailability());
+        return electronicFilterDto;
+    }
 }

@@ -96,4 +96,9 @@ public class ACController {
     public Map<String, Object> getFilteredAc(@RequestParam int page, @RequestParam int size, @RequestBody ElectronicFilterDto electronicFilterDto){
         return acService.getFilteredAc(page, size, electronicFilterDto);
     }
+
+    @GetMapping("/findAllDistinctData")
+    public ElectronicFilterDto findAllDistinctData(){
+        return acService.findAllDistinctData();
+    }
 }

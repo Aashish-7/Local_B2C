@@ -184,4 +184,14 @@ public class TelevisionService {
             throw new BadRequest400Exception("size can't be zero");
         }
     }
+
+    public ElectronicFilterDto findAllDistinctData() {
+        ElectronicFilterDto electronicFilterDto = new ElectronicFilterDto();
+        electronicFilterDto.setModel(televisionRepository.findAllDistinctModel());
+        electronicFilterDto.setBrand(televisionRepository.findAllDistinctBrand());
+        electronicFilterDto.setPrice(televisionRepository.findAllDistinctPrice());
+        electronicFilterDto.setColour(televisionRepository.findAllDistinctColour());
+        electronicFilterDto.setAvailability(televisionRepository.findAllDistinctAvailability());
+        return electronicFilterDto;
+    }
 }

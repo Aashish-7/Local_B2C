@@ -31,4 +31,19 @@ public interface ACRepository extends JpaRepository<AC, Long> {
 
     List<AC> findAllByActiveTrueAndBrandLikeAndLocalStore_PinCode(String Brand, int pinCode);
 
+    @Query("select distinct a.model from AC a where a.active =true")
+    List<String> findAllDistinctModel();
+
+    @Query("select distinct  a.brand from AC a where a.active =true")
+    List<String> findAllDistinctBrand();
+
+    @Query("select distinct a.colour from AC a where a.active =true")
+    List<String> findAllDistinctColour();
+
+    @Query("select distinct  a.price from AC a where a.active =true")
+    List<Double> findAllDistinctPrice();
+
+    @Query("select distinct a.availability from AC a where a.active =true")
+    List<String> findAllDistinctAvailability();
+
 }

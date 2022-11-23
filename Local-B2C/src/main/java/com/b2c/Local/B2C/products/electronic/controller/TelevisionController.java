@@ -72,4 +72,9 @@ public class TelevisionController {
     public Map<String, Object> getFilteredTelevision(@RequestParam int page, @RequestParam int size, @RequestBody ElectronicFilterDto electronicFilterDto){
         return televisionService.getFilteredTelevision(page, size, electronicFilterDto);
     }
+
+    @GetMapping("/findAllDistinctData")
+    public ElectronicFilterDto findAllDistinctData(){
+        return televisionService.findAllDistinctData();
+    }
 }
