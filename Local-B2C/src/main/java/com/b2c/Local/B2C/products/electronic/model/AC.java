@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Entity
@@ -17,7 +18,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EnableScheduling
-public class AC {
+public class AC implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -62,19 +62,19 @@ public class LocalStoreController {
         return localStoreService.addProductByStoreId(uuid, product);
     }
 
-    @Cacheable(value = "findByPinCode", key = "#pinCode")
+    @Cacheable(value = "findStoreByPinCode", key = "#pinCode")
     @GetMapping("/findByPinCode")
     public List<LocalStore> findStoreByPinCode(@RequestParam int pinCode){
         return localStoreService.findStoreByPinCode(pinCode);
     }
 
-    @Cacheable(value = "findByCity", key = "#city")
+    @Cacheable(value = "findStoreByCity", key = "#city")
     @GetMapping("/findByCity")
     public List<LocalStore> findStoreByCity(@RequestParam String city){
         return localStoreService.findStoreByCity(city);
     }
 
-    @GetMapping("/{uuid}/getAllProductInLocalStoreById")
+    @GetMapping("/{uuid}/getAllProductInLocalStoreById")     @Cacheable(value = "getAllProductInLocalStoreById", key = "#uuid")
     public Map<String, Object> getAllProductInLocalStoreById(@PathVariable UUID uuid){
         return localStoreService.getAllProductInLocalStoreById(uuid);
     }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "refrigerator")
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Refrigerator {
+public class Refrigerator implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
