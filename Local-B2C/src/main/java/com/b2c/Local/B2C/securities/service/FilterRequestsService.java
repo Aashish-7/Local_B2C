@@ -6,7 +6,6 @@ import com.b2c.Local.B2C.securities.model.FilterRequest;
 import com.b2c.Local.B2C.utility.UserMacAddress;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -26,10 +25,13 @@ public class FilterRequestsService extends GenericFilter {
 
     UserRepository userRepository;
 
+    UserMacAddress userMacAddress;
+
     @Autowired
-    public FilterRequestsService(FilterRequestsRepository filterRequestsRepository, UserRepository userRepository) {
+    public FilterRequestsService(FilterRequestsRepository filterRequestsRepository, UserRepository userRepository, UserMacAddress userMacAddress) {
         this.filterRequestsRepository = filterRequestsRepository;
         this.userRepository = userRepository;
+        this.userMacAddress = userMacAddress;
     }
 
     @Override
@@ -68,17 +70,11 @@ public class FilterRequestsService extends GenericFilter {
         filterRequest.setProtocol(servletRequest.getProtocol());
         filterRequest.setContentType(servletRequest.getContentType());
         filterRequest.setLocalDateTime(LocalDateTime.now());
-        filterRequest.setMacAddress(getMacAddress(httpServletRequest.getRemoteAddr()));
+        filterRequest.setMacAddress(userMacAddress.arpByRemoteIp(httpServletRequest.getRemoteAddr()));
         filterRequestsRepository.save(filterRequest);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    @Cacheable(cacheNames = "getMacAddress", key = "#remoteIp")
-    public String getMacAddress(String remoteIp) throws IOException {
-        return UserMacAddress.arpByRemoteIp(remoteIp);
-    }
-
-    @Cacheable(cacheNames = "getUserIdByEmail", key = "#email")
     public String getUserIdByEmail(String email) {
         return userRepository.findByEmail(email).getId().toString();
     }

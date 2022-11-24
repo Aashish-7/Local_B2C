@@ -49,17 +49,20 @@ public class UserService implements UserDetailsService {
 
     LocalStoreService localStoreService;
 
+    UserMacAddress userMacAddress;
+
     @Autowired
     public UserService(@Lazy UserRepository userRepository, @Lazy AuthenticationManager authenticationManager,
                        @Lazy DaoAuthenticationProvider authenticationProvider,
                        @Lazy FindByIndexNameSessionRepository<? extends Session> sessions,
-                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository,@Lazy LocalStoreService localStoreService) {
+                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository,@Lazy LocalStoreService localStoreService, @Lazy UserMacAddress userMacAddress) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.authenticationProvider = authenticationProvider;
         this.sessions = sessions;
         this.userSecurityDetailsRepository = userSecurityDetailsRepository;
         this.localStoreService = localStoreService;
+        this.userMacAddress = userMacAddress;
     }
 
 
@@ -94,7 +97,7 @@ public class UserService implements UserDetailsService {
                 UserSecurityDetails userSecurityDetails = new UserSecurityDetails();
                 userSecurityDetails.setUser(userRepository.findByEmail(userDto.getEmail()));
                 userSecurityDetails.setMaxSession(userDto.getMaxSession());
-                userSecurityDetails.setMacAddress(UserMacAddress.arpByRemoteIp(httpServletRequest.getRemoteAddr()));
+                userSecurityDetails.setMacAddress(userMacAddress.arpByRemoteIp(httpServletRequest.getRemoteAddr()));
                 userSecurityDetailsRepository.save(userSecurityDetails);
             } else {
                 throw new Conflict409Exception("Email already exists!");

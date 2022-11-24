@@ -14,13 +14,16 @@ import java.util.UUID;
 @CacheConfig(cacheNames = {"LocalStoreRepository"})
 public interface LocalStoreRepository extends JpaRepository<LocalStore, UUID> {
 
-    @Cacheable(value = "findByUserId", key = "#userId")
+    @Cacheable(value = "findByUserIdAndActiveTrue", key = "#userId")
     List<LocalStore> findByUserIdAndActiveTrue(UUID userId);
 
+    @Cacheable(cacheNames = "findByPinCodeAndActiveTrue", key = "#pinCode")
     List<LocalStore> findByPinCodeAndActiveTrue(int pinCode);
 
+    @Cacheable(cacheNames = "findByCityAndActiveTrue", key = "#city")
     List<LocalStore> findByCityAndActiveTrue(String city);
 
+    @Cacheable(cacheNames = "existsByIdAndActiveTrue", key = "#id")
     boolean existsByIdAndActiveTrue(UUID id);
 
     Iterable<? extends LocalStore> findByUserId(UUID loggedInUserId);

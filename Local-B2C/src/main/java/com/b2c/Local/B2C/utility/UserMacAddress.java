@@ -1,7 +1,9 @@
 package com.b2c.Local.B2C.utility;
 
-import lombok.experimental.UtilityClass;
 import org.apache.commons.io.IOUtils;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@UtilityClass
+@Component
 public class UserMacAddress {
 
     public void pingRemoteIp() throws IOException {
@@ -22,6 +24,7 @@ public class UserMacAddress {
         process.destroy();
     }
 
+    @Cacheable(cacheNames = "arpByRemoteIp", key = "#remoteIp")
     public String arpByRemoteIp(String remoteIp) throws IOException {
         try {
             Process process = Runtime.getRuntime().exec("arp -a " + remoteIp);
