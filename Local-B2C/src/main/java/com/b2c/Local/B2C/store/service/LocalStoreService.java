@@ -168,6 +168,7 @@ public class LocalStoreService {
     public Map<String, Object> getAllProductInLocalStoreById(UUID uuid) {
         if (localStoreRepository.existsByIdAndActiveTrue(uuid)) {
             Map<String, Object> map = new HashMap<>();
+            map.put("localStore",localStoreRepository.findById(uuid).get());
             map.put("Ac", acRepository.findByLocalStore_IdAndActiveTrue(uuid));
             map.put("Laptop", laptopRepository.findByLocalStore_IdAndActiveTrue(uuid));
             map.put("MobilePhone", mobilePhoneRepository.findByLocalStore_IdAndActiveTrue(uuid));
