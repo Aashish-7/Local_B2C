@@ -34,7 +34,7 @@ public class LaptopService {
 
 
     public Laptop addLaptop(LaptopDto laptopDto){
-        if (localStoreRepository.existsById(laptopDto.getLocalStoreId())) {
+        if (localStoreRepository.existsByIdAndActiveTrue(laptopDto.getLocalStoreId())) {
             Laptop laptop = new Laptop();
             laptop.setModel(laptopDto.getModel());
             laptop.setBrand(laptopDto.getBrand());

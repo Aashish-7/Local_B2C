@@ -33,7 +33,7 @@ public class TelevisionService {
     }
 
     public Television addTelevision(TelevisionDto televisionDto){
-        if (localStoreRepository.findById(televisionDto.getLocalStoreId()).isPresent()){
+        if (localStoreRepository.existsByIdAndActiveTrue(televisionDto.getLocalStoreId())){
             Television television = new Television();
             television.setModel(televisionDto.getModel());
             television.setBrand(televisionDto.getBrand());

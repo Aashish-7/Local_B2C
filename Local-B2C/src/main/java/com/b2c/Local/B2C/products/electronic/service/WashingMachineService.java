@@ -33,7 +33,7 @@ public class WashingMachineService {
     }
 
     public WashingMachine addWashingMachine(WashingMachineDto washingMachineDto){
-        if (localStoreRepository.findById(washingMachineDto.getLocalStoreId()).isPresent()){
+        if (localStoreRepository.existsByIdAndActiveTrue(washingMachineDto.getLocalStoreId())){
             WashingMachine washingMachine = new WashingMachine();
             washingMachine.setModel(washingMachineDto.getModel());
             washingMachine.setBrand(washingMachineDto.getBrand());

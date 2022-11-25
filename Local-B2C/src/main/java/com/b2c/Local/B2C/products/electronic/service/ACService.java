@@ -40,7 +40,7 @@ public class ACService {
     }
 
     public AC addAc(ACDto acDto) {
-        if (localStoreRepository.findById(acDto.getLocalStoreId()).isPresent()) {
+        if (localStoreRepository.existsByIdAndActiveTrue(acDto.getLocalStoreId())) {
             AC ac = new AC();
             ac.setModel(acDto.getModel());
             ac.setBrand(acDto.getBrand());

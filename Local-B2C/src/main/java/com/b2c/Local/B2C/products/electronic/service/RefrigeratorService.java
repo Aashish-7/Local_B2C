@@ -33,7 +33,7 @@ public class RefrigeratorService {
     }
 
     public Refrigerator addRefrigerator(RefrigeratorDto refrigeratorDto){
-        if (localStoreRepository.findById(refrigeratorDto.getLocalStoreId()).isPresent()){
+        if (localStoreRepository.existsByIdAndActiveTrue(refrigeratorDto.getLocalStoreId())){
             Refrigerator refrigerator = new Refrigerator();
             refrigerator.setModel(refrigeratorDto.getModel());
             refrigerator.setBrand(refrigeratorDto.getBrand());

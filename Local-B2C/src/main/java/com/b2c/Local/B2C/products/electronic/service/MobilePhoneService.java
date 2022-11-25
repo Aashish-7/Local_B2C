@@ -32,7 +32,7 @@ public class MobilePhoneService {
     }
 
     public MobilePhone addMobilePhone(MobilePhoneDto mobilePhoneDto){
-        if (localStoreRepository.existsById(mobilePhoneDto.getLocalStoreId())){
+        if (localStoreRepository.existsByIdAndActiveTrue(mobilePhoneDto.getLocalStoreId())){
             MobilePhone mobilePhone = new MobilePhone();
             mobilePhone.setModel(mobilePhoneDto.getModel());
             mobilePhone.setBrand(mobilePhoneDto.getBrand());

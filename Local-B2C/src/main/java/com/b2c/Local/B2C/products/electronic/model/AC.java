@@ -1,6 +1,7 @@
 package com.b2c.Local.B2C.products.electronic.model;
 
 import com.b2c.Local.B2C.store.model.LocalStore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,7 +60,7 @@ public class AC implements Serializable {
 
     private double price;
 
-    @ManyToOne
+    @ManyToOne @JsonIgnore
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")
     private LocalStore localStore;
 }
