@@ -5,6 +5,7 @@ import com.b2c.Local.B2C.products.electronic.dto.RefrigeratorDto;
 import com.b2c.Local.B2C.products.electronic.model.Refrigerator;
 import com.b2c.Local.B2C.products.electronic.service.RefrigeratorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -24,11 +25,13 @@ public class RefrigeratorController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public Refrigerator addRefrigerator(@RequestBody RefrigeratorDto refrigeratorDto){
         return refrigeratorService.addRefrigerator(refrigeratorDto);
     }
 
     @GetMapping("/{uuid}/getAllByStoreId")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public List<Refrigerator> getAllByStoreId(@PathVariable UUID uuid) {
         return refrigeratorService.getAllByStoreId(uuid);
     }
@@ -39,11 +42,13 @@ public class RefrigeratorController {
     }
 
     @GetMapping("/{id}/getRefrigeratorById")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public Refrigerator getRefrigeratorById(@PathVariable Long id){
         return refrigeratorService.getRefrigeratorById(id);
     }
 
     @GetMapping("/{id}/deactivateById")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public String deactivateById(@PathVariable Long id){
         return refrigeratorService.deactivateById(id);
     }

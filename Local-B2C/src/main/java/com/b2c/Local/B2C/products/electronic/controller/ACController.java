@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -31,32 +32,38 @@ public class ACController {
         this.acService = acService;
     }
 
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     @PostMapping("/add")
     public AC addAc(@RequestBody ACDto acDto) {
         return acService.addAc(acDto);
     }
 
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     @GetMapping("/{uuid}/getAllByStoreId")
     public List<AC> getAllByStoreId(@PathVariable UUID uuid) {
         return acService.getAllByStoreId(uuid);
     }
 
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     @PostMapping("/{id}/updateAcById")
     public AC updateAcById(@RequestBody ACDto acDto, @PathVariable Long id) {
         return acService.updateAcById(acDto, id);
     }
 
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     @PutMapping("/{id}/updateAcByIdByPut")
     public AC updateAcByIdByPut(@RequestBody ACDto acDto, @PathVariable Long id) {
         return acService.updateAcByIdByPut(acDto, id);
     }
 
     @GetMapping("/{id}/getAcById")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public AC getAcById(@PathVariable Long id) {
         return acService.getAcById(id);
     }
 
     @GetMapping("/{id}/deactivateById")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public String deactivateById(@PathVariable Long id) {
         return acService.deactivateById(id);
     }

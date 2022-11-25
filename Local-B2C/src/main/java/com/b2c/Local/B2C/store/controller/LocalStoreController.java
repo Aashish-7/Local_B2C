@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,6 +29,7 @@ public class LocalStoreController {
     }
 
     @PostMapping("/addStore")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public LocalStore addStore(@RequestBody @Valid LocalStoreDto localStoreDto){
         return localStoreService.addStore(localStoreDto);
     }

@@ -4,6 +4,7 @@ import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.auths.dao.UserSecurityDetailsRepository;
 import com.b2c.Local.B2C.auths.dto.LoginDto;
 import com.b2c.Local.B2C.auths.dto.UserDto;
+import com.b2c.Local.B2C.auths.enums.Role;
 import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.auths.model.UserSecurityDetails;
 import com.b2c.Local.B2C.exception.BadRequest400Exception;
@@ -13,6 +14,7 @@ import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.store.service.LocalStoreService;
 import com.b2c.Local.B2C.utility.UserMacAddress;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -75,6 +77,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    @Cacheable(cacheNames = "addUser", key = "#userDto.email")
     public User addUser(UserDto userDto, HttpServletRequest httpServletRequest) throws IOException {
         User user = new User();
         if (userDto.getEmail() != null) {
@@ -92,6 +95,12 @@ public class UserService implements UserDetailsService {
                     user.setPassword(bCryptPasswordEncoder.encode(userDto.getNewPassword()));
                 } else {
                     throw new Conflict409Exception("New password and confirm password is not match!");
+                }
+                if (userDto.isStoreOwner()) {
+                    user.setRole(Role.STORE_OWNER);
+                }
+                else {
+                    user.setRole(Role.USER);
                 }
                 userRepository.save(user);
                 UserSecurityDetails userSecurityDetails = new UserSecurityDetails();

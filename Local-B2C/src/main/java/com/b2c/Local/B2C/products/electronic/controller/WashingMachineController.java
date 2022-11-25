@@ -5,6 +5,7 @@ import com.b2c.Local.B2C.products.electronic.dto.WashingMachineDto;
 import com.b2c.Local.B2C.products.electronic.model.WashingMachine;
 import com.b2c.Local.B2C.products.electronic.service.WashingMachineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -24,26 +25,31 @@ public class WashingMachineController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public WashingMachine addWashingMachine(@RequestBody WashingMachineDto washingMachineDto){
         return washingMachineService.addWashingMachine(washingMachineDto);
     }
 
     @GetMapping("/{uuid}/getAllByStoreId")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public List<WashingMachine> getAllByStoreId(@PathVariable UUID uuid) {
         return washingMachineService.getAllByStoreId(uuid);
     }
 
     @PutMapping("/{id}/updateWashingMachineById")
+    @PreAuthorize("hasAnyAuthority('storeOwner', 'admin')")
     public WashingMachine updateWashingMachineById(@RequestBody WashingMachineDto washingMachineDto, @PathVariable Long id){
         return washingMachineService.updateWashingMachineById(washingMachineDto, id);
     }
 
     @GetMapping("/{id}/getWashingMachineById")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public WashingMachine getWashingMachineById(@PathVariable Long id){
         return washingMachineService.getWashingMachineById(id);
     }
 
     @GetMapping("{id}/deactivateById")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public String deactivateById(@PathVariable Long id){
         return washingMachineService.deactivateById(id);
     }

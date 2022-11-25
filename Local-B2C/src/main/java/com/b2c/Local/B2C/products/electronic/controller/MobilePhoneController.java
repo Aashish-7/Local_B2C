@@ -5,6 +5,7 @@ import com.b2c.Local.B2C.products.electronic.dto.MobilePhoneDto;
 import com.b2c.Local.B2C.products.electronic.model.MobilePhone;
 import com.b2c.Local.B2C.products.electronic.service.MobilePhoneService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -24,26 +25,31 @@ public class MobilePhoneController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public MobilePhone addMobilePhone(@RequestBody MobilePhoneDto mobilePhoneDto){
         return mobilePhoneService.addMobilePhone(mobilePhoneDto);
     }
 
     @GetMapping("/{uuid}/getAllByStoreId")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public List<MobilePhone> getAllByStoreId(@PathVariable UUID uuid) {
         return mobilePhoneService.getAllByStoreId(uuid);
     }
 
     @PutMapping("/{id}/updateMobilePhoneById")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public MobilePhone updateMobilePhoneById(@RequestBody MobilePhoneDto mobilePhoneDto, @PathVariable Long id){
         return mobilePhoneService.updateMobilePhoneById(mobilePhoneDto, id);
     }
 
     @GetMapping("/{id}/getMobilePhoneById")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public MobilePhone getMobilePhoneById(@PathVariable Long id){
         return mobilePhoneService.getMobilePhoneById(id);
     }
 
     @GetMapping("/{id}/deactivateById")
+    @PreAuthorize("hasAnyAuthority('storeOwner')")
     public String deactivateById(@PathVariable Long id){
         return mobilePhoneService.deactivateById(id);
     }
