@@ -45,7 +45,7 @@ public class FilteringDataService {
         }
     }
 
-    public List<FilterRequest> getBySessionId(String sessionId) {
+    public List<FilterRequest> getFilterRequestBySessionId(String sessionId) {
         if (filterRequestsRepository.existsAllBySessionId(sessionId)) {
             return filterRequestsRepository.findAllBySessionId(sessionId);
         } else {

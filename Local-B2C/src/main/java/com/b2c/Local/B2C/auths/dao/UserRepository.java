@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Cacheable(cacheNames = "existsByIdAndIsActiveTrue", key = "#id")
     boolean existsByIdAndIsActiveTrue(UUID id);
+
+    boolean existsByEmailAndIsActiveTrue(String email);
 }

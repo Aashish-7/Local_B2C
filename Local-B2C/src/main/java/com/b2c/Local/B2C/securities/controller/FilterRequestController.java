@@ -27,9 +27,9 @@ public class FilterRequestController {
         return filteringDataService.getAllSessionRequests();
     }
 
-    @GetMapping("{id}/getBySessionId")
-    public List<FilterRequest> getBySessionId(@PathVariable String id) {
-        return filteringDataService.getBySessionId(id);
+    @GetMapping("{id}/getFilterRequestBySessionId")
+    public List<FilterRequest> getFilterRequestBySessionId(@PathVariable String id) {
+        return filteringDataService.getFilterRequestBySessionId(id);
     }
 
     @GetMapping("user/getActiveSessionId")
@@ -43,12 +43,12 @@ public class FilterRequestController {
     }
 
     @GetMapping("{sessionId}/getRequestsBySessionId")
-    public List<FilterRequest> getRequestsBySessionId(@PathVariable String sessionId, @RequestParam String url){
+    public List<FilterRequest> getRequestsBySessionId(@PathVariable String sessionId, @RequestParam String url) {
         return filteringDataService.getRequestsBySessionId(sessionId, url);
     }
 
     @GetMapping("user/getAllSessionsByUser")
-    public List<FilterRequestInfo> getAllSessionsByUser(){
+    public List<FilterRequestInfo> getAllSessionsByUser() {
         return filteringDataService.getAllSessionsByUser();
     }
 }
