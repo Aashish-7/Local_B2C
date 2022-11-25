@@ -1,6 +1,7 @@
 package com.b2c.Local.B2C.store.model;
 
 import com.b2c.Local.B2C.auths.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -54,7 +55,7 @@ public class LocalStore implements Serializable {
     @Type(type = "list-array")
     private List<String> listOfProduct;
 
-    @ManyToOne
+    @ManyToOne @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
