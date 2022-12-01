@@ -12,6 +12,5 @@ import java.util.UUID;
 @CacheConfig
 public interface UserSecurityDetailsRepository extends JpaRepository<UserSecurityDetails, UUID> {
 
-    @Cacheable(cacheNames = "findByUserEmail", key = "#email")
     UserSecurityDetails findByUserEmail(String email);
 }

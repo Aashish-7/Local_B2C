@@ -35,10 +35,10 @@ public class UserMacAddress {
             if (matcher.find()) {
                 return matcher.group(0);
             } else {
-                return "localhost";
+                return "unIdentified";
             }
         } catch (IOException e) {
-            return e.getMessage();
+            return "unIdentified";
         }
     }
 }

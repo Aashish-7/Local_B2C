@@ -12,7 +12,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -69,7 +68,6 @@ public class FilterRequestsService extends GenericFilter {
         filterRequest.setRemotePort(servletRequest.getRemotePort());
         filterRequest.setProtocol(servletRequest.getProtocol());
         filterRequest.setContentType(servletRequest.getContentType());
-        filterRequest.setLocalDateTime(LocalDateTime.now());
         filterRequest.setMacAddress(userMacAddress.arpByRemoteIp(httpServletRequest.getRemoteAddr()));
         filterRequestsRepository.save(filterRequest);
         filterChain.doFilter(servletRequest, servletResponse);

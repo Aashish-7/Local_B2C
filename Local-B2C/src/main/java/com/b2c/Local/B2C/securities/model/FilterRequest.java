@@ -7,7 +7,6 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -28,8 +27,6 @@ public class FilterRequest {
     private String remoteHost;
 
     private String protocol;
-
-    private LocalDateTime localDateTime;
 
     private String contentType;
 
