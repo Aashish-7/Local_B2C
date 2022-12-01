@@ -22,7 +22,8 @@ public class RandomString {
     public String getRandomPassword(int n)
     {
         Random rand = new Random(); //instance of random class
-        String total_characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()[]<>{}";
+        String total_characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        //!@#$%^&*()[]<>{}
         StringBuilder randomString = new StringBuilder();
         for (int i = 0; i < n; i++) {
             int index = rand.nextInt(total_characters.length()-1);

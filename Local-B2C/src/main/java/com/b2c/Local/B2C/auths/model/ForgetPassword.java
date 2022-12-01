@@ -1,6 +1,5 @@
 package com.b2c.Local.B2C.auths.model;
 
-import com.b2c.Local.B2C.utility.RandomString;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,12 +22,21 @@ public class ForgetPassword {
     @Column(unique=true, nullable=false, precision=19)
     private UUID id = UUID.randomUUID();
 
-    @Column
+    @Column(precision = 20)
     @JsonIgnore
-    private String token= RandomString.getRandom(6);
+    private String token;
 
     @Column
-    private LocalDateTime ctime;
+    private String address;
+
+    @Column
+    private String userAgent;
+
+    @Column
+    private LocalDateTime sendTime;
+
+    @Column
+    private Boolean active;
 
     @OneToOne
     @JsonIgnore

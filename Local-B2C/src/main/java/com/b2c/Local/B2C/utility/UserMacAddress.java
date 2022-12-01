@@ -35,7 +35,7 @@ public class UserMacAddress {
             if (matcher.find()) {
                 return matcher.group(0);
             } else {
-                return null;
+                return "localhost";
             }
         } catch (IOException e) {
             return e.getMessage();

@@ -10,4 +10,14 @@ import java.util.UUID;
 @Transactional
 @Repository
 public interface ForgetPasswordRepository extends JpaRepository<ForgetPassword, UUID> {
+
+    boolean existsByTokenAndActiveTrue(String token);
+
+    ForgetPassword findByTokenAndActiveTrue(String token);
+
+    boolean existsByTokenAndAddressAndUserAgentAndActiveTrue(String token, String address, String userAgent);
+
+    boolean existsByAddressAndActiveTrue(String address);
+
+    boolean existsByUserAgentAndActiveTrue(String userAgent);
 }

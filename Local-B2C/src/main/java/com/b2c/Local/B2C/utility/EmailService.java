@@ -25,7 +25,7 @@ public class EmailService {
         MimeMessage msg = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(msg, true);
         helper.setFrom("");
-        helper.setTo(UserMail);
+        helper.setTo("");
         helper.setSubject("Forget Password");
         helper.setText(url, true);
         javaMailSender.send(msg);
