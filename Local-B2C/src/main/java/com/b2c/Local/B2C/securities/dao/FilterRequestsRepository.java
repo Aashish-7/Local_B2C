@@ -2,7 +2,6 @@ package com.b2c.Local.B2C.securities.dao;
 
 import com.b2c.Local.B2C.securities.dto.FilterRequestInfo;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,15 +16,13 @@ public interface FilterRequestsRepository extends JpaRepository<FilterRequest, S
 
     boolean existsAllBySessionId(String uuid);
 
-    boolean existsAllByUrlAndSessionId(String url, String sessionId);
+    boolean existsAllByUrlAndRequestId(String url, String requestId);
 
-    @Cacheable(cacheNames = "findAllByUserId", key = "#userId")
     List<FilterRequest> findAllByUserId(String userId);
 
     List<FilterRequest> findAllBySessionId(String sessionId);
 
-    List<FilterRequest> findAllByUrlAndSessionId(String url, String sessionId);
+    List<FilterRequest> findAllByUrlAndRequestId(String url, String requestId);
 
-    @Cacheable(cacheNames = "getAllByUserId", key = "#userId")
     List<FilterRequestInfo> getAllByUserId(String userId);
 }

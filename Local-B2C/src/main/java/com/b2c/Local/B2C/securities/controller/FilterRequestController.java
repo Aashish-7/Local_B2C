@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -27,10 +28,6 @@ public class FilterRequestController {
         return filteringDataService.getAllSessionRequests();
     }
 
-    @GetMapping("{id}/getFilterRequestBySessionId")
-    public List<FilterRequest> getFilterRequestBySessionId(@PathVariable String id) {
-        return filteringDataService.getFilterRequestBySessionId(id);
-    }
 
     @GetMapping("user/getActiveSessionId")
     public Set<String> getActiveSessionId() {
@@ -42,13 +39,23 @@ public class FilterRequestController {
         filteringDataService.destroyAllSession();
     }
 
-    @GetMapping("{sessionId}/getRequestsBySessionId")
-    public List<FilterRequest> getRequestsBySessionId(@PathVariable String sessionId, @RequestParam String url) {
-        return filteringDataService.getRequestsBySessionId(sessionId, url);
+    @GetMapping("{requestId}/getRequestsByRequestId")
+    public List<FilterRequest> getRequestsByRequestId(@PathVariable String requestId, @RequestParam String url) {
+        return filteringDataService.getRequestsByRequestId(requestId, url);
     }
 
-    @GetMapping("user/getAllSessionsByUser")
-    public List<FilterRequestInfo> getAllSessionsByUser() {
-        return filteringDataService.getAllSessionsByUser();
+    @GetMapping("user/getAllRequestIdByUser")
+    public List<FilterRequestInfo> getAllRequestIdByUser() {
+        return filteringDataService.getAllRequestIdByUser();
+    }
+
+    @GetMapping("user/getAllActiveSessionDetails")
+    public Map<String, List<FilterRequest>> getAllActiveSessionDetails() {
+        return filteringDataService.getAllActiveSessionDetails();
+    }
+
+    @GetMapping("user/getFilterRequestBySessionId")
+    public Set<FilterRequest> getFilterRequestBySessionId(@RequestParam String sessionId) {
+        return filteringDataService.getFilterRequestBySessionId(sessionId);
     }
 }

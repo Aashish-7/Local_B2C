@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.securities.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,10 +33,12 @@ public class FilterRequest {
 
     private String url;
 
+    @JsonIgnore
     private String sessionId;
 
     private String userAgent;
 
+    @JsonIgnore
     private Boolean newSession;
 
     private String userId;

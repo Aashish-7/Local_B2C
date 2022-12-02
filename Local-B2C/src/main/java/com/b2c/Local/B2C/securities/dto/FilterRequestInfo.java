@@ -1,7 +1,7 @@
 package com.b2c.Local.B2C.securities.dto;
 
-public interface FilterRequestInfo {
-    String getRequestId();
+import java.io.Serializable;
 
-    String getSessionId();
+public interface FilterRequestInfo extends Serializable {
+    String getRequestId();
 }
