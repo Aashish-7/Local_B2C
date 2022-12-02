@@ -43,12 +43,22 @@ public class FilterRequestsService extends GenericFilter {
         log.info("Destroying WebFilter For Local_B2C");
     }
 
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         log.info("Incoming Request From - " + servletRequest.getRemoteAddr() + "  For - " + httpServletRequest.getRequestURI());
+        saveFilterRequest(httpServletRequest.getSession(), httpServletRequest);
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    public String getUserIdByEmail(String email) {
+        return userRepository.findByEmail(email).getId().toString();
+    }
+
+
+    public void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest) throws IOException {
         FilterRequest filterRequest = new FilterRequest();
-        HttpSession httpSession = httpServletRequest.getSession();
         if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())) {
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
@@ -63,18 +73,12 @@ public class FilterRequestsService extends GenericFilter {
         filterRequest.setSessionId(httpServletRequest.getSession().getId());
         filterRequest.setUserAgent(httpServletRequest.getHeader("User-Agent"));
         filterRequest.setUrl(httpServletRequest.getRequestURL().toString());
-        filterRequest.setRemoteIp(servletRequest.getRemoteAddr());
-        filterRequest.setRemoteHost(servletRequest.getRemoteHost());
-        filterRequest.setRemotePort(servletRequest.getRemotePort());
-        filterRequest.setProtocol(servletRequest.getProtocol());
-        filterRequest.setContentType(servletRequest.getContentType());
+        filterRequest.setRemoteIp(httpServletRequest.getRemoteAddr());
+        filterRequest.setRemoteHost(httpServletRequest.getRemoteHost());
+        filterRequest.setRemotePort(httpServletRequest.getRemotePort());
+        filterRequest.setProtocol(httpServletRequest.getProtocol());
+        filterRequest.setContentType(httpServletRequest.getContentType());
         filterRequest.setMacAddress(userMacAddress.arpByRemoteIp(httpServletRequest.getRemoteAddr()));
         filterRequestsRepository.save(filterRequest);
-        filterChain.doFilter(servletRequest, servletResponse);
     }
-
-    public String getUserIdByEmail(String email) {
-        return userRepository.findByEmail(email).getId().toString();
-    }
-
 }
