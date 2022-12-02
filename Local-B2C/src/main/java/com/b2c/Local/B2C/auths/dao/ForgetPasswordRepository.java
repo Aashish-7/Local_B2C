@@ -22,4 +22,5 @@ public interface ForgetPasswordRepository extends JpaRepository<ForgetPassword, 
     boolean existsByUserAgentAndActiveTrue(String userAgent);
 
     boolean existsByActiveTrueAndUser_Email(String email);
+
 }

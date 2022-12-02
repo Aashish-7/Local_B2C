@@ -17,10 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
 
 @Service
 public class ForgetPasswordService {
@@ -56,10 +58,11 @@ public class ForgetPasswordService {
                 forgetPassword.setAddress(bCryptPasswordEncoder.encode(userMacAddress.arpByRemoteIp(httpServletRequest.getRemoteAddr())));
                 forgetPassword.setSendTime(LocalDateTime.now());
                 String redirectUrl = httpServletRequest.getServerName() + ":8080/forgetPassword/changePassword/" + firstToken;
-                emailService.sendEmail(email, redirectUrl);
+                //emailService.sendEmail(email, redirectUrl);
                 forgetPassword.setUser(userRepository.findByEmail(email));
                 forgetPasswordRepository.save(forgetPassword);
-            } catch (MessagingException | IOException e) {
+                deleteTokenTaskActivate(forgetPassword.getId());
+            } catch ( IOException e) {
                 e.printStackTrace();
             }
             return "Check Your Inbox";
@@ -91,6 +94,21 @@ public class ForgetPasswordService {
         } else {
             throw new BadPasswordException("Password Not Matches");
         }
+    }
+
+    public void deleteTokenTaskActivate(UUID uuid){
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (forgetPasswordRepository.findById(uuid).isPresent()) {
+                    ForgetPassword forgetPassword = forgetPasswordRepository.findById(uuid).get();
+                    forgetPassword.setActive(false);
+                    forgetPasswordRepository.save(forgetPassword);
+                }
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(timerTask,600000);
     }
 
 }
