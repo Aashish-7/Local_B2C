@@ -35,6 +35,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
 public class UserService implements UserDetailsService {
 
@@ -133,10 +134,10 @@ public class UserService implements UserDetailsService {
     public String loginUser(LoginDto loginDto) {
         if (loginDto.getEmail() != null && loginDto.getPassword() != null) {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            if (!userRepository.findByEmail(loginDto.getEmail()).getIsActive()) {
+                throw new NotFound404Exception("User not found OR Enter Valid Credentials");
+            }
             if (userRepository.existsByEmail(loginDto.getEmail()) && bCryptPasswordEncoder.matches(loginDto.getPassword(), userRepository.findByEmail(loginDto.getEmail()).getPassword())) {
-                if (!userRepository.findByEmail(loginDto.getEmail()).getIsActive()) {
-                    throw new NotFound404Exception("User not found OR Enter Valid Credentials");
-                }
                 if (validateSession(loginDto.getEmail())) {
                     Authentication authentication = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
