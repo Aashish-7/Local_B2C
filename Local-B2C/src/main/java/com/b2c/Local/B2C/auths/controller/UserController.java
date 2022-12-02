@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
+@RequestMapping("user")
 public class UserController {
 
     UserService userService;
@@ -44,5 +46,10 @@ public class UserController {
     @GetMapping("/get")
     public User get() {
         return userService.get();
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(@RequestParam UUID id, @RequestBody @Valid UserDto userDto){
+        return userService.changePassword(userDto,id);
     }
 }

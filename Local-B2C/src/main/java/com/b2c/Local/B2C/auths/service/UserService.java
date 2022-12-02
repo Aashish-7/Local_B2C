@@ -206,4 +206,22 @@ public class UserService implements UserDetailsService {
     public User get(){
       return userRepository.findById(Objects.requireNonNull(getLoggedInUserId())).get();
     }
+
+    public String changePassword(UserDto userDto, UUID uuid){
+        if (!uuid.equals(getLoggedInUserId())){
+            throw new Forbidden403Exception("You Are Not Allowed");
+        }
+        if (userDto.getCurrentPassword().equals(userDto.getNewPassword())){
+            throw new Conflict409Exception("Current Password and New Password Not Be Same");
+        }
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        if (bCryptPasswordEncoder.matches(userDto.getCurrentPassword(),userRepository.findById(uuid).get().getPassword()) && userDto.getNewPassword().equals(userDto.getConfirmPassword())){
+            User user = userRepository.findById(uuid).get();
+            user.setPassword(bCryptPasswordEncoder.encode(userDto.getNewPassword()));
+            userRepository.save(user);
+            return "Password Changed";
+        }else {
+            throw new BadRequest400Exception("Enter Valid Password");
+        }
+    }
 }
