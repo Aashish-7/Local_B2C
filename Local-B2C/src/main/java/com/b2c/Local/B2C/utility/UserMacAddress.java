@@ -38,7 +38,7 @@ public class UserMacAddress {
                 return "unIdentified";
             }
         } catch (IOException e) {
-            return "unIdentified";
+            return e.getMessage();
         }
     }
 }

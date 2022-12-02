@@ -1,4 +1,4 @@
-package com.b2c.Local.B2C.encryptData;
+package com.b2c.Local.B2C.securities.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.util.Base64;
 
 @ControllerAdvice
 public class JsonDataConverter extends AbstractHttpMessageConverter {
@@ -43,6 +45,8 @@ public class JsonDataConverter extends AbstractHttpMessageConverter {
     }
 
     private byte[] encrypt(byte[] bytesToEncrypt){
-        return bytesToEncrypt ;//Base64.getEncoder().encode(bytesToEncrypt);
+        byte[] encoded = Base64.getEncoder().encode(bytesToEncrypt);
+        byte[] result = ByteBuffer.allocate(bytesToEncrypt.length + encoded.length).put(bytesToEncrypt).put(encoded).array();
+        return result;
     }
 }
