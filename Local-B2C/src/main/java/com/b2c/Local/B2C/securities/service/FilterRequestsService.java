@@ -6,17 +6,19 @@ import com.b2c.Local.B2C.securities.model.FilterRequest;
 import com.b2c.Local.B2C.utility.UserMacAddress;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Objects;
 
 
-@WebFilter
+@WebFilter(filterName = "OneFilter")
 @Log4j2
 public class FilterRequestsService extends GenericFilter {
 
@@ -47,8 +49,22 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        saveFilterRequest(httpServletRequest.getSession(), httpServletRequest);
-        filterChain.doFilter(servletRequest, servletResponse);
+        if (!httpServletRequest.getSession().isNew()){
+            FilterRequest filterRequest = filterRequestsRepository.findBySessionIdAndUrl(httpServletRequest.getSession().getId(), "http://localhost:8080/user/login");
+            if (filterRequest.getRemoteIp().equals(httpServletRequest.getRemoteAddr())){
+                saveFilterRequest(httpServletRequest.getSession(), httpServletRequest,false);
+                filterChain.doFilter(servletRequest, servletResponse);
+            }else {
+                saveFilterRequest(httpServletRequest.getSession(), httpServletRequest,true);
+                HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+                httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
+                httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            }
+        }else {
+            saveFilterRequest(httpServletRequest.getSession(), httpServletRequest,false);
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
+
     }
 
     public String getUserIdByEmail(String email) {
@@ -56,7 +72,7 @@ public class FilterRequestsService extends GenericFilter {
     }
 
 
-    public void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest) throws IOException {
+    public void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest,boolean sessionHijack) throws IOException {
         FilterRequest filterRequest = new FilterRequest();
         if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())) {
             Date last = new Date(httpSession.getLastAccessedTime());
@@ -64,13 +80,14 @@ public class FilterRequestsService extends GenericFilter {
             filterRequest.setNewSession(false);
             filterRequest.setUserId(getUserIdByEmail(httpServletRequest.getUserPrincipal().getName()));
             filterRequest.setUserName(httpServletRequest.getUserPrincipal().getName());
-            log.info("Incoming Request From: "+httpServletRequest.getRemoteAddr()+"  Request URL : ["+httpServletRequest.getMethod()+" "+httpServletRequest.getRequestURL().toString()+"] UserPrincipal : ["+httpServletRequest.getUserPrincipal().getName()+"]");
+            log.info("Incoming Request From: " + httpServletRequest.getRemoteAddr() + "  Request URL : [" + httpServletRequest.getMethod() + " " + httpServletRequest.getRequestURL().toString() + "] UserPrincipal : [" + httpServletRequest.getUserPrincipal().getName() + "]");
         } else {
             filterRequest.setNewSession(true);
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
-            log.info("Incoming Request From: "+httpServletRequest.getRemoteAddr()+"  Request URL : ["+httpServletRequest.getMethod()+" "+httpServletRequest.getRequestURL().toString()+"] UserPrincipal : [Anonymous]");
+            log.info("Incoming Request From: " + httpServletRequest.getRemoteAddr() + "  Request URL : [" + httpServletRequest.getMethod() + " " + httpServletRequest.getRequestURL().toString() + "] UserPrincipal : [Anonymous]");
         }
+        filterRequest.setSessionHijack(sessionHijack);
         filterRequest.setSessionId(httpServletRequest.getSession().getId());
         filterRequest.setUserAgent(httpServletRequest.getHeader("User-Agent"));
         filterRequest.setUrl(httpServletRequest.getRequestURL().toString());
@@ -82,4 +99,5 @@ public class FilterRequestsService extends GenericFilter {
         filterRequest.setMacAddress(userMacAddress.arpByRemoteIp(httpServletRequest.getRemoteAddr()));
         filterRequestsRepository.save(filterRequest);
     }
+
 }

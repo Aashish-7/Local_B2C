@@ -48,4 +48,7 @@ public class FilterRequest {
     private String userName;
 
     private String macAddress;
+
+    @JsonIgnore
+    private Boolean sessionHijack;
 }

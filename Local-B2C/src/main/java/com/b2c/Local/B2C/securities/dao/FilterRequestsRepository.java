@@ -25,4 +25,8 @@ public interface FilterRequestsRepository extends JpaRepository<FilterRequest, S
     List<FilterRequest> findAllByUrlAndRequestId(String url, String requestId);
 
     List<FilterRequestInfo> getAllByUserId(String userId);
+
+    boolean existsBySessionIdAndRemoteIp(String session, String remoteIp);
+
+    FilterRequest findBySessionIdAndUrl(String session, String url);
 }
