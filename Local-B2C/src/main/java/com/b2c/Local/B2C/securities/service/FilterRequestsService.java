@@ -47,7 +47,6 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        log.info("Incoming Request From - " + servletRequest.getRemoteAddr() + "  For - " + httpServletRequest.getRequestURI());
         saveFilterRequest(httpServletRequest.getSession(), httpServletRequest);
         filterChain.doFilter(servletRequest, servletResponse);
     }
@@ -65,10 +64,12 @@ public class FilterRequestsService extends GenericFilter {
             filterRequest.setNewSession(false);
             filterRequest.setUserId(getUserIdByEmail(httpServletRequest.getUserPrincipal().getName()));
             filterRequest.setUserName(httpServletRequest.getUserPrincipal().getName());
+            log.info("Incoming Request From: "+httpServletRequest.getRemoteAddr()+"  Request URL : ["+httpServletRequest.getMethod()+" "+httpServletRequest.getRequestURL().toString()+"] UserPrincipal : ["+httpServletRequest.getUserPrincipal().getName()+"]");
         } else {
             filterRequest.setNewSession(true);
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
+            log.info("Incoming Request From: "+httpServletRequest.getRemoteAddr()+"  Request URL : ["+httpServletRequest.getMethod()+" "+httpServletRequest.getRequestURL().toString()+"] UserPrincipal : [Anonymous]");
         }
         filterRequest.setSessionId(httpServletRequest.getSession().getId());
         filterRequest.setUserAgent(httpServletRequest.getHeader("User-Agent"));
