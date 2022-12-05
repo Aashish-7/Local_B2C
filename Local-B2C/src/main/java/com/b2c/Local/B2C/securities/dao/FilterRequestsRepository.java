@@ -5,11 +5,11 @@ import com.b2c.Local.B2C.securities.model.FilterRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface FilterRequestsRepository extends JpaRepository<FilterRequest, String> {
-
     /*@Query(nativeQuery = true, value = "select * from filter_request WHERE sessionId=:sessionId ORDER BY localDateTime DESC ")
     List<FilterRequest> getBySessionId(String sessionId);*/
 
@@ -29,4 +29,6 @@ public interface FilterRequestsRepository extends JpaRepository<FilterRequest, S
     boolean existsBySessionIdAndRemoteIp(String session, String remoteIp);
 
     FilterRequest findBySessionIdAndUrl(String session, String url);
+
+    long countByRemoteIpAndLastAccessTimeBetween(String remoteIp, Date lastAccessTimeStart, Date lastAccessTimeEnd);
 }

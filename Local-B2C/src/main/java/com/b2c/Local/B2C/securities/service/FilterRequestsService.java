@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Objects;
 
@@ -74,6 +77,7 @@ public class FilterRequestsService extends GenericFilter {
 
     public void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest,boolean sessionHijack) throws IOException {
         FilterRequest filterRequest = new FilterRequest();
+        getCount(httpServletRequest);
         if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())) {
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
@@ -100,4 +104,10 @@ public class FilterRequestsService extends GenericFilter {
         filterRequestsRepository.save(filterRequest);
     }
 
+    public void getCount(HttpServletRequest httpServletRequest) {
+        LocalDateTime localDateTime = LocalDateTime.now().minus(Duration.of(5, ChronoUnit.MINUTES));
+        System.out.println(localDateTime);
+        System.out.println(LocalDateTime.now());
+//        System.out.println(filterRequestsRepository.countByRemoteIpAndLastAccessTimeBetween(httpServletRequest.getRemoteAddr(), date1, date));
+    }
 }
