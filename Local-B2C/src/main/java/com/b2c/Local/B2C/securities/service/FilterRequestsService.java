@@ -65,7 +65,7 @@ public class FilterRequestsService extends GenericFilter {
                 saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, true);
                 sessions.deleteById(httpServletRequest.getSession().getId());
                 HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-                httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+                httpServletResponse.sendError(511);
             } else {
                 filterChain.doFilter(servletRequest, servletResponse);
             }
