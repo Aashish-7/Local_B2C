@@ -59,19 +59,20 @@ public class FilterRequestsService extends GenericFilter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
-        if (getCount(httpServletRequest) > 4) {
+        if (getCount(httpServletRequest) < 5) {
+            if (validateSessionAndUrl(httpServletRequest.getSession(), httpServletRequest)) {
+                log.warn("Session Hijack Different RemoteIp Address Found :" + httpServletRequest.getRemoteAddr());
+                saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, true);
+                sessions.deleteById(httpServletRequest.getSession().getId());
+                HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+                httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+            } else {
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
+        }else {
             log.warn("Too Many Request From RemoteIp Address :" + httpServletRequest.getRemoteAddr());
             HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
             httpServletResponse.sendError(429);
-        }
-        if (validateSessionAndUrl(httpServletRequest.getSession(), httpServletRequest)) {
-            log.warn("Session Hijack Different RemoteIp Address Found :" + httpServletRequest.getRemoteAddr());
-            saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, true);
-            sessions.deleteById(httpServletRequest.getSession().getId());
-            HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-            httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
-        } else {
-            filterChain.doFilter(servletRequest, servletResponse);
         }
     }
 
