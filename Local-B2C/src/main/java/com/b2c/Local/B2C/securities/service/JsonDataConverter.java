@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Base64;
 
@@ -56,8 +55,8 @@ public class JsonDataConverter extends AbstractHttpMessageConverter {
 
     private byte[] encrypt(byte[] bytesToEncrypt){
         byte[] encoded = Base64.getEncoder().encode(bytesToEncrypt);
-        byte[] result = ByteBuffer.allocate(bytesToEncrypt.length + encoded.length).put(bytesToEncrypt).put(encoded).array();
-        return result;
+        //byte[] result = ByteBuffer.allocate(bytesToEncrypt.length + encoded.length).put(bytesToEncrypt).put(encoded).array();
+        return bytesToEncrypt;
     }
 
     private User getLoggedInUserId() {

@@ -6,7 +6,8 @@ import com.b2c.Local.B2C.securities.model.FilterRequest;
 import com.b2c.Local.B2C.utility.UserMacAddress;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.session.Session;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -15,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Objects;
@@ -31,11 +34,14 @@ public class FilterRequestsService extends GenericFilter {
 
     UserMacAddress userMacAddress;
 
+    FindByIndexNameSessionRepository<? extends Session> sessions;
+
     @Autowired
-    public FilterRequestsService(FilterRequestsRepository filterRequestsRepository, UserRepository userRepository, UserMacAddress userMacAddress) {
+    public FilterRequestsService(FilterRequestsRepository filterRequestsRepository, UserRepository userRepository, UserMacAddress userMacAddress, FindByIndexNameSessionRepository<? extends Session> sessions) {
         this.filterRequestsRepository = filterRequestsRepository;
         this.userRepository = userRepository;
         this.userMacAddress = userMacAddress;
+        this.sessions = sessions;
     }
 
     @Override
@@ -52,22 +58,20 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        if (!httpServletRequest.getSession().isNew()){
-            FilterRequest filterRequest = filterRequestsRepository.findBySessionIdAndUrl(httpServletRequest.getSession().getId(), "http://localhost:8080/user/login");
-            if (filterRequest.getRemoteIp().equals(httpServletRequest.getRemoteAddr())){
-                saveFilterRequest(httpServletRequest.getSession(), httpServletRequest,false);
-                filterChain.doFilter(servletRequest, servletResponse);
-            }else {
-                saveFilterRequest(httpServletRequest.getSession(), httpServletRequest,true);
-                HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-                httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
-                httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
-            }
-        }else {
-            saveFilterRequest(httpServletRequest.getSession(), httpServletRequest,false);
+        if (getCount(httpServletRequest) > 4){
+            saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
+            HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+            httpServletResponse.sendError(429);
+        }
+        if (validateSessionAndUrl(httpServletRequest.getSession(), httpServletRequest)) {
+            log.warn("Session Hijack Different RemoteIp Address Found :" + httpServletRequest.getRemoteAddr());
+            saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, true);
+            HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+            httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+        } else {
+            saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
             filterChain.doFilter(servletRequest, servletResponse);
         }
-
     }
 
     public String getUserIdByEmail(String email) {
@@ -75,9 +79,8 @@ public class FilterRequestsService extends GenericFilter {
     }
 
 
-    public void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest,boolean sessionHijack) throws IOException {
+    public void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest, boolean sessionHijack) throws IOException {
         FilterRequest filterRequest = new FilterRequest();
-        getCount(httpServletRequest);
         if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())) {
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
@@ -104,10 +107,19 @@ public class FilterRequestsService extends GenericFilter {
         filterRequestsRepository.save(filterRequest);
     }
 
-    public void getCount(HttpServletRequest httpServletRequest) {
-        LocalDateTime localDateTime = LocalDateTime.now().minus(Duration.of(5, ChronoUnit.MINUTES));
-        System.out.println(localDateTime);
-        System.out.println(LocalDateTime.now());
-//        System.out.println(filterRequestsRepository.countByRemoteIpAndLastAccessTimeBetween(httpServletRequest.getRemoteAddr(), date1, date));
+    public long getCount(HttpServletRequest httpServletRequest) {
+        LocalDateTime localDateTime = LocalDateTime.now().minus(Duration.of(5, ChronoUnit.SECONDS));
+        Instant i = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(i);
+        LocalDateTime local = LocalDateTime.now();
+        Instant b = local.atZone(ZoneId.systemDefault()).toInstant();
+        Date dateInstant = Date.from(b);
+        return filterRequestsRepository.countByRemoteIpAndLastAccessTimeBetween(httpServletRequest.getRemoteAddr(), date, dateInstant);
+    }
+
+    private boolean validateSessionAndUrl(HttpSession httpSession, HttpServletRequest httpServletRequest) {
+        if (!httpSession.isNew() && !Objects.isNull(httpServletRequest.getUserPrincipal()) && !filterRequestsRepository.findBySessionIdAndUrlIsEndingWith(httpSession.getId(), "8080/user/login").getRemoteIp().equals(httpServletRequest.getRemoteAddr()))
+            return true;
+        return false;
     }
 }
