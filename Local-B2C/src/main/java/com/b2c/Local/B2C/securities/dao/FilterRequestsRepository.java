@@ -28,7 +28,8 @@ public interface FilterRequestsRepository extends JpaRepository<FilterRequest, S
 
     boolean existsBySessionIdAndRemoteIp(String session, String remoteIp);
 
-    FilterRequest findBySessionIdAndUrlIsEndingWith(String session, String url);
+    FilterRequest findFirstBySessionIdAndUrlIsEndingWithOrderByLastAccessTimeDesc(String session, String url);
+
 
     long countByRemoteIpAndLastAccessTimeBetween(String remoteIp, Date lastAccessTimeStart, Date lastAccessTimeEnd);
 }

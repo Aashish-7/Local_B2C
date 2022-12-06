@@ -120,6 +120,6 @@ public class FilterRequestsService extends GenericFilter {
     }
 
     private boolean validateSessionAndUrl(HttpSession httpSession, HttpServletRequest httpServletRequest) {
-        return !httpSession.isNew() && !Objects.isNull(httpServletRequest.getUserPrincipal()) && !filterRequestsRepository.findBySessionIdAndUrlIsEndingWith(httpSession.getId(), "8080/user/login").getRemoteIp().equals(httpServletRequest.getRemoteAddr());
+        return !httpSession.isNew() && !Objects.isNull(httpServletRequest.getUserPrincipal()) && !filterRequestsRepository.findFirstBySessionIdAndUrlIsEndingWithOrderByLastAccessTimeDesc(httpSession.getId(), "8080/user/login").getRemoteIp().equals(httpServletRequest.getRemoteAddr());
     }
 }
