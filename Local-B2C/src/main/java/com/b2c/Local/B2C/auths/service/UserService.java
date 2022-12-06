@@ -7,14 +7,10 @@ import com.b2c.Local.B2C.auths.dto.UserDto;
 import com.b2c.Local.B2C.auths.enums.Role;
 import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.auths.model.UserSecurityDetails;
-import com.b2c.Local.B2C.exception.BadRequest400Exception;
-import com.b2c.Local.B2C.exception.Conflict409Exception;
-import com.b2c.Local.B2C.exception.Forbidden403Exception;
-import com.b2c.Local.B2C.exception.NotFound404Exception;
+import com.b2c.Local.B2C.exception.*;
 import com.b2c.Local.B2C.store.service.LocalStoreService;
 import com.b2c.Local.B2C.utility.UserMacAddress;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,7 +54,7 @@ public class UserService implements UserDetailsService {
     public UserService(@Lazy UserRepository userRepository, @Lazy AuthenticationManager authenticationManager,
                        @Lazy DaoAuthenticationProvider authenticationProvider,
                        @Lazy FindByIndexNameSessionRepository<? extends Session> sessions,
-                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository,@Lazy LocalStoreService localStoreService, @Lazy UserMacAddress userMacAddress) {
+                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository, @Lazy LocalStoreService localStoreService, @Lazy UserMacAddress userMacAddress) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.authenticationProvider = authenticationProvider;
@@ -78,9 +74,10 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    @Cacheable(cacheNames = "addUser", key = "#userDto.email")
     public User addUser(UserDto userDto, HttpServletRequest httpServletRequest) throws IOException {
         User user = new User();
+        if (!Objects.isNull(httpServletRequest.getUserPrincipal()))
+            throw new Unauthorized401Exception("You are UnAuthorized");
         if (userDto.getEmail() != null) {
             if (!userRepository.existsByEmail(userDto.getEmail())) {
                 user.setFirstName(userDto.getFirstName());
@@ -99,8 +96,7 @@ public class UserService implements UserDetailsService {
                 }
                 if (userDto.isStoreOwner()) {
                     user.setRole(Role.STORE_OWNER);
-                }
-                else {
+                } else {
                     user.setRole(Role.USER);
                 }
                 userRepository.save(user);
@@ -151,11 +147,11 @@ public class UserService implements UserDetailsService {
         return "Success Logged In";
     }
 
-    public boolean validateSession(String email){
+    public boolean validateSession(String email) {
         int userSessionLimit = userSecurityDetailsRepository.findByUserEmail(email).getMaxSession();
-        if (this.sessions.findByPrincipalName(email).entrySet().size() < userSessionLimit){
+        if (this.sessions.findByPrincipalName(email).entrySet().size() < userSessionLimit) {
             return true;
-        }else {
+        } else {
             throw new Forbidden403Exception("Your Maximum Session Limit Exceed , Logout Any Session For Logged In");
         }
     }
@@ -163,16 +159,16 @@ public class UserService implements UserDetailsService {
     private UUID getLoggedInUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            return ((User)principal).getId();
+            return ((User) principal).getId();
         }
         return null;
     }
 
     public String updateUser(UserDto userDto) {
         User user = new User();
-        if (getLoggedInUserId() !=  null){
+        if (getLoggedInUserId() != null) {
             user = userRepository.findById(getLoggedInUserId()).get();
-            if (userDto.getFirstName() != null){
+            if (userDto.getFirstName() != null) {
                 user.setFirstName(userDto.getFirstName());
             }
             if (userDto.getLastName() != null) {
@@ -187,7 +183,7 @@ public class UserService implements UserDetailsService {
                     user.setPassword(userDto.getNewPassword());
                 }
             }
-            if (!Objects.isNull(userDto.getMaxSession())){
+            if (!Objects.isNull(userDto.getMaxSession())) {
                 userSecurityDetailsRepository.findByUserEmail(user.getEmail()).setMaxSession(userDto.getMaxSession());
             }
             userRepository.save(user);
@@ -195,33 +191,33 @@ public class UserService implements UserDetailsService {
         return "Successfully Updated!";
     }
 
-    public String deleteUser(){
-        if(userRepository.findById((Objects.requireNonNull(getLoggedInUserId()))).isPresent()){
+    public String deleteUser() {
+        if (userRepository.findById((Objects.requireNonNull(getLoggedInUserId()))).isPresent()) {
             userRepository.findById(getLoggedInUserId()).get().setIsActive(false);
             return "Deleted Successfully";
-        }else {
+        } else {
             return "Not Deleted";
         }
     }
 
-    public User get(){
-      return userRepository.findById(Objects.requireNonNull(getLoggedInUserId())).get();
+    public User get() {
+        return userRepository.findById(Objects.requireNonNull(getLoggedInUserId())).get();
     }
 
-    public String changePassword(UserDto userDto, UUID uuid){
-        if (!uuid.equals(getLoggedInUserId())){
+    public String changePassword(UserDto userDto, UUID uuid) {
+        if (!uuid.equals(getLoggedInUserId())) {
             throw new Forbidden403Exception("You Are Not Allowed");
         }
-        if (userDto.getCurrentPassword().equals(userDto.getNewPassword())){
+        if (userDto.getCurrentPassword().equals(userDto.getNewPassword())) {
             throw new Conflict409Exception("Current Password and New Password Not Be Same");
         }
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        if (bCryptPasswordEncoder.matches(userDto.getCurrentPassword(),userRepository.findById(uuid).get().getPassword()) && userDto.getNewPassword().equals(userDto.getConfirmPassword())){
+        if (bCryptPasswordEncoder.matches(userDto.getCurrentPassword(), userRepository.findById(uuid).get().getPassword()) && userDto.getNewPassword().equals(userDto.getConfirmPassword())) {
             User user = userRepository.findById(uuid).get();
             user.setPassword(bCryptPasswordEncoder.encode(userDto.getNewPassword()));
             userRepository.save(user);
             return "Password Changed";
-        }else {
+        } else {
             throw new BadRequest400Exception("Enter Valid Password");
         }
     }
