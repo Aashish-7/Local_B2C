@@ -58,18 +58,19 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        if (getCount(httpServletRequest) > 4){
-            saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
+        saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
+        if (getCount(httpServletRequest) > 4) {
+            log.warn("Too Many Request From RemoteIp Address :" + httpServletRequest.getRemoteAddr());
             HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
             httpServletResponse.sendError(429);
         }
         if (validateSessionAndUrl(httpServletRequest.getSession(), httpServletRequest)) {
             log.warn("Session Hijack Different RemoteIp Address Found :" + httpServletRequest.getRemoteAddr());
             saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, true);
+            sessions.deleteById(httpServletRequest.getSession().getId());
             HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
             httpServletResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
         } else {
-            saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
             filterChain.doFilter(servletRequest, servletResponse);
         }
     }
@@ -118,8 +119,6 @@ public class FilterRequestsService extends GenericFilter {
     }
 
     private boolean validateSessionAndUrl(HttpSession httpSession, HttpServletRequest httpServletRequest) {
-        if (!httpSession.isNew() && !Objects.isNull(httpServletRequest.getUserPrincipal()) && !filterRequestsRepository.findBySessionIdAndUrlIsEndingWith(httpSession.getId(), "8080/user/login").getRemoteIp().equals(httpServletRequest.getRemoteAddr()))
-            return true;
-        return false;
+        return !httpSession.isNew() && !Objects.isNull(httpServletRequest.getUserPrincipal()) && !filterRequestsRepository.findBySessionIdAndUrlIsEndingWith(httpSession.getId(), "8080/user/login").getRemoteIp().equals(httpServletRequest.getRemoteAddr());
     }
 }
