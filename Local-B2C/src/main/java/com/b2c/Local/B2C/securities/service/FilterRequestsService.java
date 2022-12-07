@@ -58,7 +58,6 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
         if (getCount(httpServletRequest) < 5) {
             if (validateSessionAndUrl(httpServletRequest.getSession(), httpServletRequest)) {
                 log.warn("Session Hijack Different RemoteIp Address Found :" + httpServletRequest.getRemoteAddr());
@@ -67,9 +66,11 @@ public class FilterRequestsService extends GenericFilter {
                 HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
                 httpServletResponse.sendError(511);
             } else {
+                saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
                 filterChain.doFilter(servletRequest, servletResponse);
             }
         }else {
+            saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
             log.warn("Too Many Request From RemoteIp Address :" + httpServletRequest.getRemoteAddr());
             HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
             httpServletResponse.sendError(429);
@@ -110,7 +111,7 @@ public class FilterRequestsService extends GenericFilter {
     }
 
     public long getCount(HttpServletRequest httpServletRequest) {
-        LocalDateTime localDateTime = LocalDateTime.now().minus(Duration.of(5, ChronoUnit.SECONDS));
+        LocalDateTime localDateTime = LocalDateTime.now().minus(Duration.of(10, ChronoUnit.SECONDS));
         Instant i = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
         Date date = Date.from(i);
         LocalDateTime local = LocalDateTime.now();
