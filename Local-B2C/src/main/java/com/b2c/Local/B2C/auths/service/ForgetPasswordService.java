@@ -5,10 +5,7 @@ import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.auths.dto.UserDto;
 import com.b2c.Local.B2C.auths.model.ForgetPassword;
 import com.b2c.Local.B2C.auths.model.User;
-import com.b2c.Local.B2C.exception.BadRequest400Exception;
-import com.b2c.Local.B2C.exception.Conflict409Exception;
-import com.b2c.Local.B2C.exception.Forbidden403Exception;
-import com.b2c.Local.B2C.exception.NotFound404Exception;
+import com.b2c.Local.B2C.exception.*;
 import com.b2c.Local.B2C.utility.EmailService;
 import com.b2c.Local.B2C.utility.RandomString;
 import com.b2c.Local.B2C.utility.UserMacAddress;
@@ -20,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -44,6 +42,8 @@ public class ForgetPasswordService {
     }
 
     public String resetPassword(String email, HttpServletRequest httpServletRequest) {
+        if (!Objects.isNull(httpServletRequest.getUserPrincipal()))
+            throw new Unauthorized401Exception("You are UnAuthorized");
         if (forgetPasswordRepository.existsByActiveTrueAndUser_Email(email)) {
             throw new Conflict409Exception("One Token Already Exits");
         }
@@ -72,6 +72,8 @@ public class ForgetPasswordService {
     }
 
     public String changePassword(String token, UserDto userDto, HttpServletRequest httpServletRequest) throws IOException {
+        if (!Objects.isNull(httpServletRequest.getUserPrincipal()))
+            throw new Unauthorized401Exception("You are UnAuthorized");
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         if (!forgetPasswordRepository.existsByTokenAndActiveTrue(token)) {
             throw new NotFound404Exception("Token Not Valid");
