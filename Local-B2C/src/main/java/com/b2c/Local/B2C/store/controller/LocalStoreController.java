@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.store.controller;
 
+import com.b2c.Local.B2C.products.electronic.model.*;
 import com.b2c.Local.B2C.store.dto.LocalStoreDto;
 import com.b2c.Local.B2C.store.model.LocalStore;
 import com.b2c.Local.B2C.store.service.LocalStoreService;
@@ -80,4 +81,37 @@ public class LocalStoreController {
     public Map<String, Object> getAllProductInLocalStoreById(@PathVariable UUID uuid){
         return localStoreService.getAllProductInLocalStoreById(uuid);
     }
+
+    @GetMapping("/{uuid}/getAllAcByLocalStoreId")
+    public List<AC> getAllAcByLocalStoreId(@PathVariable UUID uuid){
+       return localStoreService.getAllAcByLocalStoreId(uuid);
+    }
+
+    @GetMapping("/{uuid}/getAllLaptopByLocalStoreId")
+    public List<Laptop> getAllLaptopByLocalStoreId(@PathVariable UUID uuid){
+        return localStoreService.getAllLaptopByLocalStoreId(uuid);
+    }
+
+
+    @GetMapping("/{uuid}/getAllMobilePhoneByLocalStoreId")
+    public List<MobilePhone> getAllMobilePhoneByLocalStoreId(@PathVariable UUID uuid){
+        return localStoreService.getAllMobilePhoneByLocalStoreId(uuid);
+    }
+
+    @GetMapping("/{uuid}/getAllRefrigeratorByLocalStoreId")
+    public List<Refrigerator> getAllRefrigeratorByLocalStoreId(@PathVariable UUID uuid){
+        return localStoreService.getAllRefrigeratorByLocalStoreId(uuid);
+    }
+
+    @GetMapping("/{uuid}/getAllTelevisionByLocalStoreId")
+    public List<Television> getAllTelevisionByLocalStoreId(@PathVariable UUID uuid){
+        return localStoreService.getAllTelevisionByLocalStoreId(uuid);
+    }
+
+    @GetMapping("/{uuid}/getAllWashingMachineByLocalStoreId")
+    public List<WashingMachine> getAllWashingMachineByLocalStoreId(@PathVariable UUID uuid){
+        return localStoreService.getAllWashingMachineByLocalStoreId(uuid);
+    }
+
+
 }

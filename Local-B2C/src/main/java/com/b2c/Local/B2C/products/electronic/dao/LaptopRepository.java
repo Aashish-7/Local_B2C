@@ -39,4 +39,6 @@ public interface LaptopRepository extends JpaRepository<Laptop, Long> {
 
     @Query("select distinct a.availability from Laptop a where a.active =true")
     List<String> findAllDistinctAvailability();
+
+    List<Laptop> findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(UUID uuid);
 }

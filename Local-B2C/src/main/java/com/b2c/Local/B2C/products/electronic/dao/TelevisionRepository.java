@@ -40,4 +40,6 @@ public interface TelevisionRepository extends JpaRepository<Television, Long> {
 
     @Query("select distinct a.availability from Television a where a.active =true")
     List<String> findAllDistinctAvailability();
+
+    List<Television> findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(UUID uuid);
 }

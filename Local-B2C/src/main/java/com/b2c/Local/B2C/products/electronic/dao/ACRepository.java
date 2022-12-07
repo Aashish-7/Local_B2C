@@ -46,4 +46,7 @@ public interface ACRepository extends JpaRepository<AC, Long> {
     @Query("select distinct a.availability from AC a where a.active =true")
     List<String> findAllDistinctAvailability();
 
+    List<AC> findByLocalStore_Id(UUID id);
+
+    List<AC> findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(UUID id);
 }

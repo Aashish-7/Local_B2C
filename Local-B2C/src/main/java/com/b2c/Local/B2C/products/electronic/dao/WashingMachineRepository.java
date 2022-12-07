@@ -39,4 +39,6 @@ public interface WashingMachineRepository extends JpaRepository<WashingMachine, 
 
     @Query("select distinct a.availability from WashingMachine a where a.active =true")
     List<String> findAllDistinctAvailability();
+
+    List<WashingMachine> findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(UUID uuid);
 }

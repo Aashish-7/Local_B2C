@@ -40,4 +40,6 @@ public interface MobilePhoneRepository extends JpaRepository<MobilePhone, Long> 
 
     @Query("select distinct a.availability from MobilePhone a where a.active =true")
     List<String> findAllDistinctAvailability();
+
+    List<MobilePhone> findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(UUID uuid);
 }

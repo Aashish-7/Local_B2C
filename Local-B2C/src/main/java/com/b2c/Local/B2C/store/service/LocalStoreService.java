@@ -5,6 +5,7 @@ import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.exception.Forbidden403Exception;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.products.electronic.dao.*;
+import com.b2c.Local.B2C.products.electronic.model.*;
 import com.b2c.Local.B2C.products.electronic.service.ACService;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import com.b2c.Local.B2C.store.dto.LocalStoreDto;
@@ -179,5 +180,29 @@ public class LocalStoreService {
         } else {
             throw new NotFound404Exception("Store not found");
         }
+    }
+
+    public List<AC> getAllAcByLocalStoreId(UUID uuid){
+        return acRepository.findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(uuid);
+    }
+
+    public List<Laptop> getAllLaptopByLocalStoreId(UUID uuid){
+        return laptopRepository.findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(uuid);
+    }
+
+    public List<MobilePhone> getAllMobilePhoneByLocalStoreId(UUID uuid){
+        return mobilePhoneRepository.findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(uuid);
+    }
+
+    public List<Refrigerator> getAllRefrigeratorByLocalStoreId(UUID uuid){
+        return refrigeratorRepository.findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(uuid);
+    }
+
+    public List<Television> getAllTelevisionByLocalStoreId(UUID uuid){
+        return televisionRepository.findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(uuid);
+    }
+
+    public List<WashingMachine> getAllWashingMachineByLocalStoreId(UUID uuid){
+        return washingMachineRepository.findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(uuid);
     }
 }

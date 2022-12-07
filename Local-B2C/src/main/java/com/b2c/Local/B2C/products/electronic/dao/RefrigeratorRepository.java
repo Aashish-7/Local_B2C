@@ -40,4 +40,6 @@ public interface RefrigeratorRepository extends JpaRepository<Refrigerator, Long
 
     @Query("select distinct a.availability from Refrigerator a where a.active =true")
     List<String> findAllDistinctAvailability();
+
+    List<Refrigerator> findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(UUID uuid);
 }
