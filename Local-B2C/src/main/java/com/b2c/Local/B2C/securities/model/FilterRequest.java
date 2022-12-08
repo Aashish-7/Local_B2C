@@ -51,4 +51,6 @@ public class FilterRequest {
 
     @JsonIgnore
     private Boolean sessionHijack;
+
+    private Object parameter;
 }

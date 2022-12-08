@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -95,8 +97,15 @@ public class FilterRequestsService extends GenericFilter {
             filterRequest.setNewSession(true);
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
+            filterRequest.setUserName("Anonymous");
             log.info("Incoming Request From: " + httpServletRequest.getRemoteAddr() + "  Request URL : [" + httpServletRequest.getMethod() + " " + httpServletRequest.getRequestURL().toString() + "] UserPrincipal : [Anonymous]");
         }
+        if (httpServletRequest.getParameterNames().hasMoreElements()){
+            Map<String, String> map = new HashMap<>();
+            httpServletRequest.getParameterNames().asIterator().forEachRemaining(s -> map.put(s,httpServletRequest.getParameter(s)));
+            filterRequest.setParameter(map);
+        }
+        filterRequest.setParameter(null);
         filterRequest.setSessionHijack(sessionHijack);
         filterRequest.setSessionId(httpServletRequest.getSession().getId());
         filterRequest.setUserAgent(httpServletRequest.getHeader("User-Agent"));
@@ -121,6 +130,8 @@ public class FilterRequestsService extends GenericFilter {
     }
 
     private boolean validateSessionAndUrl(HttpSession httpSession, HttpServletRequest httpServletRequest) {
+        if (filterRequestsRepository.findFirstBySessionIdAndUrlIsEndingWithOrderByLastAccessTimeDesc(httpSession.getId(), "8080/user/login") == null)
+            return false;
         return !httpSession.isNew() && !Objects.isNull(httpServletRequest.getUserPrincipal()) && !filterRequestsRepository.findFirstBySessionIdAndUrlIsEndingWithOrderByLastAccessTimeDesc(httpSession.getId(), "8080/user/login").getRemoteIp().equals(httpServletRequest.getRemoteAddr());
     }
 }

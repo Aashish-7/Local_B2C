@@ -32,4 +32,6 @@ public interface FilterRequestsRepository extends JpaRepository<FilterRequest, S
 
 
     long countByRemoteIpAndLastAccessTimeBetween(String remoteIp, Date lastAccessTimeStart, Date lastAccessTimeEnd);
+
+    FilterRequest findBySessionIdAndUserNameAndLastAccessTime(String sessionId, String userName, Date lastAccessTime);
 }
