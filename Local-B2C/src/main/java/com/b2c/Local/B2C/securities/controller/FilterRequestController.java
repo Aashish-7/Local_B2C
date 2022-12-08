@@ -58,4 +58,5 @@ public class FilterRequestController {
     public Set<FilterRequest> getFilterRequestBySessionId(@RequestParam String sessionId) {
         return filteringDataService.getFilterRequestBySessionId(sessionId);
     }
+
 }

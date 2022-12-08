@@ -24,6 +24,7 @@ public class FilteringDataService {
 
     FindByIndexNameSessionRepository<? extends Session> sessions;
 
+
     @Autowired
     public FilteringDataService(FilterRequestsRepository filterRequestsRepository, FindByIndexNameSessionRepository<? extends Session> sessions) {
         this.filterRequestsRepository = filterRequestsRepository;
@@ -54,10 +55,10 @@ public class FilteringDataService {
         }
     }
 
-    public Set<FilterRequest> getFilterRequestBySessionId(String sessionId){
+    public Set<FilterRequest> getFilterRequestBySessionId(String sessionId) {
         Set<FilterRequest> stringSet = getAllSessionRequests().stream().filter(filterRequest ->
-            Base64.getEncoder().encodeToString(filterRequest.getSessionId().getBytes(StandardCharsets.UTF_8)
-            ).equals(sessionId)).collect(Collectors.toSet());
+                Base64.getEncoder().encodeToString(filterRequest.getSessionId().getBytes(StandardCharsets.UTF_8)
+                ).equals(sessionId)).collect(Collectors.toSet());
         return stringSet;
     }
 
@@ -69,7 +70,7 @@ public class FilteringDataService {
         }
     }
 
-    public Set<String> getActiveSessionId(){
+    public Set<String> getActiveSessionId() {
         Set<String> stringSet = new HashSet<>();
         getActiveSession().forEach(s -> {
             stringSet.add(Base64.getEncoder().encodeToString(s.getBytes(StandardCharsets.UTF_8)));
@@ -103,10 +104,10 @@ public class FilteringDataService {
         }
     }
 
-    public Map<String, List<FilterRequest>> getAllActiveSessionDetails(){
+    public Map<String, List<FilterRequest>> getAllActiveSessionDetails() {
         Map<String, List<FilterRequest>> stringListMap = new HashMap<>();
         getActiveSession().forEach(s -> {
-            stringListMap.put(Base64.getEncoder().encodeToString(s.getBytes()),getBySessionId(s));
+            stringListMap.put(Base64.getEncoder().encodeToString(s.getBytes()), getBySessionId(s));
         });
         return stringListMap;
     }
