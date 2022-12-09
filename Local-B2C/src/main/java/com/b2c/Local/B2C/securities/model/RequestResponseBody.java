@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -25,21 +24,12 @@ public class RequestResponseBody {
 
     private Object responseBody;
 
-    private String sessionId;
-
-    private String userPrincipal;
-
-    private Date lastAccessTime;
-
     @OneToOne
     private FilterRequest filterRequest;
 
-    public RequestResponseBody(Object requestBody, String sessionId, String userPrincipal, FilterRequest filterRequest, Date lastAccessTime, Object responseBody) {
+    public RequestResponseBody(Object requestBody, FilterRequest filterRequest, Object responseBody) {
         this.requestBody = requestBody;
-        this.sessionId = sessionId;
-        this.userPrincipal = userPrincipal;
         this.filterRequest = filterRequest;
-        this.lastAccessTime = lastAccessTime;
         this.responseBody = responseBody;
     }
 }

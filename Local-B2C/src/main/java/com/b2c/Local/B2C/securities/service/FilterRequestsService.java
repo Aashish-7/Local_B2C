@@ -20,10 +20,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
 @WebFilter(filterName = "OneFilter")
@@ -86,6 +83,8 @@ public class FilterRequestsService extends GenericFilter {
 
     public void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest, boolean sessionHijack) throws IOException {
         FilterRequest filterRequest = new FilterRequest();
+        filterRequest.setRequestId(UUID.randomUUID().toString());
+        httpSession.setAttribute("requestId", filterRequest.getRequestId());
         if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())) {
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);

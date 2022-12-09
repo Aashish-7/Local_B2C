@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Base64;
-import java.util.Date;
 
 @ControllerAdvice
 @Log4j2
@@ -54,7 +53,7 @@ public class JsonDataConverter extends AbstractHttpMessageConverter {
     protected Object readInternal(Class clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         String readRequest = IOUtils.toString(inputMessage.getBody(), Charset.defaultCharset());
         if (!readRequest.isEmpty()) {
-            requestResponseBodyRepository.save(new RequestResponseBody(readRequest, httpSession.getId(), ((getLoggedInUserId() != null) ? getLoggedInUserId().getEmail() : "Anonymous"), filterRequestsRepository.findBySessionIdAndUserNameAndLastAccessTime(httpSession.getId(), ((getLoggedInUserId() != null) ? getLoggedInUserId().getEmail() : "Anonymous"), new Date(httpSession.getLastAccessedTime())), new Date(httpSession.getLastAccessedTime()),null));
+            requestResponseBodyRepository.save(new RequestResponseBody(readRequest, filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("requestId"))).get(), null));
         }
         log.info("Accept Request Message : "+readRequest+" From CurrentUserPrincipal :["+((getLoggedInUserId() != null)?getLoggedInUserId().getEmail():"Anonymous")+"]");
         return objectMapper.readValue(decrypt(IOUtils.toInputStream(readRequest,Charset.defaultCharset())), clazz);
@@ -62,12 +61,13 @@ public class JsonDataConverter extends AbstractHttpMessageConverter {
 
     @Override
     protected void writeInternal(Object o, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
-        if (requestResponseBodyRepository.findBySessionIdAndUserPrincipalAndLastAccessTime(httpSession.getId(),((getLoggedInUserId() != null)?getLoggedInUserId().getEmail(): "Anonymous"), new Date(httpSession.getLastAccessedTime())) != null){
-        RequestResponseBody requestResponseBody = requestResponseBodyRepository.findBySessionIdAndUserPrincipalAndLastAccessTime(httpSession.getId(),((getLoggedInUserId() != null)?getLoggedInUserId().getEmail(): "Anonymous"), new Date(httpSession.getLastAccessedTime()));
+        System.out.println(httpSession.getAttribute("requestId"));
+        if (requestResponseBodyRepository.findByFilterRequest_RequestId(String.valueOf(httpSession.getAttribute("requestId"))) != null){
+        RequestResponseBody requestResponseBody = requestResponseBodyRepository.findByFilterRequest_RequestId(String.valueOf(httpSession.getAttribute("requestId")));
         requestResponseBody.setResponseBody(o);
         requestResponseBodyRepository.save(requestResponseBody);
         }else {
-            requestResponseBodyRepository.save(new RequestResponseBody(null, httpSession.getId(), ((getLoggedInUserId() != null) ? getLoggedInUserId().getEmail() : "Anonymous"), filterRequestsRepository.findBySessionIdAndUserNameAndLastAccessTime(httpSession.getId(), ((getLoggedInUserId() != null) ? getLoggedInUserId().getEmail() : "Anonymous"), new Date(httpSession.getLastAccessedTime())), new Date(httpSession.getLastAccessedTime()),o));
+            requestResponseBodyRepository.save(new RequestResponseBody(null,filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("requestId"))).get(),o));
         }
         outputMessage.getBody().write(encrypt(objectMapper.writeValueAsBytes(o)));
         log.info("Sending Response Message : "+objectMapper.writeValueAsString(o)+" For CurrentUserPrincipal :["+((getLoggedInUserId() != null)?getLoggedInUserId().getEmail(): "Anonymous")+"]");

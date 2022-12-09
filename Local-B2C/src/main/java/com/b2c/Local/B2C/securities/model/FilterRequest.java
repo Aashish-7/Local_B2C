@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -19,7 +18,7 @@ import java.util.UUID;
 public class FilterRequest {
 
     @Id
-    private String requestId = UUID.randomUUID().toString();
+    private String requestId;
 
     private String remoteIp;
 
