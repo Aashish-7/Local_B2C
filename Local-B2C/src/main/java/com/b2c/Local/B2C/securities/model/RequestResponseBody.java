@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -18,7 +17,7 @@ import java.util.UUID;
 public class RequestResponseBody {
 
     @Id
-    private String id = UUID.randomUUID().toString();
+    private String id;
 
     private Object requestBody;
 
@@ -27,7 +26,8 @@ public class RequestResponseBody {
     @OneToOne
     private FilterRequest filterRequest;
 
-    public RequestResponseBody(Object requestBody, FilterRequest filterRequest, Object responseBody) {
+    public RequestResponseBody(String id,Object requestBody, FilterRequest filterRequest, Object responseBody) {
+        this.id = id;
         this.requestBody = requestBody;
         this.filterRequest = filterRequest;
         this.responseBody = responseBody;

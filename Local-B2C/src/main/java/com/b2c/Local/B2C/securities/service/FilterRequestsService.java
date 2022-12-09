@@ -84,7 +84,7 @@ public class FilterRequestsService extends GenericFilter {
     public void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest, boolean sessionHijack) throws IOException {
         FilterRequest filterRequest = new FilterRequest();
         filterRequest.setRequestId(UUID.randomUUID().toString());
-        httpSession.setAttribute("requestId", filterRequest.getRequestId());
+        httpSession.setAttribute("FILTER_REQUEST_ID", filterRequest.getRequestId());
         if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())) {
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
