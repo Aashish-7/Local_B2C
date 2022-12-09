@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -51,5 +52,6 @@ public class FilterRequest {
     @JsonIgnore
     private Boolean sessionHijack;
 
+    @Type(type = "com.vladmihalcea.hibernate.type.json.JsonStringType")
     private Object parameter;
 }

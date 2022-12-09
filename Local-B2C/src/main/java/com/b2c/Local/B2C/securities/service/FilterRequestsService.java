@@ -103,8 +103,9 @@ public class FilterRequestsService extends GenericFilter {
             Map<String, String> map = new HashMap<>();
             httpServletRequest.getParameterNames().asIterator().forEachRemaining(s -> map.put(s,httpServletRequest.getParameter(s)));
             filterRequest.setParameter(map);
+        }else {
+            filterRequest.setParameter(null);
         }
-        filterRequest.setParameter(null);
         filterRequest.setSessionHijack(sessionHijack);
         filterRequest.setSessionId(httpServletRequest.getSession().getId());
         filterRequest.setUserAgent(httpServletRequest.getHeader("User-Agent"));
