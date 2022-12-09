@@ -83,7 +83,7 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
     }
 
     private void saveResponseBody(Object o) throws JsonProcessingException {
-        log.info("Sending Response Message : "+objectMapper.writeValueAsString(o)+" For CurrentUserPrincipal :["+((getLoggedInUserId() != null)?getLoggedInUserId().getEmail(): "Anonymous")+"]");
+        //log.info("Sending Response Message : "+objectMapper.writeValueAsString(o)+" For CurrentUserPrincipal :["+((getLoggedInUserId() != null)?getLoggedInUserId().getEmail(): "Anonymous")+"]");
         if (requestResponseBodyRepository.existsById(String.valueOf(httpSession.getAttribute("REQUEST_RESPONSE_BODY")))){
             requestResponseBodyRepository.updateById(String.valueOf(httpSession.getAttribute("REQUEST_RESPONSE_BODY")),objectMapper.writeValueAsString(o));
         }else {
@@ -94,7 +94,7 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
     }
 
     private void saveRequestBody(String requestBody){
-        log.info("Accept Request Message : "+requestBody+" From CurrentUserPrincipal :["+((getLoggedInUserId() != null)?getLoggedInUserId().getEmail():"Anonymous")+"]");
+        //log.info("Accept Request Message : "+requestBody+" From CurrentUserPrincipal :["+((getLoggedInUserId() != null)?getLoggedInUserId().getEmail():"Anonymous")+"]");
         if (!requestBody.isEmpty()) {
             String id = UUID.randomUUID().toString();
             httpSession.setAttribute("REQUEST_RESPONSE_BODY",id);
