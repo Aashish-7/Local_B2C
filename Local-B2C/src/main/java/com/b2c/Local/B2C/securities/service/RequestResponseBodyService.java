@@ -28,7 +28,7 @@ import java.util.UUID;
 
 @ControllerAdvice
 @Log4j2
-public class JsonDataConverter extends AbstractHttpMessageConverter {
+public class RequestResponseBodyService extends AbstractHttpMessageConverter {
 
     @Autowired
     RequestResponseBodyRepository requestResponseBodyRepository;
@@ -42,7 +42,7 @@ public class JsonDataConverter extends AbstractHttpMessageConverter {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public JsonDataConverter() {
+    public RequestResponseBodyService() {
         super(MediaType.ALL);
     }
 
@@ -89,6 +89,8 @@ public class JsonDataConverter extends AbstractHttpMessageConverter {
         }else {
             requestResponseBodyRepository.save(new RequestResponseBody(UUID.randomUUID().toString(),null,filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(),o));
         }
+        httpSession.removeAttribute("REQUEST_RESPONSE_BODY");
+        httpSession.removeAttribute("FILTER_REQUEST_ID");
     }
 
     private void saveRequestBody(String requestBody){
