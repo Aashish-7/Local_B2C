@@ -3,6 +3,7 @@ package com.b2c.Local.B2C.securities.service;
 import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.securities.dao.FilterRequestsRepository;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
+import com.b2c.Local.B2C.utility.TimeTaskSchedule;
 import com.b2c.Local.B2C.utility.UserMacAddress;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,22 +58,32 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        if (getCount(httpServletRequest) < 5) {
-            if (validateSessionAndUrl(httpServletRequest.getSession(), httpServletRequest)) {
-                log.warn("Session Hijack Different RemoteIp Address Found :" + httpServletRequest.getRemoteAddr());
-                saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, true);
-                sessions.deleteById(httpServletRequest.getSession().getId());
-                HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-                httpServletResponse.sendError(511);
-            } else {
-                saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
-                filterChain.doFilter(servletRequest, servletResponse);
-            }
-        }else {
+        if (TimeTaskSchedule.isBlocked(httpServletRequest.getRemoteAddr())){
             saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
             log.warn("Too Many Request From RemoteIp Address :" + httpServletRequest.getRemoteAddr());
             HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+            httpServletResponse.setHeader("Retry-After","30s");
             httpServletResponse.sendError(429);
+        }else {
+            if (getCount(httpServletRequest) < 5) {
+                if (validateSessionAndUrl(httpServletRequest.getSession(), httpServletRequest)) {
+                    log.warn("Session Hijack Different RemoteIp Address Found :" + httpServletRequest.getRemoteAddr());
+                    saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, true);
+                    sessions.deleteById(httpServletRequest.getSession().getId());
+                    HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+                    httpServletResponse.sendError(511);
+                } else {
+                    saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
+                    filterChain.doFilter(servletRequest, servletResponse);
+                }
+            } else {
+                saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
+                TimeTaskSchedule.blockIp(httpServletRequest.getRemoteAddr(), 30000);
+                log.warn("Too Many Request From RemoteIp Address :" + httpServletRequest.getRemoteAddr());
+                HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+                httpServletResponse.setHeader("Retry-After","30s");
+                httpServletResponse.sendError(429);
+            }
         }
     }
 
@@ -106,6 +117,7 @@ public class FilterRequestsService extends GenericFilter {
         }else {
             filterRequest.setParameter(null);
         }
+        filterRequest.setHttpMethod(httpServletRequest.getMethod());
         filterRequest.setSessionHijack(sessionHijack);
         filterRequest.setSessionId(httpServletRequest.getSession().getId());
         filterRequest.setUserAgent(httpServletRequest.getHeader("User-Agent"));

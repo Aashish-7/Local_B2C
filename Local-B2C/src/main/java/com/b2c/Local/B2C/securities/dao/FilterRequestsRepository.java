@@ -37,7 +37,7 @@ public interface FilterRequestsRepository extends JpaRepository<FilterRequest, S
 
     List<FilterRequest> findAllByNewSession(Boolean bool);
 
-    List<FilterRequest> findAllByRemoteIpNotNull(String remoteIp);
+    List<FilterRequest> findAllByRemoteIp(String remoteIp);
 
-    List<FilterRequest> findAllByMacAddressNotNull(String macAddress);
+    List<FilterRequest> findAllByMacAddress(String macAddress);
 }

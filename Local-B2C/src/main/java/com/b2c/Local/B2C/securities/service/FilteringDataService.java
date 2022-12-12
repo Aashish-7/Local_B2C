@@ -126,11 +126,11 @@ public class FilteringDataService {
     }
 
     public List<FilterRequest> getAllByRemoteIp(String remoteIp){
-        return filterRequestsRepository.findAllByRemoteIpNotNull(remoteIp);
+        return filterRequestsRepository.findAllByRemoteIp(remoteIp);
     }
 
     public List<FilterRequest> getAllByMacAddress(String macAddress){
-        return filterRequestsRepository.findAllByMacAddressNotNull(macAddress);
+        return filterRequestsRepository.findAllByMacAddress(macAddress);
     }
 
 }
