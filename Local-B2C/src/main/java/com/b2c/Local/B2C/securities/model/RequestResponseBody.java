@@ -3,6 +3,7 @@ package com.b2c.Local.B2C.securities.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,8 +20,10 @@ public class RequestResponseBody {
     @Id
     private String id;
 
+    @Type(type = "com.vladmihalcea.hibernate.type.json.JsonType")
     private Object requestBody;
 
+    @Type(type = "com.vladmihalcea.hibernate.type.json.JsonType")
     private Object responseBody;
 
     @OneToOne

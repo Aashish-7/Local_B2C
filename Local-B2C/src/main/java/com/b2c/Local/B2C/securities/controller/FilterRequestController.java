@@ -2,6 +2,7 @@ package com.b2c.Local.B2C.securities.controller;
 
 import com.b2c.Local.B2C.securities.dto.FilterRequestInfo;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
+import com.b2c.Local.B2C.securities.model.RequestResponseBody;
 import com.b2c.Local.B2C.securities.service.FilteringDataService;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,26 @@ public class FilterRequestController {
     @GetMapping("user/getFilterRequestBySessionId")
     public Set<FilterRequest> getFilterRequestBySessionId(@RequestParam String sessionId) {
         return filteringDataService.getFilterRequestBySessionId(sessionId);
+    }
+
+    @GetMapping("admin/getAllNewSessionRequest")
+    public List<FilterRequest> getAllNewSessionRequest(){
+        return filteringDataService.getAllNewSessionRequest();
+    }
+
+    @GetMapping("admin/{filterRequestId}/getRequestResponseBodyByFilterRequestId")
+    public RequestResponseBody getRequestResponseBodyByFilterRequestId(@PathVariable String filterRequestId){
+        return filteringDataService.getRequestResponseBodyByFilterRequestId(filterRequestId);
+    }
+
+    @GetMapping("admin/getAllByRemoteIp")
+    public List<FilterRequest> getAllByRemoteIp(@RequestParam String remoteIp){
+        return filteringDataService.getAllByRemoteIp(remoteIp);
+    }
+
+    @GetMapping("admin/getAllByMacAddress")
+    public List<FilterRequest> getAllByMacAddress(@RequestParam String macAddress){
+        return filteringDataService.getAllByMacAddress(macAddress);
     }
 
 }

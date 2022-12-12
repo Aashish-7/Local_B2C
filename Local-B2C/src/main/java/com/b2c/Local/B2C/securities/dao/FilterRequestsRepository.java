@@ -35,4 +35,9 @@ public interface FilterRequestsRepository extends JpaRepository<FilterRequest, S
 
     FilterRequest findBySessionIdAndUserNameAndLastAccessTime(String sessionId, String userName, Date lastAccessTime);
 
+    List<FilterRequest> findAllByNewSession(Boolean bool);
+
+    List<FilterRequest> findAllByRemoteIpNotNull(String remoteIp);
+
+    List<FilterRequest> findAllByMacAddressNotNull(String macAddress);
 }

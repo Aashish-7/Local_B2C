@@ -18,4 +18,6 @@ public interface RequestResponseBodyRepository extends JpaRepository<RequestResp
     @Query(value = "update request_response_body  set responseBody=:responseBody where id=:id",nativeQuery = true)
     Integer updateById(@Param("id") String id, @Param("responseBody") Object responseBody);
 
+    RequestResponseBody findRequestResponseBodyByFilterRequest_RequestId(String requestId);
+
 }

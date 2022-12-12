@@ -4,8 +4,10 @@ import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.exception.BadRequest400Exception;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.securities.dao.FilterRequestsRepository;
+import com.b2c.Local.B2C.securities.dao.RequestResponseBodyRepository;
 import com.b2c.Local.B2C.securities.dto.FilterRequestInfo;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
+import com.b2c.Local.B2C.securities.model.RequestResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,11 +26,14 @@ public class FilteringDataService {
 
     FindByIndexNameSessionRepository<? extends Session> sessions;
 
+    RequestResponseBodyRepository requestResponseBodyRepository;
+
 
     @Autowired
-    public FilteringDataService(FilterRequestsRepository filterRequestsRepository, FindByIndexNameSessionRepository<? extends Session> sessions) {
+    public FilteringDataService(FilterRequestsRepository filterRequestsRepository, FindByIndexNameSessionRepository<? extends Session> sessions, RequestResponseBodyRepository requestResponseBodyRepository) {
         this.filterRequestsRepository = filterRequestsRepository;
         this.sessions = sessions;
+        this.requestResponseBodyRepository = requestResponseBodyRepository;
     }
 
     private User getLoggedInUserId() {
@@ -110,6 +115,22 @@ public class FilteringDataService {
             stringListMap.put(Base64.getEncoder().encodeToString(s.getBytes()), getBySessionId(s));
         });
         return stringListMap;
+    }
+
+    public List<FilterRequest> getAllNewSessionRequest(){
+        return filterRequestsRepository.findAllByNewSession(true);
+    }
+
+    public RequestResponseBody getRequestResponseBodyByFilterRequestId(String filterRequestId){
+        return requestResponseBodyRepository.findRequestResponseBodyByFilterRequest_RequestId(filterRequestId);
+    }
+
+    public List<FilterRequest> getAllByRemoteIp(String remoteIp){
+        return filterRequestsRepository.findAllByRemoteIpNotNull(remoteIp);
+    }
+
+    public List<FilterRequest> getAllByMacAddress(String macAddress){
+        return filterRequestsRepository.findAllByMacAddressNotNull(macAddress);
     }
 
 }
