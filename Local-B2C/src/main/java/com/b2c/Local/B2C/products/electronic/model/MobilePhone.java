@@ -96,4 +96,12 @@ public class MobilePhone implements Serializable {
     @ManyToOne @JsonIgnore
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")
     private LocalStore localStore;
+
+    @Transient
+    private String url;
+
+    @PostLoad
+    public void postLoad(){
+        this.url = "http://localhost:8080/products/mobilePhone/"+this.mobilePhoneId+"/getMobilePhoneById";
+    }
 }

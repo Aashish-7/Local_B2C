@@ -59,4 +59,11 @@ public class LocalStore implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @Transient
+    private String url;
+
+    @PostLoad
+    public void postLoadUrl(){
+        this.url = "http://localhost:8080/localStore/0/"+this.id+"/getLocalStoreById";
+    }
 }

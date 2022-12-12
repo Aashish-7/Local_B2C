@@ -6,7 +6,6 @@ import com.b2c.Local.B2C.store.model.LocalStore;
 import com.b2c.Local.B2C.store.service.LocalStoreService;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/localStore/0")
 @Hidden
-@CacheConfig(cacheNames = {"LocalStoreController"})
 public class LocalStoreController {
 
     LocalStoreService localStoreService;
@@ -40,8 +38,8 @@ public class LocalStoreController {
         return localStoreService.listAllStores();
     }
 
-    @GetMapping("/getById")
-    public LocalStore getById(@RequestParam UUID uuid){
+    @GetMapping("/{uuid}/getLocalStoreById")
+    public LocalStore getById(@PathVariable UUID uuid){
         return localStoreService.getById(uuid);
     }
 
@@ -112,6 +110,4 @@ public class LocalStoreController {
     public List<WashingMachine> getAllWashingMachineByLocalStoreId(@PathVariable UUID uuid){
         return localStoreService.getAllWashingMachineByLocalStoreId(uuid);
     }
-
-
 }

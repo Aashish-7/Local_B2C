@@ -57,7 +57,7 @@ public class ACController {
     }
 
     @GetMapping("/{id}/getAcById")
-    @PreAuthorize("hasAnyAuthority('storeOwner')")
+    //@PreAuthorize("hasAnyAuthority('storeOwner')")
     public AC getAcById(@PathVariable Long id) {
         return acService.getAcById(id);
     }

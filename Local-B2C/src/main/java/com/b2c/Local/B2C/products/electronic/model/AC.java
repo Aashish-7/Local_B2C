@@ -63,4 +63,12 @@ public class AC implements Serializable {
     @ManyToOne @JsonIgnore
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")
     private LocalStore localStore;
+
+    @Transient
+    private String url;
+
+    @PostLoad
+    public void postLoad(){
+        this.url = "http://localhost:8080/products/ac/"+this.acId+"/getAcById";
+    }
 }
