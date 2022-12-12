@@ -33,6 +33,11 @@ public class LocalStoreController {
         return localStoreService.addStore(localStoreDto);
     }
 
+    @PutMapping("/{uuid}/updateByStoreId")
+    public LocalStore updateByStoreId(@PathVariable UUID uuid, @RequestBody @Valid LocalStoreDto localStoreDto){
+        return localStoreService.updateByStoreId(uuid, localStoreDto);
+    }
+
     @GetMapping("/listAllStores")
     public List<LocalStore> listAllStores(){
         return localStoreService.listAllStores();

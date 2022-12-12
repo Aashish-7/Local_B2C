@@ -78,23 +78,28 @@ public class LocalStoreService {
         return localStore;
     }
 
-    public LocalStore UpdateByStoreId(UUID uuid, LocalStoreDto localStoreDto) {
-        if (localStoreRepository.findById(uuid).isEmpty() && !localStoreRepository.findById(uuid).get().getActive()) {
+    public LocalStore updateByStoreId(UUID uuid, LocalStoreDto localStoreDto) {
+        if (!localStoreRepository.existsByIdAndActiveTrue(uuid)) {
             throw new NotFound404Exception("Store Not Found");
         }
-        LocalStore localStore = localStoreRepository.findById(uuid).get();
-        if (localStoreDto.getEmail() != null)
-            localStore.setEmail(localStoreDto.getEmail());
-        if (localStoreDto.getStoreName() != null)
-            localStore.setStoreName(localStoreDto.getStoreName());
-        if (localStoreDto.getStoreAddress() != null)
-            localStore.setStoreName(localStoreDto.getStoreAddress());
-        if (localStoreDto.getCity() != null)
-            localStore.setCity(localStoreDto.getCity());
-        if (!localStoreDto.getListOfProduct().isEmpty())
-            localStore.setListOfProduct(localStoreDto.getListOfProduct());
-        localStoreRepository.save(localStore);
-        return localStore;
+        if (localStoreRepository.existsByIdAndUser_Id(uuid, getLoggedInUserId())) {
+            LocalStore localStore = localStoreRepository.findById(uuid).get();
+            if (localStoreDto.getEmail() != null)
+                localStore.setEmail(localStoreDto.getEmail());
+            if (localStoreDto.getStoreName() != null)
+                localStore.setStoreName(localStoreDto.getStoreName());
+            if (localStoreDto.getStoreAddress() != null)
+                localStore.setStoreName(localStoreDto.getStoreAddress());
+            if (localStoreDto.getCity() != null)
+                localStore.setCity(localStoreDto.getCity());
+            if (!localStoreDto.getListOfProduct().isEmpty())
+                localStore.setListOfProduct(localStoreDto.getListOfProduct());
+            localStoreRepository.save(localStore);
+            return localStore;
+        }
+        else {
+            throw new Forbidden403Exception("Access denied!!");
+        }
     }
 
     private UUID getLoggedInUserId() {
