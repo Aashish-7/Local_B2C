@@ -91,6 +91,8 @@ public class LocalStoreService {
             localStore.setStoreName(localStoreDto.getStoreAddress());
         if (localStoreDto.getCity() != null)
             localStore.setCity(localStoreDto.getCity());
+        if (!localStoreDto.getListOfProduct().isEmpty())
+            localStore.setListOfProduct(localStoreDto.getListOfProduct());
         localStoreRepository.save(localStore);
         return localStore;
     }

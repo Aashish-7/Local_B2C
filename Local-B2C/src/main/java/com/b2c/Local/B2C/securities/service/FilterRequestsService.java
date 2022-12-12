@@ -7,6 +7,7 @@ import com.b2c.Local.B2C.utility.TimeTaskSchedule;
 import com.b2c.Local.B2C.utility.UserMacAddress;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
 
@@ -62,7 +63,7 @@ public class FilterRequestsService extends GenericFilter {
             saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
             log.warn("Too Many Request From RemoteIp Address :" + httpServletRequest.getRemoteAddr());
             HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-            httpServletResponse.setHeader("Retry-After","30s");
+            httpServletResponse.setHeader(HttpHeaders.RETRY_AFTER,"30s");
             httpServletResponse.sendError(429);
         }else {
             if (getCount(httpServletRequest) < 5) {
@@ -81,18 +82,18 @@ public class FilterRequestsService extends GenericFilter {
                 TimeTaskSchedule.blockIp(httpServletRequest.getRemoteAddr(), 30000);
                 log.warn("Too Many Request From RemoteIp Address :" + httpServletRequest.getRemoteAddr());
                 HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-                httpServletResponse.setHeader("Retry-After","30s");
+                httpServletResponse.setHeader(HttpHeaders.RETRY_AFTER,"30s");
                 httpServletResponse.sendError(429);
             }
         }
     }
 
-    public String getUserIdByEmail(String email) {
+    private String getUserIdByEmail(String email) {
         return userRepository.findByEmail(email).getId().toString();
     }
 
 
-    public void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest, boolean sessionHijack) throws IOException {
+    private void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest, boolean sessionHijack) throws IOException {
         FilterRequest filterRequest = new FilterRequest();
         filterRequest.setRequestId(UUID.randomUUID().toString());
         httpSession.setAttribute("FILTER_REQUEST_ID", filterRequest.getRequestId());
@@ -131,7 +132,7 @@ public class FilterRequestsService extends GenericFilter {
         filterRequestsRepository.save(filterRequest);
     }
 
-    public long getCount(HttpServletRequest httpServletRequest) {
+    private long getCount(HttpServletRequest httpServletRequest) {
         LocalDateTime localDateTime = LocalDateTime.now().minus(Duration.of(10, ChronoUnit.SECONDS));
         Instant i = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
         Date date = Date.from(i);
