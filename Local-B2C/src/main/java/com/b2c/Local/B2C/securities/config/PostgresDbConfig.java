@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = {"com.b2c.Local.B2C.auths.model","com.b2c.Local.B2C.store.dao","com.b2c.Local.B2C.products.electronic.controller","com.b2c.Local.B2C.products.electronic.service","com.b2c.Local.B2C.products.electronic.model","com.b2c.Local.B2C.products.electronic.dao","com.b2c.Local.B2C.store.model","com.b2c.Local.B2C.auths.dao","com.b2c.Local.B2C.common.model"}, entityManagerFactoryRef = "postgresEntityManager",transactionManagerRef = "postTransactionManager")
+@EnableJpaRepositories(basePackages = {"com.b2c.Local.B2C.auths.model","com.b2c.Local.B2C.common.dao","com.b2c.Local.B2C.store.dao","com.b2c.Local.B2C.products.electronic.controller","com.b2c.Local.B2C.products.electronic.service","com.b2c.Local.B2C.products.electronic.model","com.b2c.Local.B2C.products.electronic.dao","com.b2c.Local.B2C.store.model","com.b2c.Local.B2C.auths.dao","com.b2c.Local.B2C.common.model"}, entityManagerFactoryRef = "postgresEntityManager",transactionManagerRef = "postTransactionManager")
 public class PostgresDbConfig {
 
     @Value("${spring.datasource.first.hibernate.dialect}")
@@ -39,7 +39,7 @@ public class PostgresDbConfig {
     public LocalContainerEntityManagerFactoryBean postgresEntityManagerFactory(EntityManagerFactoryBuilder entityManagerFactoryBuilder){
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.dialect", dialect);
-        return entityManagerFactoryBuilder.dataSource(primaryDataSource()).packages("com.b2c.Local.B2C.auths.model","com.b2c.Local.B2C.store.dao","com.b2c.Local.B2C.store.model","com.b2c.Local.B2C.auths.dao","com.b2c.Local.B2C.products.electronic.controller","com.b2c.Local.B2C.products.electronic.service","com.b2c.Local.B2C.products.electronic.model","com.b2c.Local.B2C.products.electronic.dao","com.b2c.Local.B2C.common.model").properties(properties).build();
+        return entityManagerFactoryBuilder.dataSource(primaryDataSource()).packages("com.b2c.Local.B2C.auths.model","com.b2c.Local.B2C.common.dao","com.b2c.Local.B2C.store.dao","com.b2c.Local.B2C.store.model","com.b2c.Local.B2C.auths.dao","com.b2c.Local.B2C.products.electronic.controller","com.b2c.Local.B2C.products.electronic.service","com.b2c.Local.B2C.products.electronic.model","com.b2c.Local.B2C.products.electronic.dao","com.b2c.Local.B2C.common.model").properties(properties).build();
     }
 
     @Primary

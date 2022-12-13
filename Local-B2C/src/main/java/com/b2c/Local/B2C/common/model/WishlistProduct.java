@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -23,7 +22,7 @@ public class WishlistProduct {
     @Id
     private UUID id = UUID.randomUUID();
     
-    private Boolean deleted;
+    private Boolean deleted = false;
     
     private LocalDateTime createDate = LocalDateTime.now();
 
@@ -32,6 +31,6 @@ public class WishlistProduct {
 
     private Long productId;
     
-    @ManyToMany
-    private List<User> user;
+    @ManyToOne
+    private User user;
 }
