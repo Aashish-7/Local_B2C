@@ -34,4 +34,7 @@ public class WishlistProduct {
     
     @ManyToOne @JsonIgnore
     private User user;
+
+    @Transient
+    private Object products;
 }

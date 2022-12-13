@@ -72,6 +72,7 @@ public class WishlistProductService {
                 wishlistProduct.setProduct(ProductEnum.LAPTOP);
                 wishlistProduct.setProductId(objectMapper.convertValue(wishlist, Laptop.class).getLaptopId());
                 wishlistProduct.setUser(getLoggedInUser());
+                wishlistProduct.setProducts(laptopRepository.findByLaptopIdAndActiveTrue(objectMapper.convertValue(wishlist, Laptop.class).getLaptopId()));
                 wishlistProductRepository.save(wishlistProduct);
                 return wishlistProduct;
             } else {
@@ -85,6 +86,7 @@ public class WishlistProductService {
                 wishlistProduct.setProduct(ProductEnum.AC);
                 wishlistProduct.setProductId(objectMapper.convertValue(wishlist, AC.class).getAcId());
                 wishlistProduct.setUser(getLoggedInUser());
+                wishlistProduct.setProducts(acRepository.findByAcIdAndActiveTrue(objectMapper.convertValue(wishlist, AC.class).getAcId()));
                 wishlistProductRepository.save(wishlistProduct);
                 return wishlistProduct;
             } else {
@@ -98,6 +100,7 @@ public class WishlistProductService {
                 wishlistProduct.setProduct(ProductEnum.WASHINGMACHINE);
                 wishlistProduct.setProductId(objectMapper.convertValue(wishlist, WashingMachine.class).getWashingMachineId());
                 wishlistProduct.setUser(getLoggedInUser());
+                wishlistProduct.setProducts(washingMachineRepository.findByWashingMachineIdAndActiveTrue(objectMapper.convertValue(wishlist, WashingMachine.class).getWashingMachineId()));
                 wishlistProductRepository.save(wishlistProduct);
                 return wishlistProduct;
             } else {
@@ -111,6 +114,7 @@ public class WishlistProductService {
                 wishlistProduct.setProduct(ProductEnum.TELEVISION);
                 wishlistProduct.setProductId(objectMapper.convertValue(wishlist, Television.class).getTelevisionId());
                 wishlistProduct.setUser(getLoggedInUser());
+                wishlistProduct.setProducts(televisionRepository.findByTelevisionIdAndActiveTrue(objectMapper.convertValue(wishlist, Television.class).getTelevisionId()));
                 wishlistProductRepository.save(wishlistProduct);
                 return wishlistProduct;
             } else {
@@ -124,6 +128,7 @@ public class WishlistProductService {
                 wishlistProduct.setProduct(ProductEnum.MOBILEPHONE);
                 wishlistProduct.setProductId(objectMapper.convertValue(wishlist, MobilePhone.class).getMobilePhoneId());
                 wishlistProduct.setUser(getLoggedInUser());
+                wishlistProduct.setProducts(mobilePhoneRepository.findByMobilePhoneIdAndActiveTrue(objectMapper.convertValue(wishlist, MobilePhone.class).getMobilePhoneId()));
                 wishlistProductRepository.save(wishlistProduct);
                 return wishlistProduct;
             } else {
@@ -137,6 +142,7 @@ public class WishlistProductService {
                 wishlistProduct.setProduct(ProductEnum.REFRIGERATOR);
                 wishlistProduct.setProductId(objectMapper.convertValue(wishlist, Refrigerator.class).getRefrigeratorId());
                 wishlistProduct.setUser(getLoggedInUser());
+                wishlistProduct.setProducts(refrigeratorRepository.findByRefrigeratorIdAndActiveTrue(objectMapper.convertValue(wishlist, Refrigerator.class).getRefrigeratorId()));
                 wishlistProductRepository.save(wishlistProduct);
                 return wishlistProduct;
             } else {
@@ -162,6 +168,7 @@ public class WishlistProductService {
                     wishlistProduct.setProduct(ProductEnum.AC);
                     wishlistProduct.setUser(getLoggedInUser());
                     wishlistProduct.setProductId(id);
+                    wishlistProduct.setProducts(acRepository.findByAcIdAndActiveTrue(id));
                     wishlistProductRepository.save(wishlistProduct);
                     return wishlistProduct;
                 } else {
@@ -175,6 +182,7 @@ public class WishlistProductService {
                     wishlistProduct.setProduct(ProductEnum.LAPTOP);
                     wishlistProduct.setUser(getLoggedInUser());
                     wishlistProduct.setProductId(id);
+                    wishlistProduct.setProducts(laptopRepository.findByLaptopIdAndActiveTrue(id));
                     wishlistProductRepository.save(wishlistProduct);
                     return wishlistProduct;
                 } else {
@@ -188,6 +196,7 @@ public class WishlistProductService {
                     wishlistProduct.setProduct(ProductEnum.MOBILEPHONE);
                     wishlistProduct.setUser(getLoggedInUser());
                     wishlistProduct.setProductId(id);
+                    wishlistProduct.setProducts(mobilePhoneRepository.findByMobilePhoneIdAndActiveTrue(id));
                     wishlistProductRepository.save(wishlistProduct);
                     return wishlistProduct;
                 } else {
@@ -201,6 +210,7 @@ public class WishlistProductService {
                     wishlistProduct.setProduct(ProductEnum.REFRIGERATOR);
                     wishlistProduct.setUser(getLoggedInUser());
                     wishlistProduct.setProductId(id);
+                    wishlistProduct.setProducts(refrigeratorRepository.findByRefrigeratorIdAndActiveTrue(id));
                     wishlistProductRepository.save(wishlistProduct);
                     return wishlistProduct;
                 } else {
@@ -214,6 +224,7 @@ public class WishlistProductService {
                     wishlistProduct.setProduct(ProductEnum.TELEVISION);
                     wishlistProduct.setUser(getLoggedInUser());
                     wishlistProduct.setProductId(id);
+                    wishlistProduct.setProducts(televisionRepository.findByTelevisionIdAndActiveTrue(id));
                     wishlistProductRepository.save(wishlistProduct);
                     return wishlistProduct;
                 } else {
@@ -227,6 +238,7 @@ public class WishlistProductService {
                     wishlistProduct.setProduct(ProductEnum.WASHINGMACHINE);
                     wishlistProduct.setUser(getLoggedInUser());
                     wishlistProduct.setProductId(id);
+                    wishlistProduct.setProducts(washingMachineRepository.findByWashingMachineIdAndActiveTrue(id));
                     wishlistProductRepository.save(wishlistProduct);
                     return wishlistProduct;
                 } else {
