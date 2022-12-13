@@ -2,6 +2,7 @@ package com.b2c.Local.B2C.common.model;
 
 import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.common.enums.ProductEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,6 @@ public class WishlistProduct {
 
     private Long productId;
     
-    @ManyToOne
+    @ManyToOne @JsonIgnore
     private User user;
 }

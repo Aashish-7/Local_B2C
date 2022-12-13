@@ -49,4 +49,5 @@ public interface ACRepository extends JpaRepository<AC, Long> {
     List<AC> findByLocalStore_Id(UUID id);
 
     List<AC> findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(UUID id);
+
 }
