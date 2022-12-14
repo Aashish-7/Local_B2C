@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.common.controller;
 
+import com.b2c.Local.B2C.common.model.WishlistProduct;
 import com.b2c.Local.B2C.common.service.WishlistProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,20 @@ public class WishlistProductController {
     @GetMapping("{userId}/getAllProductByUserId")
     public Map<String, Object> getAllProductByUserId(@PathVariable UUID userId){
         return wishlistProductService.getAllProductByUserId(userId);
+    }
+
+    @GetMapping("{userId}/getProductById")
+    public WishlistProduct getProductById(@PathVariable UUID userId,@RequestParam UUID wishlistId){
+        return wishlistProductService.getProductById(userId, wishlistId);
+    }
+
+    @DeleteMapping("{userId}/deleteProductById")
+    public String deleteProductById(@PathVariable UUID userId,@RequestParam UUID wishlistId){
+        return wishlistProductService.deleteProductById(userId,wishlistId);
+    }
+
+    @DeleteMapping("{userId}/deleteAllProductByUserId")
+    public String deleteAllProductByUserId(@PathVariable UUID userId){
+        return wishlistProductService.deleteAllProductByUserId(userId);
     }
 }

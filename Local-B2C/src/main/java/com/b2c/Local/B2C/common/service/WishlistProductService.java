@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
 public class WishlistProductService {
 
@@ -291,10 +292,73 @@ public class WishlistProductService {
                 }
             });
             objectMap.put("WishlistProduct", wishlistProductsList);
-            objectMap.put("TotalPrice",priceCount.stream().mapToDouble(Double::doubleValue).sum());
+            objectMap.put("TotalPrice", priceCount.stream().mapToDouble(Double::doubleValue).sum());
         } else {
-            throw new NotFound404Exception("Product Not Found In Wishlist");
+            throw new NotFound404Exception("Wishlist Is Empty");
         }
         return objectMap;
+    }
+
+    public String deleteProductById(UUID userId, UUID wishlistId) {
+        if (!userId.equals(getLoggedInUser().getId())) {
+            throw new Forbidden403Exception("You Not Allowed");
+        }
+        if (wishlistProductRepository.existsByIdAndDeletedFalse(wishlistId)) {
+            WishlistProduct wishlistProduct = wishlistProductRepository.findById(wishlistId).get();
+            wishlistProduct.setDeleted(true);
+            wishlistProductRepository.save(wishlistProduct);
+            return wishlistProduct.getProduct().getValue() + " Deleted Successfully";
+        } else {
+            throw new NotFound404Exception("Product Not Found In WishList");
+        }
+    }
+
+    public String deleteAllProductByUserId(UUID userId) {
+        if (!userId.equals(getLoggedInUser().getId())) {
+            throw new Forbidden403Exception("You Not Allowed");
+        }
+        if (wishlistProductRepository.existsAllByDeletedFalseAndUser_Id(userId)) {
+            List<WishlistProduct> wishlistProducts = new ArrayList<>();
+            wishlistProductRepository.findAllByDeletedFalseAndUser_Id(userId).forEach(wishlistProduct -> {
+                wishlistProduct.setDeleted(true);
+                wishlistProducts.add(wishlistProduct);
+            });
+            wishlistProductRepository.saveAll(wishlistProducts);
+            return "All Deleted Successfully";
+        } else {
+            throw new NotFound404Exception("Product Not Found In WishList");
+        }
+    }
+
+    public WishlistProduct getProductById(UUID userId, UUID wishlistId) {
+        if (!userId.equals(getLoggedInUser().getId())) {
+            throw new Forbidden403Exception("You Not Allowed");
+        }
+        if (wishlistProductRepository.existsByIdAndDeletedFalse(wishlistId)) {
+            WishlistProduct wishlistProduct = wishlistProductRepository.findById(wishlistId).get();
+            switch (wishlistProduct.getProduct().getValue()) {
+                case "AC":
+                    wishlistProduct.setProducts(acRepository.findByAcIdAndActiveTrue(wishlistProduct.getProductId()));
+                    break;
+                case "Laptop":
+                    wishlistProduct.setProducts(laptopRepository.findByLaptopIdAndActiveTrue(wishlistProduct.getProductId()));
+                    break;
+                case "MobilePhone":
+                    wishlistProduct.setProducts(mobilePhoneRepository.findByMobilePhoneIdAndActiveTrue(wishlistProduct.getProductId()));
+                    break;
+                case "Refrigerator":
+                    wishlistProduct.setProducts(refrigeratorRepository.findByRefrigeratorIdAndActiveTrue(wishlistProduct.getProductId()));
+                    break;
+                case "Television":
+                    wishlistProduct.setProducts(televisionRepository.findByTelevisionIdAndActiveTrue(wishlistProduct.getProductId()));
+                    break;
+                case "WashingMachine":
+                    wishlistProduct.setProducts(washingMachineRepository.findByWashingMachineIdAndActiveTrue(wishlistProduct.getProductId()));
+                    break;
+            }
+            return wishlistProduct;
+        } else {
+            throw new NotFound404Exception("Product Not Found");
+        }
     }
 }
