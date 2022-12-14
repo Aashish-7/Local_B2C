@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -18,13 +19,18 @@ public class WishlistProductController {
         this.wishlistProductService = wishlistProductService;
     }
 
-    @PostMapping("{uuid}/addByObject")
-    public Object addByObject(@RequestBody Object wishlist, @PathVariable UUID uuid){
-       return wishlistProductService.addByObject(wishlist, uuid);
+    @PostMapping("{userId}/addByObject")
+    public Object addByObject(@RequestBody Object wishlist, @PathVariable UUID userId){
+       return wishlistProductService.addByObject(wishlist, userId);
     }
 
-    @PostMapping("{uuid}/addByUrl")
-    public Object addByUrl(@PathVariable UUID uuid,@RequestParam String productUrl) throws JsonProcessingException {
-        return wishlistProductService.addByUrl(uuid, productUrl);
+    @PostMapping("{userId}/addByUrl")
+    public Object addByUrl(@PathVariable UUID userId,@RequestParam String productUrl) throws JsonProcessingException {
+        return wishlistProductService.addByUrl(userId, productUrl);
+    }
+
+    @GetMapping("{userId}/getAllProductByUserId")
+    public Map<String, Object> getAllProductByUserId(@PathVariable UUID userId){
+        return wishlistProductService.getAllProductByUserId(userId);
     }
 }

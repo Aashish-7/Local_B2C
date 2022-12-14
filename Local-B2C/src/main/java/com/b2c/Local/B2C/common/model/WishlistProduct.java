@@ -37,4 +37,5 @@ public class WishlistProduct {
 
     @Transient
     private Object products;
+
 }

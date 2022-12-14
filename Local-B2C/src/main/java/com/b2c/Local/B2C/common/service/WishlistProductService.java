@@ -17,8 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class WishlistProductService {
@@ -247,5 +246,55 @@ public class WishlistProductService {
             default:
                 return "Not Added in Wishlist " + url;
         }
+    }
+
+    public Map<String, Object> getAllProductByUserId(UUID uuid) {
+        if (!uuid.equals(getLoggedInUser().getId())) {
+            throw new Forbidden403Exception("You Not Allowed");
+        }
+        Map<String, Object> objectMap = new HashMap<>();
+        if (wishlistProductRepository.existsAllByDeletedFalseAndUser_Id(uuid)) {
+            List<WishlistProduct> wishlistProductsList = new ArrayList<>();
+            List<Double> priceCount = new ArrayList<>();
+            wishlistProductRepository.findAllByDeletedFalseAndUser_Id(uuid).forEach(wishlistProduct -> {
+                switch (wishlistProduct.getProduct().getValue()) {
+                    case "AC":
+                        wishlistProduct.setProducts(acRepository.findByAcIdAndActiveTrue(wishlistProduct.getProductId()));
+                        priceCount.add(acRepository.findByAcIdAndActiveTrue(wishlistProduct.getProductId()).getPrice());
+                        wishlistProductsList.add(wishlistProduct);
+                        break;
+                    case "Laptop":
+                        wishlistProduct.setProducts(laptopRepository.findByLaptopIdAndActiveTrue(wishlistProduct.getProductId()));
+                        priceCount.add(laptopRepository.findByLaptopIdAndActiveTrue(wishlistProduct.getProductId()).getPrice());
+                        wishlistProductsList.add(wishlistProduct);
+                        break;
+                    case "MobilePhone":
+                        wishlistProduct.setProducts(mobilePhoneRepository.findByMobilePhoneIdAndActiveTrue(wishlistProduct.getProductId()));
+                        priceCount.add(mobilePhoneRepository.findByMobilePhoneIdAndActiveTrue(wishlistProduct.getProductId()).getPrice());
+                        wishlistProductsList.add(wishlistProduct);
+                        break;
+                    case "Refrigerator":
+                        wishlistProduct.setProducts(refrigeratorRepository.findByRefrigeratorIdAndActiveTrue(wishlistProduct.getProductId()));
+                        priceCount.add(refrigeratorRepository.findByRefrigeratorIdAndActiveTrue(wishlistProduct.getProductId()).getPrice());
+                        wishlistProductsList.add(wishlistProduct);
+                        break;
+                    case "Television":
+                        wishlistProduct.setProducts(televisionRepository.findByTelevisionIdAndActiveTrue(wishlistProduct.getProductId()));
+                        priceCount.add(televisionRepository.findByTelevisionIdAndActiveTrue(wishlistProduct.getProductId()).getPrice());
+                        wishlistProductsList.add(wishlistProduct);
+                        break;
+                    case "WashingMachine":
+                        wishlistProduct.setProducts(washingMachineRepository.findByWashingMachineIdAndActiveTrue(wishlistProduct.getProductId()));
+                        priceCount.add(washingMachineRepository.findByWashingMachineIdAndActiveTrue(wishlistProduct.getProductId()).getPrice());
+                        wishlistProductsList.add(wishlistProduct);
+                        break;
+                }
+            });
+            objectMap.put("WishlistProduct", wishlistProductsList);
+            objectMap.put("TotalPrice",priceCount.stream().mapToDouble(Double::doubleValue).sum());
+        } else {
+            throw new NotFound404Exception("Product Not Found In Wishlist");
+        }
+        return objectMap;
     }
 }
