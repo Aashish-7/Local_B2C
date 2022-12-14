@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.UUID;
 
 @ControllerAdvice
@@ -97,7 +98,9 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
         //log.info("Accept Request Message : "+requestBody+" From CurrentUserPrincipal :["+((getLoggedInUserId() != null)?getLoggedInUserId().getEmail():"Anonymous")+"]");
         if (!requestBody.isEmpty()) {
             String id = UUID.randomUUID().toString();
-            httpSession.setAttribute("REQUEST_RESPONSE_BODY",id);
+            if (Objects.isNull(httpSession.getAttribute("REQUEST_RESPONSE_BODY"))) {
+                httpSession.setAttribute("REQUEST_RESPONSE_BODY", id);
+            }
             requestResponseBodyRepository.save(new RequestResponseBody(id,requestBody, filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(), null));
         }
     }
