@@ -59,13 +59,13 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        if (TimeTaskSchedule.isBlocked(httpServletRequest.getRemoteAddr())){
+        if (TimeTaskSchedule.isBlocked(httpServletRequest.getRemoteAddr())) {
             saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
             log.warn("Too Many Request From RemoteIp Address :" + httpServletRequest.getRemoteAddr());
             HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-            httpServletResponse.setHeader(HttpHeaders.RETRY_AFTER,"30s");
+            httpServletResponse.setHeader(HttpHeaders.RETRY_AFTER, "30s");
             httpServletResponse.sendError(429);
-        }else {
+        } else {
             if (getCount(httpServletRequest) < 5) {
                 if (validateSessionAndUrl(httpServletRequest.getSession(), httpServletRequest)) {
                     log.warn("Session Hijack Different RemoteIp Address Found :" + httpServletRequest.getRemoteAddr());
@@ -82,7 +82,7 @@ public class FilterRequestsService extends GenericFilter {
                 TimeTaskSchedule.blockIp(httpServletRequest.getRemoteAddr(), 30000);
                 log.warn("Too Many Request From RemoteIp Address :" + httpServletRequest.getRemoteAddr());
                 HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-                httpServletResponse.setHeader(HttpHeaders.RETRY_AFTER,"30s");
+                httpServletResponse.setHeader(HttpHeaders.RETRY_AFTER, "30s");
                 httpServletResponse.sendError(429);
             }
         }
@@ -113,13 +113,14 @@ public class FilterRequestsService extends GenericFilter {
             filterRequest.setUserName("Anonymous");
             log.info("Incoming Request From: " + httpServletRequest.getRemoteAddr() + "  Request URL : [" + httpServletRequest.getMethod() + " " + httpServletRequest.getRequestURL().toString() + "] UserPrincipal : [Anonymous]");
         }
-        if (httpServletRequest.getParameterNames().hasMoreElements()){
+        if (httpServletRequest.getParameterNames().hasMoreElements()) {
             Map<String, String> map = new HashMap<>();
-            httpServletRequest.getParameterNames().asIterator().forEachRemaining(s -> map.put(s,httpServletRequest.getParameter(s)));
+            httpServletRequest.getParameterNames().asIterator().forEachRemaining(s -> map.put(s, httpServletRequest.getParameter(s)));
             filterRequest.setParameter(map);
-        }else {
+        } else {
             filterRequest.setParameter(null);
         }
+        filterRequest.setUri(httpServletRequest.getRequestURI());
         filterRequest.setHttpMethod(httpServletRequest.getMethod());
         filterRequest.setSessionHijack(sessionHijack);
         filterRequest.setSessionId(httpServletRequest.getSession().getId());

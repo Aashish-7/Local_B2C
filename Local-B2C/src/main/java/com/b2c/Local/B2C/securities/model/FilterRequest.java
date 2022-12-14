@@ -36,6 +36,8 @@ public class FilterRequest {
 
     private String url;
 
+    private String uri;
+
     private String sessionId;
 
     private String userAgent;
