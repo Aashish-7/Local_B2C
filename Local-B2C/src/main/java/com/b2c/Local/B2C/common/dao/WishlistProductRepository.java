@@ -18,4 +18,6 @@ public interface WishlistProductRepository extends JpaRepository<WishlistProduct
     List<WishlistProduct> findAllByDeletedFalseAndUser_Id(UUID uuid);
 
     boolean existsByIdAndDeletedFalse(UUID wishlistId);
+
+    long countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum product, List<Long> productId );
 }

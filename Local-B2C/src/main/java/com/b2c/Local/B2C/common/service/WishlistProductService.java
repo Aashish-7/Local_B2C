@@ -10,6 +10,8 @@ import com.b2c.Local.B2C.exception.Forbidden403Exception;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.products.electronic.dao.*;
 import com.b2c.Local.B2C.products.electronic.model.*;
+import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
+import com.b2c.Local.B2C.store.service.LocalStoreService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
@@ -39,8 +42,12 @@ public class WishlistProductService {
 
     WashingMachineRepository washingMachineRepository;
 
+    LocalStoreRepository localStoreRepository;
+
+    LocalStoreService localStoreService;
+
     @Autowired
-    public WishlistProductService(WishlistProductRepository wishlistProductRepository, ObjectMapper objectMapper, ACRepository acRepository, LaptopRepository laptopRepository, MobilePhoneRepository mobilePhoneRepository, RefrigeratorRepository refrigeratorRepository, TelevisionRepository televisionRepository, WashingMachineRepository washingMachineRepository) {
+    public WishlistProductService(WishlistProductRepository wishlistProductRepository, ObjectMapper objectMapper, ACRepository acRepository, LaptopRepository laptopRepository, MobilePhoneRepository mobilePhoneRepository, RefrigeratorRepository refrigeratorRepository, TelevisionRepository televisionRepository, WashingMachineRepository washingMachineRepository,LocalStoreRepository localStoreRepository,LocalStoreService localStoreService) {
         this.wishlistProductRepository = wishlistProductRepository;
         this.objectMapper = objectMapper;
         this.acRepository = acRepository;
@@ -49,6 +56,8 @@ public class WishlistProductService {
         this.refrigeratorRepository = refrigeratorRepository;
         this.televisionRepository = televisionRepository;
         this.washingMachineRepository = washingMachineRepository;
+        this.localStoreRepository = localStoreRepository;
+        this.localStoreService = localStoreService;
     }
 
     private User getLoggedInUser() {
@@ -359,6 +368,28 @@ public class WishlistProductService {
             return wishlistProduct;
         } else {
             throw new NotFound404Exception("Product Not Found");
+        }
+    }
+
+    public Map<String, Object> getProductCount(UUID userId){
+        if (!userId.equals(getLoggedInUser().getId())) {
+            throw new Forbidden403Exception("You Not Allowed");
+        }
+        Map<String, Object> objectMap = new HashMap<>();
+        if (!localStoreRepository.findByUserIdAndActiveTrue(userId).isEmpty()){
+            Map<String,Long> longMap = new HashMap<>();
+            localStoreRepository.findByUserIdAndActiveTrue(userId).forEach(localStore -> {
+                longMap.put(ProductEnum.AC.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.AC,localStoreService.getAllAcByLocalStoreId(localStore.getId()).stream().map(AC::getAcId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.LAPTOP.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.LAPTOP,localStoreService.getAllLaptopByLocalStoreId(localStore.getId()).stream().map(Laptop::getLaptopId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.MOBILEPHONE.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.MOBILEPHONE,localStoreService.getAllMobilePhoneByLocalStoreId(localStore.getId()).stream().map(MobilePhone::getMobilePhoneId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.REFRIGERATOR.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.REFRIGERATOR,localStoreService.getAllRefrigeratorByLocalStoreId(localStore.getId()).stream().map(Refrigerator::getRefrigeratorId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.WASHINGMACHINE.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.WASHINGMACHINE,localStoreService.getAllWashingMachineByLocalStoreId(localStore.getId()).stream().map(WashingMachine::getWashingMachineId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.TELEVISION.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.TELEVISION,localStoreService.getAllTelevisionByLocalStoreId(localStore.getId()).stream().map(Television::getTelevisionId).collect(Collectors.toList())));
+                objectMap.put(localStore.getStoreName(),longMap);
+            });
+            return objectMap;
+        }else {
+            throw new NotFound404Exception("LocalStore Not Found");
         }
     }
 }

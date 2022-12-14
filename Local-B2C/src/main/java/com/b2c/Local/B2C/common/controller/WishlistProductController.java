@@ -49,4 +49,9 @@ public class WishlistProductController {
     public String deleteAllProductByUserId(@PathVariable UUID userId){
         return wishlistProductService.deleteAllProductByUserId(userId);
     }
+
+    @GetMapping("{userId}/getProductCount")
+    public Map<String, Object> getProductCount(@PathVariable UUID userId){
+        return wishlistProductService.getProductCount(userId);
+    }
 }
