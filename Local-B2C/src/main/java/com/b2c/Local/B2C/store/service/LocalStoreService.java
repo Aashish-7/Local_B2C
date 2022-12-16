@@ -10,11 +10,17 @@ import com.b2c.Local.B2C.products.electronic.service.ACService;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import com.b2c.Local.B2C.store.dto.LocalStoreDto;
 import com.b2c.Local.B2C.store.model.LocalStore;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.*;
 
 @Service
@@ -38,12 +44,14 @@ public class LocalStoreService {
 
     ACService acService;
 
+    EntityManager entityManager;
+
     @Autowired
     public LocalStoreService(LocalStoreRepository localStoreRepository, UserRepository userRepository,
                              ACRepository acRepository, LaptopRepository laptopRepository,
                              MobilePhoneRepository mobilePhoneRepository, RefrigeratorRepository refrigeratorRepository,
                              TelevisionRepository televisionRepository, WashingMachineRepository washingMachineRepository,
-                             ACService acService) {
+                             ACService acService,EntityManager entityManager) {
         this.localStoreRepository = localStoreRepository;
         this.userRepository = userRepository;
         this.acRepository = acRepository;
@@ -53,6 +61,7 @@ public class LocalStoreService {
         this.televisionRepository = televisionRepository;
         this.washingMachineRepository = washingMachineRepository;
         this.acService = acService;
+        this.entityManager = entityManager;
     }
 
     public LocalStore addStore(LocalStoreDto localStoreDto) {
@@ -212,4 +221,21 @@ public class LocalStoreService {
     public List<WashingMachine> getAllWashingMachineByLocalStoreId(UUID uuid){
         return washingMachineRepository.findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(uuid);
     }
+
+    public List<LocalStore> localStoreSearchKeyword(String keyword){
+        Session session = entityManager.unwrap(Session.class);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<LocalStore> criteriaQuery = criteriaBuilder.createQuery(LocalStore.class);
+        Root<LocalStore> localStoreRoot = criteriaQuery.from(LocalStore.class);
+        Predicate predicateForData = criteriaBuilder.or(
+                criteriaBuilder.like(localStoreRoot.get("storeName"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("storeAddress"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("pinCode").as(String.class), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("city"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("ownerName").as(String.class), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("description"), "%" + keyword + "%"));
+        criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
+       return session.createQuery(criteriaQuery).getResultList();
+    }
+
 }

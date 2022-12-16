@@ -214,4 +214,31 @@ public class LaptopService {
         electronicFilterDto.setAvailability(laptopRepository.findAllDistinctAvailability());
         return electronicFilterDto;
     }
+
+    public List<Laptop> laptopSearchKeyword(String keyword){
+        Session session = entityManager.unwrap(Session.class);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Laptop> criteriaQuery = criteriaBuilder.createQuery(Laptop.class);
+        Root<Laptop> localStoreRoot = criteriaQuery.from(Laptop.class);
+        Predicate predicateForData = criteriaBuilder.or(
+                criteriaBuilder.like(localStoreRoot.get("model"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("brand"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("colour"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("availability"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("warranty"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("screenResolution"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("cpuBrand"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("cpuModel"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("cpuGeneration"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("cpuClockSpeed"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("hardDiskSize"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("ramSize"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("ramType"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("os"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("batteryBackupHour"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("graphicCard"), "%" + keyword + "%")
+        );
+        criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
+        return session.createQuery(criteriaQuery).getResultList();
+    }
 }

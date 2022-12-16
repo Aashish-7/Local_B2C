@@ -297,4 +297,22 @@ public class ACService {
         electronicFilterDto.setAvailability(acRepository.findAllDistinctAvailability());
         return electronicFilterDto;
     }
+
+    public List<AC> acSearchKeyword(String keyword) {
+        Session session = entityManager.unwrap(Session.class);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<AC> criteriaQuery = criteriaBuilder.createQuery(AC.class);
+        Root<AC> localStoreRoot = criteriaQuery.from(AC.class);
+        Predicate predicateForData = criteriaBuilder.or(
+                criteriaBuilder.like(localStoreRoot.get("model"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("brand"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("colour"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("availability"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("warranty"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("airConditionerType"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("mode"), "%" + keyword + "%")
+        );
+        criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
+        return session.createQuery(criteriaQuery).getResultList();
+    }
 }

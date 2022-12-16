@@ -222,4 +222,38 @@ public class MobilePhoneService {
         electronicFilterDto.setAvailability(mobilePhoneRepository.findAllDistinctAvailability());
         return electronicFilterDto;
     }
+
+    public List<MobilePhone> mobilePhoneSearchKeyword(String keyword){
+        Session session = entityManager.unwrap(Session.class);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<MobilePhone> criteriaQuery = criteriaBuilder.createQuery(MobilePhone.class);
+        Root<MobilePhone> localStoreRoot = criteriaQuery.from(MobilePhone.class);
+        Predicate predicateForData = criteriaBuilder.or(
+                criteriaBuilder.like(localStoreRoot.get("model"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("brand"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("colour"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("availability"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("warranty"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("networkConnectivity"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("simType"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("displayType"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("displayResolution"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("displaySize"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("brandUi"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("chipset"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("cpuCore"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("os"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("gpu"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("cpuClockSpeed"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("internalMemorySize"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("mainCameraSpecs"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("frontCameraSpecs"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("batterySize"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("chargingType"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("chargerOutput"), "%" + keyword + "%"),
+                criteriaBuilder.like(localStoreRoot.get("usbType"), "%" + keyword + "%")
+        );
+        criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
+        return session.createQuery(criteriaQuery).getResultList();
+    }
 }
