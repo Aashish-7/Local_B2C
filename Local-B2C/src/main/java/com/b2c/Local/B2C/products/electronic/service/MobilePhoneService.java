@@ -124,6 +124,7 @@ public class MobilePhoneService {
             mobilePhone.setWlan(mobilePhoneDto.isWlan());
             mobilePhone.setAvailability(mobilePhoneDto.getAvailability());
             mobilePhone.setDiscountPercentage(mobilePhoneDto.getDiscountPercentage());
+            mobilePhone.setWarranty(mobilePhoneDto.getWarranty());
             mobilePhone.setLocalStore(localStoreRepository.findById(mobilePhoneDto.getLocalStoreId()).get());
             mobilePhone.setActive(true);
             mobilePhoneRepository.save(mobilePhone);
@@ -223,37 +224,42 @@ public class MobilePhoneService {
         return electronicFilterDto;
     }
 
-    public List<MobilePhone> mobilePhoneSearchKeyword(String keyword){
-        Session session = entityManager.unwrap(Session.class);
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<MobilePhone> criteriaQuery = criteriaBuilder.createQuery(MobilePhone.class);
-        Root<MobilePhone> localStoreRoot = criteriaQuery.from(MobilePhone.class);
-        Predicate predicateForData = criteriaBuilder.or(
-                criteriaBuilder.like(localStoreRoot.get("model"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("brand"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("colour"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("availability"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("warranty"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("networkConnectivity"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("simType"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("displayType"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("displayResolution"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("displaySize"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("brandUi"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("chipset"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("cpuCore"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("os"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("gpu"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("cpuClockSpeed"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("internalMemorySize"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("mainCameraSpecs"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("frontCameraSpecs"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("batterySize"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("chargingType"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("chargerOutput"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("usbType"), "%" + keyword + "%")
-        );
-        criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
-        return session.createQuery(criteriaQuery).getResultList();
+    public List<MobilePhone> mobilePhoneSearchKeyword(String keyword, int page, int size) {
+        if (size > 0) {
+            Session session = entityManager.unwrap(Session.class);
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<MobilePhone> criteriaQuery = criteriaBuilder.createQuery(MobilePhone.class);
+            Root<MobilePhone> localStoreRoot = criteriaQuery.from(MobilePhone.class);
+            Predicate predicateForData = criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("model")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("brand")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("colour")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("availability")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("warranty")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("networkConnectivity")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("simType")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("displayType")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("displayResolution")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("displaySize")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("brandUi")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("chipset")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("cpuCore")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("os")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("gpu")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("cpuClockSpeed")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("internalMemorySize")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("mainCameraSpecs")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("frontCameraSpecs")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("batterySize")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("chargingType")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("chargerOutput")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("usbType")), "%" + keyword.toUpperCase() + "%")
+            );
+            criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
+            List<MobilePhone> resource = session.createQuery(criteriaQuery).setFirstResult(page * size).setMaxResults(size).getResultList();
+            return resource;
+        } else {
+            throw new BadRequest400Exception("size can't be zero");
+        }
     }
 }

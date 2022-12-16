@@ -50,5 +50,6 @@ public class MobilePhoneDto implements Serializable {
     private boolean wlan;
     private String availability;
     private double discountPercentage;
+    private String warranty;
     private UUID localStoreId;
 }

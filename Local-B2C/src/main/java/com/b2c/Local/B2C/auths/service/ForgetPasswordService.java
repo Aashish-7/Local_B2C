@@ -102,7 +102,7 @@ public class ForgetPasswordService {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if (forgetPasswordRepository.findById(uuid).isPresent()) {
+                if (forgetPasswordRepository.findById(uuid).isPresent() && forgetPasswordRepository.findById(uuid).get().getActive()) {
                     ForgetPassword forgetPassword = forgetPasswordRepository.findById(uuid).get();
                     forgetPassword.setActive(false);
                     forgetPasswordRepository.save(forgetPassword);

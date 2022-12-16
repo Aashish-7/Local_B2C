@@ -2,6 +2,7 @@ package com.b2c.Local.B2C.store.service;
 
 import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.auths.model.User;
+import com.b2c.Local.B2C.exception.BadRequest400Exception;
 import com.b2c.Local.B2C.exception.Forbidden403Exception;
 import com.b2c.Local.B2C.exception.NotFound404Exception;
 import com.b2c.Local.B2C.products.electronic.dao.*;
@@ -222,20 +223,24 @@ public class LocalStoreService {
         return washingMachineRepository.findByActiveTrueAndLocalStore_IdAndLocalStore_ActiveTrue(uuid);
     }
 
-    public List<LocalStore> localStoreSearchKeyword(String keyword){
-        Session session = entityManager.unwrap(Session.class);
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<LocalStore> criteriaQuery = criteriaBuilder.createQuery(LocalStore.class);
-        Root<LocalStore> localStoreRoot = criteriaQuery.from(LocalStore.class);
-        Predicate predicateForData = criteriaBuilder.or(
-                criteriaBuilder.like(localStoreRoot.get("storeName"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("storeAddress"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("pinCode").as(String.class), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("city"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("ownerName").as(String.class), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("description"), "%" + keyword + "%"));
-        criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
-       return session.createQuery(criteriaQuery).getResultList();
+    public List<LocalStore> localStoreSearchKeyword(String keyword, int page, int size) {
+        if (size > 0) {
+            Session session = entityManager.unwrap(Session.class);
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<LocalStore> criteriaQuery = criteriaBuilder.createQuery(LocalStore.class);
+            Root<LocalStore> localStoreRoot = criteriaQuery.from(LocalStore.class);
+            Predicate predicateForData = criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("storeName")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("storeAddress")), "%" + keyword.toUpperCase() + "%"),
+//                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("pinCode")).as(String.class), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("city")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("ownerName")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("description")), "%" + keyword.toUpperCase() + "%"));
+            criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
+            List<LocalStore> resource = session.createQuery(criteriaQuery).setFirstResult(page * size).setMaxResults(size).getResultList();
+            return resource;
+        } else {
+            throw new BadRequest400Exception("size can't be zero");
+        }
     }
-
 }

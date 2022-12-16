@@ -93,6 +93,8 @@ public class MobilePhone implements Serializable {
 
     private Boolean active;
 
+    private String warranty;
+
     @ManyToOne @JsonIgnore
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")
     private LocalStore localStore;

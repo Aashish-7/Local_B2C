@@ -186,4 +186,26 @@ public class WashingMachineService {
         electronicFilterDto.setAvailability(washingMachineRepository.findAllDistinctAvailability());
         return electronicFilterDto;
     }
+
+    public List<WashingMachine> washingMachineSearchKeyword(String keyword, int page, int size) {
+        if (size > 0) {
+            Session session = entityManager.unwrap(Session.class);
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<WashingMachine> criteriaQuery = criteriaBuilder.createQuery(WashingMachine.class);
+            Root<WashingMachine> localStoreRoot = criteriaQuery.from(WashingMachine.class);
+            Predicate predicateForData = criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("model")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("brand")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("colour")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("availability")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("warranty")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("functionType")), "%" + keyword.toUpperCase() + "%")
+            );
+            criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
+            List<WashingMachine> resource = session.createQuery(criteriaQuery).setFirstResult(page * size).setMaxResults(size).getResultList();
+            return resource;
+        } else {
+            throw new BadRequest400Exception("size can't be zero");
+        }
+    }
 }

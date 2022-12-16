@@ -215,30 +215,35 @@ public class LaptopService {
         return electronicFilterDto;
     }
 
-    public List<Laptop> laptopSearchKeyword(String keyword){
-        Session session = entityManager.unwrap(Session.class);
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Laptop> criteriaQuery = criteriaBuilder.createQuery(Laptop.class);
-        Root<Laptop> localStoreRoot = criteriaQuery.from(Laptop.class);
-        Predicate predicateForData = criteriaBuilder.or(
-                criteriaBuilder.like(localStoreRoot.get("model"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("brand"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("colour"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("availability"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("warranty"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("screenResolution"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("cpuBrand"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("cpuModel"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("cpuGeneration"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("cpuClockSpeed"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("hardDiskSize"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("ramSize"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("ramType"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("os"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("batteryBackupHour"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("graphicCard"), "%" + keyword + "%")
-        );
-        criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
-        return session.createQuery(criteriaQuery).getResultList();
+    public List<Laptop> laptopSearchKeyword(String keyword, int page, int size){
+        if (size > 0) {
+            Session session = entityManager.unwrap(Session.class);
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Laptop> criteriaQuery = criteriaBuilder.createQuery(Laptop.class);
+            Root<Laptop> localStoreRoot = criteriaQuery.from(Laptop.class);
+            Predicate predicateForData = criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("brand")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("model")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("colour")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("availability")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("warranty")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("screenResolution")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("cpuBrand")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("cpuModel")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("cpuGeneration")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("cpuClockSpeed")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("hardDiskSize")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("ramSize")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("ramType")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("os")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("batteryBackupHour")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("graphicCard")), "%" + keyword.toUpperCase() + "%")
+            );
+            criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
+            List<Laptop> resource = session.createQuery(criteriaQuery).setFirstResult(page * size).setMaxResults(size).getResultList();
+            return resource;        }
+        else {
+            throw new BadRequest400Exception("size can't be zero");
+        }
     }
 }

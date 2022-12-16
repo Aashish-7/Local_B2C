@@ -194,4 +194,29 @@ public class TelevisionService {
         electronicFilterDto.setAvailability(televisionRepository.findAllDistinctAvailability());
         return electronicFilterDto;
     }
+
+    public List<Television> televisionSearchKeyword(String keyword, int page, int size) {
+        if (size > 0) {
+            Session session = entityManager.unwrap(Session.class);
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Television> criteriaQuery = criteriaBuilder.createQuery(Television.class);
+            Root<Television> localStoreRoot = criteriaQuery.from(Television.class);
+            Predicate predicateForData = criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("model")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("brand")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("colour")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("availability")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("warranty")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("displayType")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("screenResolution")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("features")), "%" + keyword.toUpperCase() + "%"),
+                    criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("displayRefreshRate")), "%" + keyword.toUpperCase() + "%")
+            );
+            criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
+            List<Television> resource = session.createQuery(criteriaQuery).setFirstResult(page * size).setMaxResults(size).getResultList();
+            return resource;
+        } else {
+            throw new BadRequest400Exception("size can't be zero");
+        }
+    }
 }

@@ -298,21 +298,26 @@ public class ACService {
         return electronicFilterDto;
     }
 
-    public List<AC> acSearchKeyword(String keyword) {
+    public List<AC> acSearchKeyword(String keyword, int page, int size) {
+        if (size > 0){
         Session session = entityManager.unwrap(Session.class);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<AC> criteriaQuery = criteriaBuilder.createQuery(AC.class);
         Root<AC> localStoreRoot = criteriaQuery.from(AC.class);
         Predicate predicateForData = criteriaBuilder.or(
-                criteriaBuilder.like(localStoreRoot.get("model"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("brand"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("colour"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("availability"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("warranty"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("airConditionerType"), "%" + keyword + "%"),
-                criteriaBuilder.like(localStoreRoot.get("mode"), "%" + keyword + "%")
+                criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("model")), "%" + keyword.toUpperCase() + "%"),
+                criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("brand")), "%" + keyword.toUpperCase() + "%"),
+                criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("colour")), "%" + keyword.toUpperCase() + "%"),
+                criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("availability")), "%" + keyword.toUpperCase() + "%"),
+                criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("warranty")), "%" + keyword.toUpperCase() + "%"),
+                criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("airConditionerType")), "%" + keyword.toUpperCase() + "%"),
+                criteriaBuilder.like(criteriaBuilder.upper(localStoreRoot.get("mode")), "%" + keyword.toUpperCase() + "%")
         );
         criteriaQuery.select(localStoreRoot).where(predicateForData).distinct(true);
-        return session.createQuery(criteriaQuery).getResultList();
+        List<AC> resource = session.createQuery(criteriaQuery).setFirstResult(page * size).setMaxResults(size).getResultList();
+        return resource;
+    } else {
+            throw new BadRequest400Exception("size can't be zero");
+        }
     }
 }
