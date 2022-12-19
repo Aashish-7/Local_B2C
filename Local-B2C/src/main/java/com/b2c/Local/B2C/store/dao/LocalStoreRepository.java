@@ -29,6 +29,5 @@ public interface LocalStoreRepository extends JpaRepository<LocalStore, UUID> {
     Iterable<? extends LocalStore> findByUserId(UUID loggedInUserId);
 
     boolean existsByIdAndUser_Id(UUID id, UUID id1);
-    
-    
+
 }
