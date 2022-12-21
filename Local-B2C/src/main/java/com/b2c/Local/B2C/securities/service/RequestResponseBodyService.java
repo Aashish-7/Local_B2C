@@ -6,6 +6,7 @@ import com.b2c.Local.B2C.securities.dao.RequestResponseBodyRepository;
 import com.b2c.Local.B2C.securities.model.RequestResponseBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +62,10 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
 
     @Override
     protected void writeInternal(Object o, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         saveResponseBody(o);
-        outputMessage.getBody().write(encrypt(objectMapper.writeValueAsBytes(o)));
+        outputMessage.getBody().write(objectMapper.writeValueAsBytes(o));
+       // outputMessage.getBody().write(encrypt(objectMapper.writeValueAsBytes(o)));
     }
 
     private InputStream decrypt(InputStream inputStream){
@@ -88,7 +91,7 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
         if (requestResponseBodyRepository.existsById(String.valueOf(httpSession.getAttribute("REQUEST_RESPONSE_BODY")))){
             requestResponseBodyRepository.updateById(String.valueOf(httpSession.getAttribute("REQUEST_RESPONSE_BODY")),objectMapper.writeValueAsString(o));
         }else {
-            requestResponseBodyRepository.save(new RequestResponseBody(UUID.randomUUID().toString(),null,filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(),o));
+//            requestResponseBodyRepository.save(new RequestResponseBody(UUID.randomUUID().toString(),null,filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(),o));
         }
         httpSession.removeAttribute("REQUEST_RESPONSE_BODY");
         httpSession.removeAttribute("FILTER_REQUEST_ID");
