@@ -392,4 +392,23 @@ public class WishlistProductService {
             throw new NotFound404Exception("LocalStore Not Found");
         }
     }
+
+    private User getLocalStoreByProduct(ProductEnum products, long productId){
+        switch (products.getValue()) {
+            case "AC":
+                return acRepository.findByAcId(productId).getLocalStore().getUser();
+            case "Laptop":
+                return laptopRepository.findById(productId).get().getLocalStore().getUser();
+            case "MobilePhone":
+                return mobilePhoneRepository.findById(productId).get().getLocalStore().getUser();
+            case "Refrigerator":
+                return refrigeratorRepository.findById(productId).get().getLocalStore().getUser();
+            case "Television":
+                return televisionRepository.findById(productId).get().getLocalStore().getUser();
+            case "WashingMachine":
+                return washingMachineRepository.findById(productId).get().getLocalStore().getUser();
+            default:
+                return null;
+        }
+    }
 }
