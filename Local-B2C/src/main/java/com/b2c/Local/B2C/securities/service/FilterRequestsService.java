@@ -25,7 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
-@WebFilter(filterName = "OneFilter")
+@WebFilter(filterName = "OneFilter",asyncSupported = true)
 @Log4j2
 public class FilterRequestsService extends GenericFilter {
 
