@@ -20,8 +20,14 @@ public class SSEmitterController {
         this.ssEmitterService = ssEmitterService;
     }
 
-    @GetMapping("/getNotification")
-    public CompletableFuture<SseEmitter> getNotification(){
-       return ssEmitterService.getNotification();
+    @GetMapping("/getUserNotification")
+    public CompletableFuture<SseEmitter> getUserNotification(){
+       return ssEmitterService.getUserNotification();
     }
+
+    @GetMapping("/getLocalStoreOwnerNotification")
+    public CompletableFuture<SseEmitter> getLocalStoreOwnerNotification(){
+        return ssEmitterService.getLocalStoreOwnerNotification();
+    }
+
 }
