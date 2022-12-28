@@ -21,7 +21,10 @@ public interface WishlistProductRepository extends JpaRepository<WishlistProduct
 
     boolean existsByIdAndDeletedFalse(UUID wishlistId);
 
-    long countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum product, List<Long> productId );
+    long countDistinctByDeletedFalseAndProductAndProductIdIn(ProductEnum product, List<Long> productId);
+
+    @Query(nativeQuery = true , value = "SELECT COUNT(DISTINCT (productid)) count FROM wishlist_product WHERE product = :product AND productid In(:productId) AND deleted is False")
+    Long getProductCountFromWishlistProduct(String product, List<Long> productId);
 
     @Query(nativeQuery = true, value = "SELECT productid, count(productid) count  From wishlist_product where product = :product group by productid having count(productid)>1 order by count DESC  LIMIT 1")
     WishlistProductProjection getProductIdCount(String product);

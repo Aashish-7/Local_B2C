@@ -373,20 +373,20 @@ public class WishlistProductService {
         }
     }
 
-    public Map<String, Object> getProductCount(UUID userId){
+    public Map<String, Object> getProductCountFromWishlistProduct(UUID userId){
         if (!userId.equals(getLoggedInUser().getId())) {
             throw new Forbidden403Exception("You Not Allowed");
         }
         Map<String, Object> objectMap = new HashMap<>();
         if (!localStoreRepository.findByUserIdAndActiveTrue(userId).isEmpty()){
-            Map<String,Long> longMap = new HashMap<>();
             localStoreRepository.findByUserIdAndActiveTrue(userId).forEach(localStore -> {
-                longMap.put(ProductEnum.AC.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.AC,localStoreService.getAllAcByLocalStoreId(localStore.getId()).stream().map(AC::getAcId).collect(Collectors.toList())));
-                longMap.put(ProductEnum.LAPTOP.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.LAPTOP,localStoreService.getAllLaptopByLocalStoreId(localStore.getId()).stream().map(Laptop::getLaptopId).collect(Collectors.toList())));
-                longMap.put(ProductEnum.MOBILEPHONE.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.MOBILEPHONE,localStoreService.getAllMobilePhoneByLocalStoreId(localStore.getId()).stream().map(MobilePhone::getMobilePhoneId).collect(Collectors.toList())));
-                longMap.put(ProductEnum.REFRIGERATOR.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.REFRIGERATOR,localStoreService.getAllRefrigeratorByLocalStoreId(localStore.getId()).stream().map(Refrigerator::getRefrigeratorId).collect(Collectors.toList())));
-                longMap.put(ProductEnum.WASHINGMACHINE.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.WASHINGMACHINE,localStoreService.getAllWashingMachineByLocalStoreId(localStore.getId()).stream().map(WashingMachine::getWashingMachineId).collect(Collectors.toList())));
-                longMap.put(ProductEnum.TELEVISION.getValue(),wishlistProductRepository.countAllByDeletedFalseAndProductAndProductIdIn(ProductEnum.TELEVISION,localStoreService.getAllTelevisionByLocalStoreId(localStore.getId()).stream().map(Television::getTelevisionId).collect(Collectors.toList())));
+                Map<String,Long> longMap = new HashMap<>();
+                longMap.put(ProductEnum.AC.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.AC.getValue(),localStoreService.getAllAcByLocalStoreId(localStore.getId()).stream().map(AC::getAcId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.LAPTOP.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.LAPTOP.getValue(),localStoreService.getAllLaptopByLocalStoreId(localStore.getId()).stream().map(Laptop::getLaptopId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.MOBILEPHONE.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.MOBILEPHONE.getValue(),localStoreService.getAllMobilePhoneByLocalStoreId(localStore.getId()).stream().map(MobilePhone::getMobilePhoneId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.REFRIGERATOR.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.REFRIGERATOR.getValue(),localStoreService.getAllRefrigeratorByLocalStoreId(localStore.getId()).stream().map(Refrigerator::getRefrigeratorId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.WASHINGMACHINE.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.WASHINGMACHINE.getValue(),localStoreService.getAllWashingMachineByLocalStoreId(localStore.getId()).stream().map(WashingMachine::getWashingMachineId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.TELEVISION.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.TELEVISION.getValue(),localStoreService.getAllTelevisionByLocalStoreId(localStore.getId()).stream().map(Television::getTelevisionId).collect(Collectors.toList())));
                 objectMap.put(localStore.getStoreName(),longMap);
             });
             return objectMap;

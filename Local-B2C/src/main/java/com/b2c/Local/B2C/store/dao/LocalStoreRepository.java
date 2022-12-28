@@ -14,7 +14,6 @@ import java.util.UUID;
 @CacheConfig(cacheNames = {"LocalStoreRepository"})
 public interface LocalStoreRepository extends JpaRepository<LocalStore, UUID> {
 
-    @Cacheable(value = "findByUserIdAndActiveTrue", key = "#userId")
     List<LocalStore> findByUserIdAndActiveTrue(UUID userId);
 
     @Cacheable(cacheNames = "findByPinCodeAndActiveTrue", key = "#pinCode")

@@ -52,9 +52,9 @@ public class WishlistProductController {
         return wishlistProductService.deleteAllProductByUserId(userId);
     }
 
-    @GetMapping("{userId}/getProductCount")
-    public Map<String, Object> getProductCount(@PathVariable UUID userId){
-        return wishlistProductService.getProductCount(userId);
+    @GetMapping("{userId}/getProductCountFromWishlistProduct")
+    public Map<String, Object> getProductCountFromWishlistProduct(@PathVariable UUID userId){
+        return wishlistProductService.getProductCountFromWishlistProduct(userId);
     }
 
     @GetMapping("/getProductIdCount")
