@@ -68,6 +68,7 @@ public class UserNotificationService {
             userNotification.setActive(true);
             userNotificationRepository.save(userNotification);
             ssEmitterService.sendUserNotification(userNotificationDto1);
+            ssEmitterService.sendLocalStoreOwnerNotification(userNotificationDto1);
         });
     }
 }
