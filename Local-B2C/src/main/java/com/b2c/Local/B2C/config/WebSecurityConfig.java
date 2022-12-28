@@ -1,4 +1,4 @@
-package com.b2c.Local.B2C.securities.config;
+package com.b2c.Local.B2C.config;
 
 import com.b2c.Local.B2C.auths.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

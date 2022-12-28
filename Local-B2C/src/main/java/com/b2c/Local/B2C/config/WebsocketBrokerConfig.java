@@ -1,4 +1,4 @@
-package com.b2c.Local.B2C.websocket;
+package com.b2c.Local.B2C.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
