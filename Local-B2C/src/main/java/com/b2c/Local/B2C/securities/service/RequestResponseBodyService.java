@@ -91,7 +91,7 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
         if (requestResponseBodyRepository.existsById(String.valueOf(httpSession.getAttribute("REQUEST_RESPONSE_BODY")))){
             requestResponseBodyRepository.updateById(String.valueOf(httpSession.getAttribute("REQUEST_RESPONSE_BODY")),objectMapper.writeValueAsString(o));
         }else {
-//            requestResponseBodyRepository.save(new RequestResponseBody(UUID.randomUUID().toString(),null,filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(),o));
+            requestResponseBodyRepository.save(new RequestResponseBody(UUID.randomUUID().toString(),null,filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(),o));
         }
         httpSession.removeAttribute("REQUEST_RESPONSE_BODY");
         httpSession.removeAttribute("FILTER_REQUEST_ID");

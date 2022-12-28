@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.PostLoad;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
@@ -38,6 +35,7 @@ public class FilterRequest {
 
     private String uri;
 
+    @JsonIgnore
     private String sessionId;
 
     private String userAgent;
@@ -61,8 +59,11 @@ public class FilterRequest {
     @Type(type = "com.vladmihalcea.hibernate.type.json.JsonStringType")
     private Object parameter;
 
+    @Transient
+    private String rawSessionId;
+
     @PostLoad
     private void postLoad(){
-        this.sessionId = Base64.getEncoder().encodeToString(sessionId.getBytes(StandardCharsets.UTF_8));
+        this.rawSessionId = Base64.getEncoder().encodeToString(sessionId.getBytes(StandardCharsets.UTF_8));
     }
 }
