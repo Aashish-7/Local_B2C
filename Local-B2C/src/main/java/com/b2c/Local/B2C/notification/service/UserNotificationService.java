@@ -19,8 +19,5 @@ public class UserNotificationService {
     }
 
     public void getWishlistProduct(){
-
     }
-
-
 }
