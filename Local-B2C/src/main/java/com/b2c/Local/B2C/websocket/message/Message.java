@@ -33,4 +33,6 @@ public class Message {
     private User receiver;
 
     private String httpSessionId;
+
+    private Boolean msgSend;
 }

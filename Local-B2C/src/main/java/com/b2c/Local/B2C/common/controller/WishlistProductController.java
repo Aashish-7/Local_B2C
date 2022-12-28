@@ -1,6 +1,8 @@
 package com.b2c.Local.B2C.common.controller;
 
+import com.b2c.Local.B2C.common.enums.ProductEnum;
 import com.b2c.Local.B2C.common.model.WishlistProduct;
+import com.b2c.Local.B2C.common.model.WishlistProductProjection;
 import com.b2c.Local.B2C.common.service.WishlistProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +55,10 @@ public class WishlistProductController {
     @GetMapping("{userId}/getProductCount")
     public Map<String, Object> getProductCount(@PathVariable UUID userId){
         return wishlistProductService.getProductCount(userId);
+    }
+
+    @GetMapping("/getProductIdCount")
+    public WishlistProductProjection getProductIdCount(){
+        return wishlistProductService.getMaxProductIdCount(ProductEnum.AC.getValue());
     }
 }

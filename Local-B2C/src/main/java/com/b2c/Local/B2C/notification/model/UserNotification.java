@@ -22,5 +22,4 @@ public class UserNotification implements Serializable {
 
     private Boolean active;
 
-    private String url;
 }

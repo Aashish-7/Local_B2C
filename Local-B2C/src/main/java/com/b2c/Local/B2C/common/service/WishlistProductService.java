@@ -4,6 +4,7 @@ import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.common.dao.WishlistProductRepository;
 import com.b2c.Local.B2C.common.enums.ProductEnum;
 import com.b2c.Local.B2C.common.model.WishlistProduct;
+import com.b2c.Local.B2C.common.model.WishlistProductProjection;
 import com.b2c.Local.B2C.exception.BadRequest400Exception;
 import com.b2c.Local.B2C.exception.Conflict409Exception;
 import com.b2c.Local.B2C.exception.Forbidden403Exception;
@@ -58,6 +59,7 @@ public class WishlistProductService {
         this.washingMachineRepository = washingMachineRepository;
         this.localStoreRepository = localStoreRepository;
         this.localStoreService = localStoreService;
+
     }
 
     private User getLoggedInUser() {
@@ -410,5 +412,9 @@ public class WishlistProductService {
             default:
                 return null;
         }
+    }
+
+    public WishlistProductProjection getMaxProductIdCount(String productEnum){
+        return wishlistProductRepository.getProductIdCount(productEnum);
     }
 }
