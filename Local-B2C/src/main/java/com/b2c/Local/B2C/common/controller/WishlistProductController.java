@@ -61,4 +61,9 @@ public class WishlistProductController {
     public WishlistProductProjection getProductIdCount(){
         return wishlistProductService.getMaxProductIdCount(ProductEnum.AC.getValue());
     }
+
+    @GetMapping("{userId}/getProductIdCountFromWishlistProduct")
+    public Map<String, Object> getProductIdCountFromWishlistProduct(@PathVariable UUID userId){
+        return wishlistProductService.getProductIdCountFromWishlistProduct(userId);
+    }
 }

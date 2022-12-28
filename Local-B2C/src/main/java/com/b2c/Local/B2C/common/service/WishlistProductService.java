@@ -48,7 +48,7 @@ public class WishlistProductService {
     LocalStoreService localStoreService;
 
     @Autowired
-    public WishlistProductService(WishlistProductRepository wishlistProductRepository, ObjectMapper objectMapper, ACRepository acRepository, LaptopRepository laptopRepository, MobilePhoneRepository mobilePhoneRepository, RefrigeratorRepository refrigeratorRepository, TelevisionRepository televisionRepository, WashingMachineRepository washingMachineRepository,LocalStoreRepository localStoreRepository,LocalStoreService localStoreService) {
+    public WishlistProductService(WishlistProductRepository wishlistProductRepository, ObjectMapper objectMapper, ACRepository acRepository, LaptopRepository laptopRepository, MobilePhoneRepository mobilePhoneRepository, RefrigeratorRepository refrigeratorRepository, TelevisionRepository televisionRepository, WashingMachineRepository washingMachineRepository, LocalStoreRepository localStoreRepository, LocalStoreService localStoreService) {
         this.wishlistProductRepository = wishlistProductRepository;
         this.objectMapper = objectMapper;
         this.acRepository = acRepository;
@@ -373,29 +373,51 @@ public class WishlistProductService {
         }
     }
 
-    public Map<String, Object> getProductCountFromWishlistProduct(UUID userId){
+    public Map<String, Object> getProductCountFromWishlistProduct(UUID userId) {
         if (!userId.equals(getLoggedInUser().getId())) {
             throw new Forbidden403Exception("You Not Allowed");
         }
         Map<String, Object> objectMap = new HashMap<>();
-        if (!localStoreRepository.findByUserIdAndActiveTrue(userId).isEmpty()){
+        if (!localStoreRepository.findByUserIdAndActiveTrue(userId).isEmpty()) {
             localStoreRepository.findByUserIdAndActiveTrue(userId).forEach(localStore -> {
-                Map<String,Long> longMap = new HashMap<>();
-                longMap.put(ProductEnum.AC.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.AC.getValue(),localStoreService.getAllAcByLocalStoreId(localStore.getId()).stream().map(AC::getAcId).collect(Collectors.toList())));
-                longMap.put(ProductEnum.LAPTOP.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.LAPTOP.getValue(),localStoreService.getAllLaptopByLocalStoreId(localStore.getId()).stream().map(Laptop::getLaptopId).collect(Collectors.toList())));
-                longMap.put(ProductEnum.MOBILEPHONE.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.MOBILEPHONE.getValue(),localStoreService.getAllMobilePhoneByLocalStoreId(localStore.getId()).stream().map(MobilePhone::getMobilePhoneId).collect(Collectors.toList())));
-                longMap.put(ProductEnum.REFRIGERATOR.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.REFRIGERATOR.getValue(),localStoreService.getAllRefrigeratorByLocalStoreId(localStore.getId()).stream().map(Refrigerator::getRefrigeratorId).collect(Collectors.toList())));
-                longMap.put(ProductEnum.WASHINGMACHINE.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.WASHINGMACHINE.getValue(),localStoreService.getAllWashingMachineByLocalStoreId(localStore.getId()).stream().map(WashingMachine::getWashingMachineId).collect(Collectors.toList())));
-                longMap.put(ProductEnum.TELEVISION.getValue(),wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.TELEVISION.getValue(),localStoreService.getAllTelevisionByLocalStoreId(localStore.getId()).stream().map(Television::getTelevisionId).collect(Collectors.toList())));
-                objectMap.put(localStore.getStoreName(),longMap);
+                Map<String, Long> longMap = new HashMap<>();
+                longMap.put(ProductEnum.AC.getValue(), wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.AC.getValue(), localStoreService.getAllAcByLocalStoreId(localStore.getId()).stream().map(AC::getAcId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.LAPTOP.getValue(), wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.LAPTOP.getValue(), localStoreService.getAllLaptopByLocalStoreId(localStore.getId()).stream().map(Laptop::getLaptopId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.MOBILEPHONE.getValue(), wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.MOBILEPHONE.getValue(), localStoreService.getAllMobilePhoneByLocalStoreId(localStore.getId()).stream().map(MobilePhone::getMobilePhoneId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.REFRIGERATOR.getValue(), wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.REFRIGERATOR.getValue(), localStoreService.getAllRefrigeratorByLocalStoreId(localStore.getId()).stream().map(Refrigerator::getRefrigeratorId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.WASHINGMACHINE.getValue(), wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.WASHINGMACHINE.getValue(), localStoreService.getAllWashingMachineByLocalStoreId(localStore.getId()).stream().map(WashingMachine::getWashingMachineId).collect(Collectors.toList())));
+                longMap.put(ProductEnum.TELEVISION.getValue(), wishlistProductRepository.getProductCountFromWishlistProduct(ProductEnum.TELEVISION.getValue(), localStoreService.getAllTelevisionByLocalStoreId(localStore.getId()).stream().map(Television::getTelevisionId).collect(Collectors.toList())));
+                objectMap.put(localStore.getStoreName(), longMap);
             });
             return objectMap;
-        }else {
+        } else {
             throw new NotFound404Exception("LocalStore Not Found");
         }
     }
 
-    private User getLocalStoreByProduct(ProductEnum products, long productId){
+    public Map<String, Object> getProductIdCountFromWishlistProduct(UUID userId) {
+        if (!userId.equals(getLoggedInUser().getId())) {
+            throw new Forbidden403Exception("You Not Allowed");
+        }
+        Map<String, Object> objectMap = new HashMap<>();
+        if (!localStoreRepository.findByUserIdAndActiveTrue(userId).isEmpty()) {
+            localStoreRepository.findByUserIdAndActiveTrue(userId).forEach(localStore -> {
+                Map<String, Object> objectMap1 = new HashMap<>();
+                objectMap1.put(ProductEnum.AC.getValue(), wishlistProductRepository.getProductIdCountFromWishlistProduct(ProductEnum.AC.getValue(), localStoreService.getAllAcByLocalStoreId(localStore.getId()).stream().map(AC::getAcId).collect(Collectors.toList())));
+                objectMap1.put(ProductEnum.LAPTOP.getValue(), wishlistProductRepository.getProductIdCountFromWishlistProduct(ProductEnum.LAPTOP.getValue(), localStoreService.getAllLaptopByLocalStoreId(localStore.getId()).stream().map(Laptop::getLaptopId).collect(Collectors.toList())));
+                objectMap1.put(ProductEnum.MOBILEPHONE.getValue(), wishlistProductRepository.getProductIdCountFromWishlistProduct(ProductEnum.MOBILEPHONE.getValue(), localStoreService.getAllMobilePhoneByLocalStoreId(localStore.getId()).stream().map(MobilePhone::getMobilePhoneId).collect(Collectors.toList())));
+                objectMap1.put(ProductEnum.REFRIGERATOR.getValue(), wishlistProductRepository.getProductIdCountFromWishlistProduct(ProductEnum.REFRIGERATOR.getValue(), localStoreService.getAllRefrigeratorByLocalStoreId(localStore.getId()).stream().map(Refrigerator::getRefrigeratorId).collect(Collectors.toList())));
+                objectMap1.put(ProductEnum.WASHINGMACHINE.getValue(), wishlistProductRepository.getProductIdCountFromWishlistProduct(ProductEnum.WASHINGMACHINE.getValue(), localStoreService.getAllWashingMachineByLocalStoreId(localStore.getId()).stream().map(WashingMachine::getWashingMachineId).collect(Collectors.toList())));
+                objectMap1.put(ProductEnum.TELEVISION.getValue(), wishlistProductRepository.getProductIdCountFromWishlistProduct(ProductEnum.TELEVISION.getValue(), localStoreService.getAllTelevisionByLocalStoreId(localStore.getId()).stream().map(Television::getTelevisionId).collect(Collectors.toList())));
+                objectMap.put(localStore.getStoreName(), objectMap1);
+            });
+            return objectMap;
+        } else {
+            throw new NotFound404Exception("LocalStore Not Found");
+        }
+    }
+
+    private User getLocalStoreByProduct(ProductEnum products, long productId) {
         switch (products.getValue()) {
             case "AC":
                 return acRepository.findByAcId(productId).getLocalStore().getUser();
@@ -414,7 +436,7 @@ public class WishlistProductService {
         }
     }
 
-    public WishlistProductProjection getMaxProductIdCount(String productEnum){
+    public WishlistProductProjection getMaxProductIdCount(String productEnum) {
         return wishlistProductRepository.getProductIdCount(productEnum);
     }
 }

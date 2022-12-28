@@ -28,4 +28,7 @@ public interface WishlistProductRepository extends JpaRepository<WishlistProduct
 
     @Query(nativeQuery = true, value = "SELECT productid, count(productid) count  From wishlist_product where product = :product group by productid having count(productid)>1 order by count DESC  LIMIT 1")
     WishlistProductProjection getProductIdCount(String product);
+
+    @Query(nativeQuery = true , value = "SELECT productid, count(productid) count  From wishlist_product where product =:product and productid In (:productId) group by productid")
+    List<WishlistProductProjection> getProductIdCountFromWishlistProduct(String product,List<Long> productId);
 }
