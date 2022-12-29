@@ -10,22 +10,22 @@ import java.util.TimerTask;
 @UtilityClass
 public class TimeTaskSchedule {
 
-    List<String> blockedIps= new ArrayList<>();
+    List<String> blockedIpsMyManyRequests= new ArrayList<>();
 
     public void blockIp(String remoteIp,long delay){
-        blockedIps.add(remoteIp);
+        blockedIpsMyManyRequests.add(remoteIp);
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                blockedIps.remove(remoteIp);
+                blockedIpsMyManyRequests.remove(remoteIp);
             }
         };
         timer.schedule(timerTask,delay);
     }
 
     public boolean isBlocked(String remoteIp){
-        if (blockedIps.contains(remoteIp))
+        if (blockedIpsMyManyRequests.contains(remoteIp))
             return true;
         else
             return false;

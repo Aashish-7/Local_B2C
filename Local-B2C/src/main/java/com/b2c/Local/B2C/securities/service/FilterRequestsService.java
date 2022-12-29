@@ -25,7 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
-@WebFilter(filterName = "OneFilter",asyncSupported = true)
+@WebFilter(filterName = "Local_B2C",asyncSupported = true)
 @Log4j2
 public class FilterRequestsService extends GenericFilter {
 
@@ -96,9 +96,6 @@ public class FilterRequestsService extends GenericFilter {
     private void saveFilterRequest(HttpSession httpSession, HttpServletRequest httpServletRequest, boolean sessionHijack) throws IOException {
         FilterRequest filterRequest = new FilterRequest();
         filterRequest.setRequestId(UUID.randomUUID().toString());
-        if (Objects.isNull(httpSession.getAttribute("FILTER_REQUEST_ID"))) {
-            httpSession.setAttribute("FILTER_REQUEST_ID", filterRequest.getRequestId());
-        }
         if (!httpSession.isNew() && Objects.nonNull(httpServletRequest.getUserPrincipal())) {
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
@@ -112,6 +109,12 @@ public class FilterRequestsService extends GenericFilter {
             filterRequest.setLastAccessTime(last);
             filterRequest.setUserName("Anonymous");
             log.info("Incoming Request From: " + httpServletRequest.getRemoteAddr() + "  Request URL : [" + httpServletRequest.getMethod() + " " + httpServletRequest.getRequestURL().toString() + "] UserPrincipal : [Anonymous]");
+        }
+        if (Objects.isNull(httpSession.getAttribute("FILTER_REQUEST_ID"))) {
+            httpSession.setAttribute("FILTER_REQUEST_ID", filterRequest.getRequestId());
+            log.info("Saving Attribute FILTER_REQUEST_ID in HttpSession");
+        }else {
+            log.error("HttpSession Saving Attribute FILTER_REQUEST_ID Failed");
         }
         if (httpServletRequest.getParameterNames().hasMoreElements()) {
             Map<String, String> map = new HashMap<>();

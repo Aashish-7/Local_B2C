@@ -57,7 +57,7 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
     protected Object readInternal(Class clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         String inputStream = IOUtils.toString(inputMessage.getBody(), Charset.defaultCharset());
         saveRequestBody(inputStream);
-        return objectMapper.readValue(decrypt(IOUtils.toInputStream(inputStream,Charset.defaultCharset())), clazz);
+        return objectMapper.readValue(decrypt(IOUtils.toInputStream(inputStream, Charset.defaultCharset())), clazz);
     }
 
     @Override
@@ -65,14 +65,14 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         saveResponseBody(o);
         outputMessage.getBody().write(objectMapper.writeValueAsBytes(o));
-       // outputMessage.getBody().write(encrypt(objectMapper.writeValueAsBytes(o)));
+        // outputMessage.getBody().write(encrypt(objectMapper.writeValueAsBytes(o)));
     }
 
-    private InputStream decrypt(InputStream inputStream){
+    private InputStream decrypt(InputStream inputStream) {
         return inputStream;
     }
 
-    private byte[] encrypt(byte[] bytesToEncrypt){
+    private byte[] encrypt(byte[] bytesToEncrypt) {
         byte[] encoded = Base64.getEncoder().encode(bytesToEncrypt);
         //byte[] result = ByteBuffer.allocate(bytesToEncrypt.length + encoded.length).put(bytesToEncrypt).put(encoded).array();
         return bytesToEncrypt;
@@ -88,23 +88,28 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
 
     private void saveResponseBody(Object o) throws JsonProcessingException {
         //log.info("Sending Response Message : "+objectMapper.writeValueAsString(o)+" For CurrentUserPrincipal :["+((getLoggedInUserId() != null)?getLoggedInUserId().getEmail(): "Anonymous")+"]");
-        if (requestResponseBodyRepository.existsById(String.valueOf(httpSession.getAttribute("REQUEST_RESPONSE_BODY")))){
-            requestResponseBodyRepository.updateById(String.valueOf(httpSession.getAttribute("REQUEST_RESPONSE_BODY")),objectMapper.writeValueAsString(o));
-        }else {
-            requestResponseBodyRepository.save(new RequestResponseBody(UUID.randomUUID().toString(),null,filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(),o));
+        if (requestResponseBodyRepository.existsById(String.valueOf(httpSession.getAttribute("REQUEST_RESPONSE_BODY")))) {
+            requestResponseBodyRepository.updateById(String.valueOf(httpSession.getAttribute("REQUEST_RESPONSE_BODY")), objectMapper.writeValueAsString(o));
+        } else {
+            requestResponseBodyRepository.save(new RequestResponseBody(UUID.randomUUID().toString(), null, filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(), o));
         }
         httpSession.removeAttribute("REQUEST_RESPONSE_BODY");
+        log.info("Removing Attribute REQUEST_RESPONSE_BODY From HttpSession");
         httpSession.removeAttribute("FILTER_REQUEST_ID");
+        log.info("Removing Attribute FILTER_REQUEST_ID From HttpSession");
     }
 
-    private void saveRequestBody(String requestBody){
+    private void saveRequestBody(String requestBody) {
         //log.info("Accept Request Message : "+requestBody+" From CurrentUserPrincipal :["+((getLoggedInUserId() != null)?getLoggedInUserId().getEmail():"Anonymous")+"]");
         if (!requestBody.isEmpty()) {
             String id = UUID.randomUUID().toString();
             if (Objects.isNull(httpSession.getAttribute("REQUEST_RESPONSE_BODY"))) {
                 httpSession.setAttribute("REQUEST_RESPONSE_BODY", id);
+                log.info("Saving Attribute REQUEST_RESPONSE_BODY in HttpSession");
+            } else {
+                log.error("HttpSession Saving Attribute REQUEST_RESPONSE_BODY Failed");
             }
-            requestResponseBodyRepository.save(new RequestResponseBody(id,requestBody, filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(), null));
+            requestResponseBodyRepository.save(new RequestResponseBody(id, requestBody, filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(), null));
         }
     }
 }
