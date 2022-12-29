@@ -2,6 +2,8 @@ package com.b2c.Local.B2C.securities.service;
 
 
 import com.b2c.Local.B2C.securities.base.ManagementInterface;
+import org.springframework.session.Session;
+import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 import org.springframework.stereotype.Service;
 
 import java.lang.management.ManagementFactory;
@@ -10,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 @Service
 public class ManagementService implements ManagementInterface {
+
+    SpringSessionBackedSessionRegistry<? extends Session> springSessionBackedSessionRegistry;
 
     @Override
     public Map<String, Object> getRuntime() {
