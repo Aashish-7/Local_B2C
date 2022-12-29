@@ -102,13 +102,13 @@ public class FilterRequestsService extends GenericFilter {
             filterRequest.setNewSession(false);
             filterRequest.setUserId(getUserIdByEmail(httpServletRequest.getUserPrincipal().getName()));
             filterRequest.setUserName(httpServletRequest.getUserPrincipal().getName());
-            log.info("Incoming Request From: " + httpServletRequest.getRemoteAddr() + "  Request URL : [" + httpServletRequest.getMethod() + " " + httpServletRequest.getRequestURL().toString() + "] UserPrincipal : [" + httpServletRequest.getUserPrincipal().getName() + "]");
+            //log.info("Incoming Request From: " + httpServletRequest.getRemoteAddr() + "  Request URL : [" + httpServletRequest.getMethod() + " " + httpServletRequest.getRequestURL().toString() + "] UserPrincipal : [" + httpServletRequest.getUserPrincipal().getName() + "]");
         } else {
             filterRequest.setNewSession(true);
             Date last = new Date(httpSession.getLastAccessedTime());
             filterRequest.setLastAccessTime(last);
             filterRequest.setUserName("Anonymous");
-            log.info("Incoming Request From: " + httpServletRequest.getRemoteAddr() + "  Request URL : [" + httpServletRequest.getMethod() + " " + httpServletRequest.getRequestURL().toString() + "] UserPrincipal : [Anonymous]");
+            //log.info("Incoming Request From: " + httpServletRequest.getRemoteAddr() + "  Request URL : [" + httpServletRequest.getMethod() + " " + httpServletRequest.getRequestURL().toString() + "] UserPrincipal : [Anonymous]");
         }
         if (Objects.isNull(httpSession.getAttribute("FILTER_REQUEST_ID"))) {
             httpSession.setAttribute("FILTER_REQUEST_ID", filterRequest.getRequestId());
