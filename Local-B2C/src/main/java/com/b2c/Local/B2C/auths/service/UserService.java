@@ -133,13 +133,9 @@ public class UserService implements UserDetailsService {
             if (!userRepository.existsByEmailAndIsActiveTrue(loginDto.getEmail())) {
                 throw new NotFound404Exception("User not found OR Enter Valid Credentials");
             }
-            if (userRepository.existsByEmail(loginDto.getEmail()) && bCryptPasswordEncoder.matches(loginDto.getPassword(), userRepository.findByEmail(loginDto.getEmail()).getPassword())) {
-                if (validateSession(loginDto.getEmail())) {
-                    Authentication authentication = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            } else {
-                throw new NotFound404Exception("User not found OR Enter Valid Credentials");
+            if (validateSession(loginDto.getEmail())) {
+                Authentication authentication = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } else {
             throw new BadRequest400Exception("Enter Email and Password");
