@@ -22,11 +22,12 @@ public interface LocalStoreRepository extends JpaRepository<LocalStore, UUID> {
     @Cacheable(cacheNames = "findByCityAndActiveTrue", key = "#city")
     List<LocalStore> findByCityAndActiveTrue(String city);
 
-    @Cacheable(cacheNames = "existsByIdAndActiveTrue", key = "#id")
     boolean existsByIdAndActiveTrue(UUID id);
 
     Iterable<? extends LocalStore> findByUserId(UUID loggedInUserId);
 
     boolean existsByIdAndUser_Id(UUID id, UUID id1);
+
+    LocalStore findByIdAndActiveTrue(UUID uuid);
 
 }

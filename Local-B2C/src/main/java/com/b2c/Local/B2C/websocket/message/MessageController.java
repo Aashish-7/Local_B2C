@@ -1,6 +1,6 @@
 package com.b2c.Local.B2C.websocket.message;
 
-import com.b2c.Local.B2C.websocket.dto.MessageDto;
+import com.b2c.Local.B2C.websocket.dto.MessageSenderDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -16,8 +16,8 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @MessageMapping("/userMessage")
-    public void sendMsgToUser(@Payload MessageDto messageDto){
-        messageService.sendMsgToUser(messageDto);
+    @MessageMapping("/to/localStoreOwner")
+    public void sendMsgToUser(@Payload MessageSenderDto messageDto){
+        messageService.sendMsgToLocalStoreOwner(messageDto);
     }
 }
