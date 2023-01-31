@@ -55,7 +55,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/forgetPassword/**", "/user/login", "/user/addUser", "/login/oauth2/code/github", "/login/oauth2").permitAll()
+                .antMatchers("/forgetPassword/**", "/auth/getToken", "/user/addUser", "/login/oauth2/code/github", "/login/oauth2").permitAll()
                 .anyRequest().fullyAuthenticated()
                 .and()
                 .formLogin().disable()
@@ -72,6 +72,7 @@ public class WebSecurityConfig {
         });
         return http.build();
     }
+
 }
 
 

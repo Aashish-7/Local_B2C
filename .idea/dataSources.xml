@@ -8,11 +8,11 @@
       <jdbc-url>jdbc:postgresql://192.168.86.56:5000/local_b2c</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="local_b2c@192.168.86.239" uuid="7d267a2f-2992-4c92-a410-29353611cc72">
+    <data-source source="LOCAL" name="local_b2c@localhost [2]" uuid="7d267a2f-2992-4c92-a410-29353611cc72">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://192.168.86.239:3306/local_b2c</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/local_b2c</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
     <data-source source="LOCAL" name="local_b2c@localhost" uuid="eda8ce39-0e3c-41c7-ae27-0314ecd7ba50">

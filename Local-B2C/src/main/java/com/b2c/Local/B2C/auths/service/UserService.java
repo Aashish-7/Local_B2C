@@ -1,10 +1,14 @@
 package com.b2c.Local.B2C.auths.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.b2c.Local.B2C.auths.dao.JwtTokenRepository;
 import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.auths.dao.UserSecurityDetailsRepository;
 import com.b2c.Local.B2C.auths.dto.LoginDto;
 import com.b2c.Local.B2C.auths.dto.UserDto;
 import com.b2c.Local.B2C.auths.enums.Role;
+import com.b2c.Local.B2C.auths.model.JwtToken;
 import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.auths.model.UserSecurityDetails;
 import com.b2c.Local.B2C.exception.*;
@@ -27,9 +31,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
@@ -50,11 +54,13 @@ public class UserService implements UserDetailsService {
 
     UserMacAddress userMacAddress;
 
+    JwtTokenRepository jwtTokenRepository;
+
     @Autowired
     public UserService(@Lazy UserRepository userRepository, @Lazy AuthenticationManager authenticationManager,
                        @Lazy DaoAuthenticationProvider authenticationProvider,
                        @Lazy FindByIndexNameSessionRepository<? extends Session> sessions,
-                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository, @Lazy LocalStoreService localStoreService, @Lazy UserMacAddress userMacAddress) {
+                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository, @Lazy LocalStoreService localStoreService, @Lazy UserMacAddress userMacAddress, @Lazy JwtTokenRepository jwtTokenRepository) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.authenticationProvider = authenticationProvider;
@@ -62,6 +68,7 @@ public class UserService implements UserDetailsService {
         this.userSecurityDetailsRepository = userSecurityDetailsRepository;
         this.localStoreService = localStoreService;
         this.userMacAddress = userMacAddress;
+        this.jwtTokenRepository = jwtTokenRepository;
     }
 
 
@@ -143,12 +150,31 @@ public class UserService implements UserDetailsService {
         return "Success Logged In";
     }
 
+    public Map<String, String> getToken(LoginDto loginDto) {
+        if (validateSession(loginDto.getEmail())) {
+            Authentication authentication = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            User user = userRepository.findByEmail(loginDto.getEmail());
+            Algorithm algorithm = Algorithm.HMAC512(user.getPassword());
+            JwtToken jwtToken = new JwtToken();
+            jwtToken.setActive(true);
+            jwtToken.setCreateDate(new Date());
+            jwtToken.setUser(user);
+            jwtToken.setExpireDate(Date.from(Instant.now().plusSeconds(1000)));
+            jwtToken.setToken(JWT.create().withIssuer("local-b2c").withIssuedAt(jwtToken.getCreateDate()).withExpiresAt(jwtToken.getExpireDate()).withSubject(user.getEmail()).sign(algorithm));
+            jwtTokenRepository.save(jwtToken);
+            return new HashMap<String, String>(Map.of("token", jwtToken.getToken()));
+        } else {
+            throw new BadRequest400Exception("Something Went Wrong");
+        }
+    }
+
     public boolean validateSession(String email) {
         int userSessionLimit = userSecurityDetailsRepository.findByUserEmail(email).getMaxSession();
         if (this.sessions.findByPrincipalName(email).entrySet().size() < userSessionLimit) {
             return true;
         } else {
-            throw new Forbidden403Exception("Your Maximum Session Limit Exceed , Logout Any Session For Logged In");
+            throw new Forbidden403Exception("Your Maximum Token Limit Exceed , Logout Any Session For Logged In");
         }
     }
 

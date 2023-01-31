@@ -18,7 +18,6 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -28,7 +27,6 @@ import java.util.Base64;
 import java.util.Objects;
 import java.util.UUID;
 
-@ControllerAdvice
 @Log4j2
 public class RequestResponseBodyService extends AbstractHttpMessageConverter {
 
@@ -94,9 +92,9 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
             requestResponseBodyRepository.save(new RequestResponseBody(UUID.randomUUID().toString(), null, filterRequestsRepository.findById(String.valueOf(httpSession.getAttribute("FILTER_REQUEST_ID"))).get(), o));
         }
         httpSession.removeAttribute("REQUEST_RESPONSE_BODY");
-        log.info("Removing Attribute REQUEST_RESPONSE_BODY From HttpSession");
+        //log.info("Removing Attribute REQUEST_RESPONSE_BODY From HttpSession");
         httpSession.removeAttribute("FILTER_REQUEST_ID");
-        log.info("Removing Attribute FILTER_REQUEST_ID From HttpSession");
+        //log.info("Removing Attribute FILTER_REQUEST_ID From HttpSession");
     }
 
     private void saveRequestBody(String requestBody) {
@@ -105,7 +103,7 @@ public class RequestResponseBodyService extends AbstractHttpMessageConverter {
             String id = UUID.randomUUID().toString();
             if (Objects.isNull(httpSession.getAttribute("REQUEST_RESPONSE_BODY"))) {
                 httpSession.setAttribute("REQUEST_RESPONSE_BODY", id);
-                log.info("Saving Attribute REQUEST_RESPONSE_BODY in HttpSession");
+                //log.info("Saving Attribute REQUEST_RESPONSE_BODY in HttpSession");
             } else {
                 log.error("HttpSession Saving Attribute REQUEST_RESPONSE_BODY Failed");
             }

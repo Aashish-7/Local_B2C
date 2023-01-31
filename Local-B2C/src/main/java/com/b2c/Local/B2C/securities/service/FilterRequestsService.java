@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.securities.service;
 
+import com.b2c.Local.B2C.auths.dao.JwtTokenRepository;
 import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.securities.dao.FilterRequestsRepository;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
@@ -25,7 +26,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
-@WebFilter(filterName = "Local_B2C",asyncSupported = true)
+@WebFilter(filterName = "Local_B2C", asyncSupported = true)
 @Log4j2
 public class FilterRequestsService extends GenericFilter {
 
@@ -37,12 +38,15 @@ public class FilterRequestsService extends GenericFilter {
 
     FindByIndexNameSessionRepository<? extends Session> sessions;
 
+    JwtTokenRepository jwtTokenRepository;
+
     @Autowired
-    public FilterRequestsService(FilterRequestsRepository filterRequestsRepository, UserRepository userRepository, UserMacAddress userMacAddress, FindByIndexNameSessionRepository<? extends Session> sessions) {
+    public FilterRequestsService(FilterRequestsRepository filterRequestsRepository, UserRepository userRepository, UserMacAddress userMacAddress, FindByIndexNameSessionRepository<? extends Session> sessions, JwtTokenRepository jwtTokenRepository) {
         this.filterRequestsRepository = filterRequestsRepository;
         this.userRepository = userRepository;
         this.userMacAddress = userMacAddress;
         this.sessions = sessions;
+        this.jwtTokenRepository = jwtTokenRepository;
     }
 
     @Override
@@ -59,6 +63,22 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+            /*if (httpServletRequest.getHeader("Authorization") != null && jwtTokenRepository.existsByTokenAndActiveTrue(httpServletRequest.getHeader("Authorization").substring(7))) {
+                DecodedJWT decodedJWT = JWT.decode(httpServletRequest.getHeader("Authorization").substring(7));
+                Period period = Period.between(LocalDate.now(), decodedJWT.getExpiresAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                if ((period.isZero() || period.isNegative()) && httpServletRequest.getUserPrincipal().getName().equals(decodedJWT.getSubject())) {
+                    JwtToken jwtToken = jwtTokenRepository.findByTokenAndActiveTrue(decodedJWT.getToken());
+                    jwtToken.setActive(false);
+                    jwtTokenRepository.save(jwtToken);
+                } else {
+                    HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+                    httpServletResponse.sendError(HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION);
+                }
+            } else {
+                HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+                httpServletResponse.sendError(404, "Enter Valid Token");
+            }*/
+
         if (TimeTaskSchedule.isBlocked(httpServletRequest.getRemoteAddr())) {
             saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
             log.warn("Too Many Request From RemoteIp Address :" + httpServletRequest.getRemoteAddr());
@@ -86,6 +106,7 @@ public class FilterRequestsService extends GenericFilter {
                 httpServletResponse.sendError(429);
             }
         }
+
     }
 
     private String getUserIdByEmail(String email) {
@@ -112,8 +133,8 @@ public class FilterRequestsService extends GenericFilter {
         }
         if (Objects.isNull(httpSession.getAttribute("FILTER_REQUEST_ID"))) {
             httpSession.setAttribute("FILTER_REQUEST_ID", filterRequest.getRequestId());
-            log.info("Saving Attribute FILTER_REQUEST_ID in HttpSession");
-        }else {
+            //log.info("Saving Attribute FILTER_REQUEST_ID in HttpSession");
+        } else {
             log.error("HttpSession Saving Attribute FILTER_REQUEST_ID Failed");
         }
         if (httpServletRequest.getParameterNames().hasMoreElements()) {
