@@ -150,7 +150,7 @@ public class UserService implements UserDetailsService {
         return "Success Logged In";
     }
 
-    public Map<String, String> getToken(LoginDto loginDto) {
+    /*public Map<String, String> getToken(LoginDto loginDto) {
         if (validateSession(loginDto.getEmail())) {
             Authentication authentication = authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -167,7 +167,7 @@ public class UserService implements UserDetailsService {
         } else {
             throw new BadRequest400Exception("Something Went Wrong");
         }
-    }
+    }*/
 
     public boolean validateSession(String email) {
         int userSessionLimit = userSecurityDetailsRepository.findByUserEmail(email).getMaxSession();

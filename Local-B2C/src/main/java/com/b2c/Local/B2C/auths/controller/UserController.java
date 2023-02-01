@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -29,15 +28,15 @@ public class UserController {
         return userService.addUser(userDto, httpServletRequest);
     }
 
-    /*@PostMapping("/login")
+    @PostMapping("/login")
     public String loginUser(@RequestBody @Valid LoginDto loginDto) {
         return userService.loginUser(loginDto);
-    }*/
+    }
 
-    @PostMapping("/getToken")
+    /*@PostMapping("/getToken")
     public Map<String, String> getToken(@RequestBody @Valid LoginDto loginDto){
         return userService.getToken(loginDto);
-    }
+    }*/
 
     @PutMapping("/updateUser")
     public String updateUser(@RequestBody UserDto userDto) {
