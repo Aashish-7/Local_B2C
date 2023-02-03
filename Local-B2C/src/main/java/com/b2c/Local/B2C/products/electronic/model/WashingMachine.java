@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "washing_machine")
+@Indexed
 public class WashingMachine implements Serializable {
 
     @Id
@@ -23,22 +25,29 @@ public class WashingMachine implements Serializable {
     @Column(name = "washing_machine_id")
     private Long washingMachineId;
 
+    @FullTextField
     private String model;
 
+    @KeywordField
     private String brand;
 
     private boolean dryer;
 
+    @KeywordField
     private String functionType;
 
+    @GenericField
     private double capacityInKg;
 
+    @GenericField
     private double powerInStar;
 
     private boolean timer;
 
+    @KeywordField
     private String colour;
 
+    @KeywordField
     private String warranty;
 
     private boolean digitalDisplay;
@@ -47,17 +56,24 @@ public class WashingMachine implements Serializable {
 
     private boolean shockProof;
 
+    @GenericField
     private double weight;
 
     private double discountPercentage;
 
+    @KeywordField
     private String availability;
 
+    @JsonIgnore
     private Boolean active;
 
+    @GenericField
     private double price;
 
-    @ManyToOne @JsonIgnore
+    @GenericField
+    private int quantity;
+
+    @ManyToOne @JsonIgnore  @IndexedEmbedded
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")
     private LocalStore localStore;
 

@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EnableScheduling
+@Indexed
 public class AC implements Serializable {
 
     @Id
@@ -26,12 +26,16 @@ public class AC implements Serializable {
     @Column(name = "ac_id")
     private Long acId;
 
+    @FullTextField
     private String model;
 
+    @KeywordField
     private String brand;
 
+    @KeywordField
     private String colour;
 
+    @KeywordField
     private String warranty;
 
     private boolean digitalDisplay;
@@ -40,12 +44,15 @@ public class AC implements Serializable {
 
     private double discountPercentage;
 
+    @GenericField
     private double powerInStar;
 
+    @KeywordField
     private String availability;
 
     private boolean builtInStabilizer;
 
+    @GenericField
     private double capacityInTon;
 
     private String mode;
@@ -56,11 +63,16 @@ public class AC implements Serializable {
 
     private String airConditionerType;
 
+    @JsonIgnore
     private Boolean active;
 
+    @GenericField
     private double price;
 
-    @ManyToOne @JsonIgnore
+    @GenericField
+    private int quantity;
+
+    @ManyToOne @JsonIgnore  @IndexedEmbedded
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")
     private LocalStore localStore;
 

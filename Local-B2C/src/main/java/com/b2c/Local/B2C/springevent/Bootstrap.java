@@ -49,7 +49,7 @@ public class Bootstrap implements CommandLineRunner {
             userRepository.save(user);
             UserSecurityDetails rishabhSecurityDetails = new UserSecurityDetails();
             rishabhSecurityDetails.setUser(user);
-            rishabhSecurityDetails.setMaxSession(1);
+            rishabhSecurityDetails.setMaxSession(2);
             rishabhSecurityDetails.setMacAddress(null);
             userSecurityDetailsRepository.save(rishabhSecurityDetails);
 

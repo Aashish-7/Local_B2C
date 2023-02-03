@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Indexed
 public class Television implements Serializable {
 
     @Id
@@ -23,49 +25,67 @@ public class Television implements Serializable {
     @Column(name = "television_id")
     private Long televisionId;
 
+    @FullTextField
     private String model;
 
+    @KeywordField
     private String brand;
 
+    @GenericField
     private double price;
 
+    @KeywordField
     private String availability;
 
+    @KeywordField
     private String displayType;
 
+    @GenericField
     private int displaySizeInInch;
 
     private String screenResolution;
 
+    @GenericField
     private int noOfHdmiPorts;
 
     private int noOfUsbPorts;
 
     private String features;
 
+    @GenericField
     private boolean wiFi;
 
+    @GenericField
     private boolean ethernet;
 
+    @GenericField
     private double ramSizeGb;
 
+    @GenericField
     private double memorySizeGb;
 
     private String displayRefreshRate;
 
     private int noOfCpuCore;
 
+    @GenericField
     private int noOfSpeakers;
 
+    @KeywordField
     private String colour;
 
     private double discountPercentage;
 
+    @KeywordField
     private String warranty;
 
+    @JsonIgnore
     private Boolean active;
 
-    @ManyToOne @JsonIgnore
+    @GenericField
+    private int quantity;
+
+    @ManyToOne @JsonIgnore  @IndexedEmbedded
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")
     private LocalStore localStore;
 

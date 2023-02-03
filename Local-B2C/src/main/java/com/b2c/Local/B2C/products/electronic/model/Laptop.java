@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Indexed
 public class Laptop implements Serializable {
 
     @Id
@@ -23,24 +25,33 @@ public class Laptop implements Serializable {
     @Column(name = "laptop_id")
     private Long laptopId;
 
+    @FullTextField
     private String model;
 
+    @KeywordField
     private String brand;
 
+    @GenericField
     private double price;
 
+    @GenericField
     private double weightInKg;
 
+    @GenericField
     private int screenSizeInInch;
 
+    @GenericField
     private boolean touchScreen;
 
+    @KeywordField
     private String availability;
 
     private String screenResolution;
 
+    @KeywordField
     private String cpuBrand;
 
+    @KeywordField
     private String cpuModel;
 
     private String cpuGeneration;
@@ -51,18 +62,23 @@ public class Laptop implements Serializable {
 
     private String hardDiskSize;
 
+    @KeywordField
     private String ramSize;
 
+    @KeywordField
     private String ramType;
 
     private boolean fingerprint;
 
+    @KeywordField
     private String os;
 
+    @KeywordField
     private String warranty;
 
     private String batteryBackupHour;
 
+    @FullTextField
     private String graphicCard;
 
     private int noOfUsbPorts;
@@ -75,15 +91,20 @@ public class Laptop implements Serializable {
 
     private boolean hdmiPort;
 
+    @KeywordField
     private String colour;
 
     private double discountPercentage;
 
     private int noOfSpeaker;
 
+    @JsonIgnore
     private Boolean active;
 
-    @ManyToOne @JsonIgnore
+    @GenericField
+    private int quantity;
+
+    @ManyToOne @JsonIgnore  @IndexedEmbedded
     @JoinColumn(name = "local_store_id", referencedColumnName = "id")
     private LocalStore localStore;
 

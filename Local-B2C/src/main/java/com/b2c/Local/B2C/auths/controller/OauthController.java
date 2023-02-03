@@ -35,6 +35,7 @@ public class OauthController {
 
     @GetMapping("/login/oauth2/code/github")
     public String getClientCode(@RequestParam String code) throws IOException {
+        System.out.println(code);
         String githubUrl = "https://github.com/login/oauth/access_token?client_id=2c1ebc8fdc8c61aaaa09&client_secret=d3329bda9c0e69d55089294b5fe3a127816b53b1&code="+code;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.getForEntity(githubUrl,String.class);
@@ -43,6 +44,7 @@ public class OauthController {
 
     @GetMapping("/login/oauth2")
     public void redirectUrlToGithub(HttpServletResponse httpServletResponse) throws IOException {
-        httpServletResponse.sendRedirect("https://github.com/login/oauth/authorize?client_id=2c1ebc8fdc8c61aaaa09&redirect_uri=http://localhost:8080/login/oauth2/code/github");
+       // httpServletResponse.sendRedirect("https://github.com/login/oauth/authorize?client_id=2c1ebc8fdc8c61aaaa09&redirect_uri=http://localhost:8080/login/oauth2/code/github");
+        httpServletResponse.sendRedirect("http://authserver:8000:/oauth2/authorize?response_type=code&client_id=messageClient&scope=read&redirect_uri=http://spring.io/&code_challenge=aGVsb3Nmc2dzb2Zoc2Zvcw&code_challenge_method=S256");
     }
 }
