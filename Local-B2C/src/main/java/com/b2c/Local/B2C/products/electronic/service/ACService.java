@@ -12,6 +12,10 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.hibernate.Session;
+import org.hibernate.search.engine.search.query.SearchScroll;
+import org.hibernate.search.engine.search.query.SearchScrollResult;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -319,5 +323,18 @@ public class ACService {
     } else {
             throw new BadRequest400Exception("size can't be zero");
         }
+    }
+
+    public List<AC> searchKeywordInAc(String keyword, int page, int size) {
+        List<AC> acList = new ArrayList<>();
+        SearchSession searchSession = Search.session(entityManager);
+        System.out.println(searchSession.search(AC.class).where(searchPredicateFactory -> searchPredicateFactory.bool().should(searchPredicateFactory1 -> searchPredicateFactory.match().fields("model","brand","colour","warranty","availability").matching(keyword))).fetchHits(size).size());
+        try (SearchScroll<AC>  acSearchScroll = searchSession.search(AC.class).where(searchPredicateFactory -> searchPredicateFactory.bool().should(searchPredicateFactory1 -> searchPredicateFactory.match().fields("model","brand","colour","warranty","availability").matching(keyword))).scroll(1)) {
+            for (SearchScrollResult<AC> chunk = acSearchScroll.next(); chunk.hasHits(); chunk = acSearchScroll.next()) {
+                System.out.println(chunk.total().hitCount());
+                acList.addAll(chunk.hits());
+            }
+        }
+        return acList;
     }
 }

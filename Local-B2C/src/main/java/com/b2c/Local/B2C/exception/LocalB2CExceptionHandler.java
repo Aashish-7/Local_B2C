@@ -3,13 +3,21 @@ package com.b2c.Local.B2C.exception;
 import com.b2c.Local.B2C.exception.dto.ErrorResponseDto;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import javax.validation.ConstraintViolationException;
+
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -17,6 +25,12 @@ import static org.springframework.http.HttpStatus.*;
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class LocalB2CExceptionHandler extends ResponseEntityExceptionHandler {
+
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return new ResponseEntity<>(new ErrorResponseDto(status,ex.getMessage()),status);
+    }
 
     @ExceptionHandler(BadRequest400Exception.class)
     @ResponseStatus(BAD_REQUEST)
@@ -58,6 +72,12 @@ public class LocalB2CExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(CONFLICT)
     public ErrorResponseDto exceptionConflict (com.b2c.Local.B2C.exception.Conflict409Exception ex) {
         return new ErrorResponseDto(ex);
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> constraintViolationException(ConstraintViolationException ex, WebRequest request) {
+        return new ResponseEntity<>(new ErrorResponseDto(BAD_REQUEST,ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
 

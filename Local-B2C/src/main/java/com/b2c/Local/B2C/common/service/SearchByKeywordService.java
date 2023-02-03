@@ -47,4 +47,15 @@ public class SearchByKeywordService {
         map.put("washingMachine", washingMachineService.washingMachineSearchKeyword(keyword, page, size));
         return map;
     }
+
+    public Map<String,Object> searchKeywordByIndexing(String keyword, int page,int size){
+        Map<String,Object> map = new HashMap<>();
+        map.put("ac", acService.searchKeywordInAc(keyword,page, size));
+       // map.put("laptop", laptopService.laptopSearchKeyword(keyword, page, size));
+       // map.put("mobilePhone", mobilePhoneService.mobilePhoneSearchKeyword(keyword, page, size));
+       // map.put("refrigerator", refrigeratorService.refrigeratorSearchKeyword(keyword, page, size));
+        //map.put("television",  televisionService.televisionSearchKeyword(keyword, page, size));
+        //map.put("washingMachine", washingMachineService.washingMachineSearchKeyword(keyword, page, size));
+        return map;
+    }
 }
