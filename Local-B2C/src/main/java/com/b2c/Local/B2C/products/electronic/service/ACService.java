@@ -328,7 +328,7 @@ public class ACService {
     public List<AC> searchKeywordInAc(String keyword, int page, int size) {
         List<AC> acList = new ArrayList<>();
         SearchSession searchSession = Search.session(entityManager);
-        System.out.println(searchSession.search(AC.class).where(searchPredicateFactory -> searchPredicateFactory.bool().should(searchPredicateFactory1 -> searchPredicateFactory.match().fields("model","brand","colour","warranty","availability").matching(keyword))).fetchHits(size).size());
+        System.out.println(searchSession.search(AC.class).where(searchPredicateFactory -> searchPredicateFactory.bool().should(searchPredicateFactory1 -> searchPredicateFactory.match().fields("model","brand","colour","warranty","availability").matching(keyword))).fetch(page).total().hitCount());
         try (SearchScroll<AC>  acSearchScroll = searchSession.search(AC.class).where(searchPredicateFactory -> searchPredicateFactory.bool().should(searchPredicateFactory1 -> searchPredicateFactory.match().fields("model","brand","colour","warranty","availability").matching(keyword))).scroll(1)) {
             for (SearchScrollResult<AC> chunk = acSearchScroll.next(); chunk.hasHits(); chunk = acSearchScroll.next()) {
                 System.out.println(chunk.total().hitCount());
