@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
@@ -90,4 +91,10 @@ public class LocalB2CExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return ResponseEntity.badRequest().body(new ErrorResponseDto(status, ex.getMessage()));
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    protected ResponseEntity<Object> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException mismatchException){
+        return ResponseEntity.badRequest().body(new ErrorResponseDto(BAD_REQUEST, mismatchException.getMessage()));
+    }
+
 }
