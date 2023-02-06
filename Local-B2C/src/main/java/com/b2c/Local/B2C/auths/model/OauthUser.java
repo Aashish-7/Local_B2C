@@ -84,4 +84,12 @@ public class OauthUser implements OAuth2User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }

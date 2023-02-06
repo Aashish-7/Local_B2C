@@ -63,21 +63,6 @@ public class FilterRequestsService extends GenericFilter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-            /*if (httpServletRequest.getHeader("Authorization") != null && jwtTokenRepository.existsByTokenAndActiveTrue(httpServletRequest.getHeader("Authorization").substring(7))) {
-                DecodedJWT decodedJWT = JWT.decode(httpServletRequest.getHeader("Authorization").substring(7));
-                Period period = Period.between(LocalDate.now(), decodedJWT.getExpiresAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-                if ((period.isZero() || period.isNegative()) && httpServletRequest.getUserPrincipal().getName().equals(decodedJWT.getSubject())) {
-                    JwtToken jwtToken = jwtTokenRepository.findByTokenAndActiveTrue(decodedJWT.getToken());
-                    jwtToken.setActive(false);
-                    jwtTokenRepository.save(jwtToken);
-                } else {
-                    HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-                    httpServletResponse.sendError(HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION);
-                }
-            } else {
-                HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-                httpServletResponse.sendError(404, "Enter Valid Token");
-            }*/
 
         if (TimeTaskSchedule.isBlocked(httpServletRequest.getRemoteAddr())) {
             saveFilterRequest(httpServletRequest.getSession(), httpServletRequest, false);
@@ -110,7 +95,6 @@ public class FilterRequestsService extends GenericFilter {
     }
 
     private String getUserIdByEmail(String email) {
-        System.out.println(email);
         if (Objects.isNull(userRepository.findByEmail(email))){
             return email;
         }
@@ -137,7 +121,6 @@ public class FilterRequestsService extends GenericFilter {
         }
         if (Objects.isNull(httpSession.getAttribute("FILTER_REQUEST_ID"))) {
             httpSession.setAttribute("FILTER_REQUEST_ID", filterRequest.getRequestId());
-            //log.info("Saving Attribute FILTER_REQUEST_ID in HttpSession");
         } else {
             log.error("HttpSession Saving Attribute FILTER_REQUEST_ID Failed");
         }
