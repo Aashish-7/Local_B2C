@@ -110,6 +110,10 @@ public class FilterRequestsService extends GenericFilter {
     }
 
     private String getUserIdByEmail(String email) {
+        System.out.println(email);
+        if (Objects.isNull(userRepository.findByEmail(email))){
+            return email;
+        }
         return userRepository.findByEmail(email).getId().toString();
     }
 

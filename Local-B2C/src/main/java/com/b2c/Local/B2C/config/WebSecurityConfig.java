@@ -1,5 +1,6 @@
 package com.b2c.Local.B2C.config;
 
+import com.b2c.Local.B2C.auths.service.OauthUserService;
 import com.b2c.Local.B2C.auths.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 public class WebSecurityConfig {
 
     UserService userService;
+
+    OauthUserService oauthUserService;
 
     @Autowired
     public WebSecurityConfig(UserService userService) {
@@ -55,21 +58,19 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/forgetPassword/**", "/auth/login", "/user/addUser", "/login/oauth2/code/github", "/login/oauth2").permitAll()
+                .antMatchers("/forgetPassword/**","/", "/auth/login", "/user/addUser").permitAll()
                 .anyRequest().fullyAuthenticated()
                 .and()
-                .formLogin().disable()
                 .logout().logoutSuccessHandler((request, response, authentication) -> {
             request.logout();
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().print("Logged out successfully!!!");
         })
-                .permitAll()
                 .and()
                 .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().append("Access Denied");
-        });
+        }).and().oauth2Login().successHandler((request, response, authentication) -> response.sendRedirect("/"));
         return http.build();
     }
 
