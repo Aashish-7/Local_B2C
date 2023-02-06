@@ -1,14 +1,10 @@
 package com.b2c.Local.B2C.auths.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.b2c.Local.B2C.auths.dao.JwtTokenRepository;
 import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.auths.dao.UserSecurityDetailsRepository;
 import com.b2c.Local.B2C.auths.dto.LoginDto;
 import com.b2c.Local.B2C.auths.dto.UserDto;
 import com.b2c.Local.B2C.auths.enums.Role;
-import com.b2c.Local.B2C.auths.model.JwtToken;
 import com.b2c.Local.B2C.auths.model.User;
 import com.b2c.Local.B2C.auths.model.UserSecurityDetails;
 import com.b2c.Local.B2C.exception.*;
@@ -31,7 +27,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -54,13 +49,11 @@ public class UserService implements UserDetailsService {
 
     UserMacAddress userMacAddress;
 
-    JwtTokenRepository jwtTokenRepository;
-
     @Autowired
     public UserService(@Lazy UserRepository userRepository, @Lazy AuthenticationManager authenticationManager,
                        @Lazy DaoAuthenticationProvider authenticationProvider,
                        @Lazy FindByIndexNameSessionRepository<? extends Session> sessions,
-                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository, @Lazy LocalStoreService localStoreService, @Lazy UserMacAddress userMacAddress, @Lazy JwtTokenRepository jwtTokenRepository) {
+                       @Lazy UserSecurityDetailsRepository userSecurityDetailsRepository, @Lazy LocalStoreService localStoreService, @Lazy UserMacAddress userMacAddress) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.authenticationProvider = authenticationProvider;
@@ -68,7 +61,6 @@ public class UserService implements UserDetailsService {
         this.userSecurityDetailsRepository = userSecurityDetailsRepository;
         this.localStoreService = localStoreService;
         this.userMacAddress = userMacAddress;
-        this.jwtTokenRepository = jwtTokenRepository;
     }
 
 

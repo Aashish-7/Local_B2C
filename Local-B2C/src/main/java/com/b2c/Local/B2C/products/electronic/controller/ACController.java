@@ -5,7 +5,6 @@ import com.b2c.Local.B2C.products.electronic.dto.ElectronicFilterDto;
 import com.b2c.Local.B2C.products.electronic.model.AC;
 import com.b2c.Local.B2C.products.electronic.service.ACService;
 import com.itextpdf.text.DocumentException;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -17,6 +16,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.ByteArrayInputStream;
@@ -113,8 +114,8 @@ public class ACController {
         return acService.findAllDistinctData();
     }
 
-    @GetMapping("/searchKeywordInAc")
-    public List<AC> searchKeywordInAc(@RequestParam @NotBlank String keyword, @RequestParam @Range(min = 1L, max = 9999999999L)  int page, @RequestParam @Range(min = 1L, max = 9999999999L) int size) {
+    @GetMapping("/searchKeywordInAc") @Valid
+    public List<AC> searchKeywordInAc(@RequestParam @NotBlank String keyword, @RequestParam  @Min(0) int page, @RequestParam @Min(1) int size) {
         return acService.searchKeywordInAc(keyword, page, size);
     }
 }

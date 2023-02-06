@@ -1,6 +1,5 @@
 package com.b2c.Local.B2C.securities.service;
 
-import com.b2c.Local.B2C.auths.dao.JwtTokenRepository;
 import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.securities.dao.FilterRequestsRepository;
 import com.b2c.Local.B2C.securities.model.FilterRequest;
@@ -38,15 +37,12 @@ public class FilterRequestsService extends GenericFilter {
 
     FindByIndexNameSessionRepository<? extends Session> sessions;
 
-    JwtTokenRepository jwtTokenRepository;
-
     @Autowired
-    public FilterRequestsService(FilterRequestsRepository filterRequestsRepository, UserRepository userRepository, UserMacAddress userMacAddress, FindByIndexNameSessionRepository<? extends Session> sessions, JwtTokenRepository jwtTokenRepository) {
+    public FilterRequestsService(FilterRequestsRepository filterRequestsRepository, UserRepository userRepository, UserMacAddress userMacAddress, FindByIndexNameSessionRepository<? extends Session> sessions) {
         this.filterRequestsRepository = filterRequestsRepository;
         this.userRepository = userRepository;
         this.userMacAddress = userMacAddress;
         this.sessions = sessions;
-        this.jwtTokenRepository = jwtTokenRepository;
     }
 
     @Override
@@ -95,7 +91,7 @@ public class FilterRequestsService extends GenericFilter {
     }
 
     private String getUserIdByEmail(String email) {
-        if (Objects.isNull(userRepository.findByEmail(email))){
+        if (Objects.isNull(userRepository.findByEmail(email))) {
             return email;
         }
         return userRepository.findByEmail(email).getId().toString();
