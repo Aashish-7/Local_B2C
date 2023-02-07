@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
@@ -43,4 +44,9 @@ public class UserDto {
     private String username;
 
     private String currentPassword;
+
+    @AssertTrue
+    public boolean matchPassword(){
+        return this.newPassword.equals(this.confirmPassword);
+    }
 }
