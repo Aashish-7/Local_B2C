@@ -70,7 +70,7 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().append("Access Denied");
-        }).and().oauth2Login().successHandler((request, response, authentication) -> response.sendRedirect("/"));
+        }).and().oauth2Login().successHandler((request, response, authentication) -> response.sendRedirect("/")).failureUrl("/");
         return http.build();
     }
 
