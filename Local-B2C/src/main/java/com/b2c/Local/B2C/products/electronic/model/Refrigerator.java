@@ -28,13 +28,13 @@ public class Refrigerator implements Serializable {
     @FullTextField
     private String model;
 
-    @KeywordField
+    @FullTextField
     private String brand;
 
-    @KeywordField
+    @FullTextField
     private String colour;
 
-    @KeywordField
+    @FullTextField
     private String warranty;
 
     private boolean digitalDisplay;
@@ -55,7 +55,7 @@ public class Refrigerator implements Serializable {
     @KeywordField
     private String freezerPosition;
 
-    @KeywordField
+    @FullTextField
     private String availability;
 
     @GenericField

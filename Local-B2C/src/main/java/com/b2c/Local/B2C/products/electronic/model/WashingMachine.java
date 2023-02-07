@@ -28,7 +28,7 @@ public class WashingMachine implements Serializable {
     @FullTextField
     private String model;
 
-    @KeywordField
+    @FullTextField
     private String brand;
 
     private boolean dryer;
@@ -44,10 +44,10 @@ public class WashingMachine implements Serializable {
 
     private boolean timer;
 
-    @KeywordField
+    @FullTextField
     private String colour;
 
-    @KeywordField
+    @FullTextField
     private String warranty;
 
     private boolean digitalDisplay;
@@ -61,7 +61,7 @@ public class WashingMachine implements Serializable {
 
     private double discountPercentage;
 
-    @KeywordField
+    @FullTextField
     private String availability;
 
     @JsonIgnore

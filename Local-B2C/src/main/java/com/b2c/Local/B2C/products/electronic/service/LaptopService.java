@@ -8,6 +8,8 @@ import com.b2c.Local.B2C.products.electronic.dto.LaptopDto;
 import com.b2c.Local.B2C.products.electronic.model.Laptop;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.hibernate.Session;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -245,5 +247,10 @@ public class LaptopService {
         else {
             throw new BadRequest400Exception("size can't be zero");
         }
+    }
+
+    public List<Laptop> searchKeywordInLaptop(String keyword, int page, int size) {
+        SearchSession searchSession = Search.session(entityManager);
+        return searchSession.search(Laptop.class).where(searchPredicateFactory -> searchPredicateFactory.bool().should(searchPredicateFactory1 -> searchPredicateFactory.match().fields("model","brand","colour","warranty","availability","cpuBrand","cpuModel","ramSize","os","graphicCard").matching(keyword))).fetchHits(page*size,size);
     }
 }

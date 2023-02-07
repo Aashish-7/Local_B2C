@@ -36,26 +36,27 @@ public class SearchByKeywordService {
         this.washingMachineService = washingMachineService;
     }
 
-    public Map<String, Object> searchKeyword(String keyword, int page, int size){
+    @Deprecated
+    public Map<String, Object> searchKeyword(String keyword, int page, int size) {
         Map<String, Object> map = new HashMap<>();
         map.put("localStore", localStoreService.localStoreSearchKeyword(keyword, page, size));
-        map.put("ac", acService.acSearchKeyword(keyword,page, size));
+        map.put("ac", acService.acSearchKeyword(keyword, page, size));
         map.put("laptop", laptopService.laptopSearchKeyword(keyword, page, size));
         map.put("mobilePhone", mobilePhoneService.mobilePhoneSearchKeyword(keyword, page, size));
         map.put("refrigerator", refrigeratorService.refrigeratorSearchKeyword(keyword, page, size));
-        map.put("television",  televisionService.televisionSearchKeyword(keyword, page, size));
+        map.put("television", televisionService.televisionSearchKeyword(keyword, page, size));
         map.put("washingMachine", washingMachineService.washingMachineSearchKeyword(keyword, page, size));
         return map;
     }
 
-    public Map<String,Object> searchKeywordByIndexing(String keyword, int page,int size){
-        Map<String,Object> map = new HashMap<>();
-        map.put("ac", acService.searchKeywordInAc(keyword,page, size));
-       // map.put("laptop", laptopService.laptopSearchKeyword(keyword, page, size));
-       // map.put("mobilePhone", mobilePhoneService.mobilePhoneSearchKeyword(keyword, page, size));
-       // map.put("refrigerator", refrigeratorService.refrigeratorSearchKeyword(keyword, page, size));
-        //map.put("television",  televisionService.televisionSearchKeyword(keyword, page, size));
-        //map.put("washingMachine", washingMachineService.washingMachineSearchKeyword(keyword, page, size));
+    public Map<String, Object> searchKeywordByIndexing(String keyword, int page, int size) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("ac", acService.searchKeywordInAc(keyword, page, size));
+        map.put("laptop", laptopService.searchKeywordInLaptop(keyword, page, size));
+        map.put("mobilePhone", mobilePhoneService.searchKeywordInMobilePhone(keyword, page, size));
+        map.put("refrigerator", refrigeratorService.searchKeywordInRefrigerator(keyword, page, size));
+        map.put("television", televisionService.searchKeywordInTelevision(keyword, page, size));
+        map.put("washingMachine", washingMachineService.searchKeywordInWashingMachine(keyword, page, size));
         return map;
     }
 }

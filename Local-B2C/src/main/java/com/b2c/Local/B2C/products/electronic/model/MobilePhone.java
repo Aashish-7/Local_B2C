@@ -28,15 +28,15 @@ public class MobilePhone implements Serializable {
     @FullTextField
     private String model;
 
-    @KeywordField
+    @FullTextField
     private String brand;
 
-    @KeywordField
+    @FullTextField
     private String networkConnectivity;
 
     private String simType;
 
-    @KeywordField
+    @FullTextField
     private String displayType;
 
     private String displayResolution;
@@ -44,7 +44,7 @@ public class MobilePhone implements Serializable {
     @KeywordField
     private String displaySize;
 
-    @KeywordField
+    @FullTextField
     private String os;
 
     @KeywordField
@@ -62,12 +62,12 @@ public class MobilePhone implements Serializable {
 
     private boolean memoryCordSlotSupported;
 
-    @KeywordField
+    @FullTextField
     private String internalMemorySize;
 
     private int mainCameraCount;
 
-    @KeywordField
+    @FullTextField
     private String mainCameraSpecs;
 
     private boolean frontCamera;
@@ -75,7 +75,7 @@ public class MobilePhone implements Serializable {
     @KeywordField
     private String frontCameraSpecs;
 
-    @KeywordField
+    @FullTextField
     private String batterySize;
 
     @KeywordField
@@ -83,7 +83,7 @@ public class MobilePhone implements Serializable {
 
     private String chargerOutput;
 
-    @KeywordField
+    @FullTextField
     private String colour;
 
     private int weightInGrams;
@@ -106,7 +106,7 @@ public class MobilePhone implements Serializable {
 
     private boolean wlan;
 
-    @KeywordField
+    @FullTextField
     private String availability;
 
     private double discountPercentage;
@@ -114,7 +114,7 @@ public class MobilePhone implements Serializable {
     @JsonIgnore
     private Boolean active;
 
-    @KeywordField
+    @FullTextField
     private String warranty;
 
     @GenericField

@@ -8,6 +8,8 @@ import com.b2c.Local.B2C.products.electronic.dto.MobilePhoneDto;
 import com.b2c.Local.B2C.products.electronic.model.MobilePhone;
 import com.b2c.Local.B2C.store.dao.LocalStoreRepository;
 import org.hibernate.Session;
+import org.hibernate.search.mapper.orm.Search;
+import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -261,5 +263,10 @@ public class MobilePhoneService {
         } else {
             throw new BadRequest400Exception("size can't be zero");
         }
+    }
+
+    public List<MobilePhone> searchKeywordInMobilePhone(String keyword, int page, int size) {
+        SearchSession searchSession = Search.session(entityManager);
+        return searchSession.search(MobilePhone.class).where(searchPredicateFactory -> searchPredicateFactory.bool().should(searchPredicateFactory1 -> searchPredicateFactory.match().fields("model","brand","colour","warranty","availability","batterySize","mainCameraSpecs","internalMemorySize","os","displayType","networkConnectivity").matching(keyword))).fetchHits(page*size,size);
     }
 }

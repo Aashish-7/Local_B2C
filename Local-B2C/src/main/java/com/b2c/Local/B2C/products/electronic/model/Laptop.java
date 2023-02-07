@@ -28,7 +28,7 @@ public class Laptop implements Serializable {
     @FullTextField
     private String model;
 
-    @KeywordField
+    @FullTextField
     private String brand;
 
     @GenericField
@@ -43,15 +43,15 @@ public class Laptop implements Serializable {
     @GenericField
     private boolean touchScreen;
 
-    @KeywordField
+    @FullTextField
     private String availability;
 
     private String screenResolution;
 
-    @KeywordField
+    @FullTextField
     private String cpuBrand;
 
-    @KeywordField
+    @FullTextField
     private String cpuModel;
 
     private String cpuGeneration;
@@ -62,7 +62,7 @@ public class Laptop implements Serializable {
 
     private String hardDiskSize;
 
-    @KeywordField
+    @FullTextField
     private String ramSize;
 
     @KeywordField
@@ -70,10 +70,10 @@ public class Laptop implements Serializable {
 
     private boolean fingerprint;
 
-    @KeywordField
+    @FullTextField
     private String os;
 
-    @KeywordField
+    @FullTextField
     private String warranty;
 
     private String batteryBackupHour;

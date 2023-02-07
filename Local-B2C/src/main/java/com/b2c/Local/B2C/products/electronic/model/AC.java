@@ -29,13 +29,13 @@ public class AC implements Serializable {
     @FullTextField
     private String model;
 
-    @KeywordField
+    @FullTextField
     private String brand;
 
-    @KeywordField
+    @FullTextField
     private String colour;
 
-    @KeywordField
+    @FullTextField
     private String warranty;
 
     private boolean digitalDisplay;
@@ -47,7 +47,7 @@ public class AC implements Serializable {
     @GenericField
     private double powerInStar;
 
-    @KeywordField
+    @FullTextField
     private String availability;
 
     private boolean builtInStabilizer;

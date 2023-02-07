@@ -28,16 +28,16 @@ public class Television implements Serializable {
     @FullTextField
     private String model;
 
-    @KeywordField
+    @FullTextField
     private String brand;
 
     @GenericField
     private double price;
 
-    @KeywordField
+    @FullTextField
     private String availability;
 
-    @KeywordField
+    @FullTextField
     private String displayType;
 
     @GenericField
@@ -71,12 +71,12 @@ public class Television implements Serializable {
     @GenericField
     private int noOfSpeakers;
 
-    @KeywordField
+    @FullTextField
     private String colour;
 
     private double discountPercentage;
 
-    @KeywordField
+    @FullTextField
     private String warranty;
 
     @JsonIgnore
