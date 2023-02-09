@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpStatusRequestRejectedHandler;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -72,6 +73,11 @@ public class WebSecurityConfig {
             response.getWriter().append("Access Denied");
         }).and().oauth2Login().successHandler((request, response, authentication) -> response.sendRedirect("/")).failureUrl("/");
         return http.build();
+    }
+
+    @Bean
+    public HttpStatusRequestRejectedHandler httpStatusRequestRejectedHandler(){
+        return new HttpStatusRequestRejectedHandler(405);
     }
 
 }
