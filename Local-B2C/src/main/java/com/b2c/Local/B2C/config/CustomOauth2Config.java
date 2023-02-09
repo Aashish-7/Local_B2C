@@ -43,7 +43,7 @@ public class CustomOauth2Config {
                 .userInfoUri("http://authserver:8000/api/user")
                 .issuerUri("http://authserver:8000")
                 .jwkSetUri("http://authserver:8000/oauth2/jwks")
-                .userNameAttributeName("id")
+                .userNameAttributeName("Name")
                 .clientName("local-b2c")
                 .build();
     }

@@ -20,7 +20,7 @@ public class OauthUser {
 
     private String email;
 
-    @Column(length = 450)
+    @Column(length = 1000)
     private String accessToken;
 
     @Enumerated(EnumType.STRING)
