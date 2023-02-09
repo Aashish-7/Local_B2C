@@ -27,6 +27,7 @@ public class OauthUserService extends DefaultOAuth2UserService {
         oauthUser.setName(auth2User.getAttribute("name"));
         oauthUser.setClientRegistration(userRequest.getClientRegistration().toString());
         oauthUserRepository.save(oauthUser);
+        System.out.println(auth2User.toString());
         return auth2User;
     }
 }
