@@ -1,6 +1,7 @@
 package com.b2c.Local.B2C.auths.service;
 
 import com.b2c.Local.B2C.auths.dao.OauthUserRepository;
+import com.b2c.Local.B2C.auths.dao.UserRepository;
 import com.b2c.Local.B2C.auths.enums.Role;
 import com.b2c.Local.B2C.auths.model.OauthUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class OauthUserService extends DefaultOAuth2UserService {
 
-    @Autowired
+    UserRepository userRepository;
+
     OauthUserRepository oauthUserRepository;
+
+    @Autowired
+    public OauthUserService(UserRepository userRepository, OauthUserRepository oauthUserRepository) {
+        this.userRepository = userRepository;
+        this.oauthUserRepository = oauthUserRepository;
+    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -27,7 +35,6 @@ public class OauthUserService extends DefaultOAuth2UserService {
         oauthUser.setName(auth2User.getAttribute("name"));
         oauthUser.setClientRegistration(userRequest.getClientRegistration().toString());
         oauthUserRepository.save(oauthUser);
-        System.out.println(auth2User.toString());
         return auth2User;
     }
 }

@@ -170,10 +170,10 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    private UUID getLoggedInUserId() {
+    private Object getLoggedInUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((User) principal).getId();
+        if (Objects.nonNull(principal)) {
+            return principal;
         }
         return null;
     }
@@ -181,7 +181,7 @@ public class UserService implements UserDetailsService {
     public String updateUser(UserDto userDto) {
         User user = new User();
         if (getLoggedInUserId() != null) {
-            user = userRepository.findById(getLoggedInUserId()).get();
+            user = userRepository.findById(((User )getLoggedInUserId()).getId()).get();
             if (userDto.getFirstName() != null) {
                 user.setFirstName(userDto.getFirstName());
             }
@@ -206,8 +206,8 @@ public class UserService implements UserDetailsService {
     }
 
     public String deleteUser() {
-        if (userRepository.findById((Objects.requireNonNull(getLoggedInUserId()))).isPresent()) {
-            userRepository.findById(getLoggedInUserId()).get().setIsActive(false);
+        if (userRepository.findById(((User ) Objects.requireNonNull(getLoggedInUserId())).getId()).isPresent()) {
+            userRepository.findById(((User )getLoggedInUserId()).getId()).get().setIsActive(false);
             return "Deleted Successfully";
         } else {
             return "Not Deleted";
@@ -215,7 +215,11 @@ public class UserService implements UserDetailsService {
     }
 
     public User get() {
-        return userRepository.findById(Objects.requireNonNull(getLoggedInUserId())).get();
+        if (getLoggedInUserId() instanceof User){
+            return userRepository.findById(((User )getLoggedInUserId()).getId()).get();
+        }else {
+            return null;
+        }
     }
 
     public String changePassword(UserDto userDto, UUID uuid) {
